@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  # Frontend Production Server
+  agenticcp-web:
+    container_name: agenticcp-web-prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - agenticcp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  agenticcp-network:
+    name: agenticcp-network
+    external: true
+

@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # Frontend Development Server
+  agenticcp-web:
+    container_name: agenticcp-web-dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount source code for hot reload
+      - .:/app
+      # Prevent node_modules from being overwritten
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_BASE_URL=http://localhost:8080
+    networks:
+      - agenticcp-network
+    stdin_open: true
+    tty: true
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  agenticcp-network:
+    name: agenticcp-network
+    external: true
+
+# Optional: Production build service
+# Uncomment to build and run production version
+# services:
+#   agenticcp-web-prod:
+#     container_name: agenticcp-web-prod
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     ports:
+#       - "80:80"
+#     networks:
+#       - agenticcp-network
+#     restart: unless-stopped
+

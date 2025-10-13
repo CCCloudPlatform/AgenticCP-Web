@@ -1,0 +1,22 @@
+.main-layout {
+  height: 100vh;
+  position: relative;
+
+  .site-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    transition: margin-left 0.2s ease, margin-right 0.3s ease;
+    position: relative;
+    min-height: 100%;
+
+    .site-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      background: #f0f2f5;
+      min-height: 0;
+    }
+  }
+}
+

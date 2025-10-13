@@ -1,0 +1,47 @@
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 9;
+  position: sticky;
+  top: 0;
+
+  .header-left {
+    .trigger {
+      font-size: 18px;
+      cursor: pointer;
+      transition: color 0.3s;
+
+      &:hover {
+        color: #1890ff;
+      }
+    }
+  }
+
+  .header-right {
+    .user-info {
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+      }
+
+      .user-details {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .user-role {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
