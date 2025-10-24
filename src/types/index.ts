@@ -61,12 +61,32 @@ export type UserStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
 export interface LoginRequest {
   username: string;
   password: string;
+  totpCode?: string;
 }
 
 export interface LoginResponse {
-  token: string;
+  accessToken: string;
   refreshToken: string;
-  user: User;
+  tokenType: string;
+  expiresIn: number;
+  refreshExpiresIn: number;
+}
+
+export interface LoginApiResponse {
+  success: boolean;
+  message: string;
+  data: LoginResponse;
+  timestamp: string;
+}
+
+export interface LoginErrorResponse {
+  success: false;
+  error: {
+    code: string;
+    message: string;
+    details?: string | null;
+  };
+  timestamp: string;
 }
 
 export interface Tenant {
