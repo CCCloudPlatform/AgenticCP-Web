@@ -89,6 +89,42 @@ export interface LoginErrorResponse {
   timestamp: string;
 }
 
+export interface RegisterRequest {
+  username: string;
+  email: string;
+  password: string;
+  name: string;
+  tenantKey?: string;
+}
+
+export interface RegisterResponse {
+  accessToken: string;
+  refreshToken: string;
+  tokenType: string;
+  expiresIn: number;
+  refreshExpiresIn: number;
+}
+
+export interface RegisterApiResponse {
+  success: boolean;
+  message: string;
+  data: RegisterResponse;
+  timestamp: string;
+}
+
+export interface RegisterErrorResponse {
+  success: false;
+  error: {
+    code: string;
+    message: string;
+    details?: {
+      field?: string;
+      value?: string;
+    } | null;
+  };
+  timestamp: string;
+}
+
 export interface Tenant {
   id: number;
   name: string;
