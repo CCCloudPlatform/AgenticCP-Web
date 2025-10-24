@@ -69,6 +69,14 @@ const LoginPage = () => {
           error={error}
           defaultValues={defaultValues}
         />
+        <div className="login-footer">
+          <Text type="secondary">
+            계정이 없으신가요?{' '}
+            <a href={ROUTES.REGISTER} style={{ color: '#1890ff' }}>
+              회원가입
+            </a>
+          </Text>
+        </div>
       </Card>
     </div>
   );
