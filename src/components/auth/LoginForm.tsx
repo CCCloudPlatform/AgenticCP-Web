@@ -1,6 +1,7 @@
 import { Form, Input, Button, Switch, Typography } from 'antd';
 import { UserOutlined, LockOutlined, SafetyOutlined } from '@ant-design/icons';
 import { useState } from 'react';
+import './LoginForm.scss';
 
 const { Text } = Typography;
 
@@ -31,14 +32,15 @@ const LoginForm = ({ onSubmit, loading = false, error, defaultValues }: LoginFor
   };
 
   return (
-    <Form
-      form={form}
-      name="login"
-      onFinish={handleSubmit}
-      size="large"
-      layout="vertical"
-      initialValues={defaultValues}
-    >
+    <div className="login-form">
+      <Form
+        form={form}
+        name="login"
+        onFinish={handleSubmit}
+        size="large"
+        layout="vertical"
+        initialValues={defaultValues}
+      >
       <Form.Item
         name="username"
         rules={[
@@ -125,7 +127,8 @@ const LoginForm = ({ onSubmit, loading = false, error, defaultValues }: LoginFor
           {loading ? '로그인 중...' : '로그인'}
         </Button>
       </Form.Item>
-    </Form>
+      </Form>
+    </div>
   );
 };
 
