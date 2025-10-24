@@ -192,3 +192,141 @@ export interface AgentSession {
   messageCount: number;
 }
 
+/**
+ * RBAC Types
+ */
+
+// Role 타입
+export interface Role {
+  id: number;
+  roleKey: string;
+  roleName: string;
+  description?: string;
+  tenantKey: string;
+  tenantName?: string;
+  status: RoleStatus;
+  isSystem: boolean;
+  isDefault: boolean;
+  priority: number;
+  permissions: Permission[];
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  updatedBy: string;
+}
+
+export type RoleStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
+
+// Permission 타입
+export interface Permission {
+  id: number;
+  permissionKey: string;
+  permissionName: string;
+  description?: string;
+  tenantKey: string;
+  tenantName?: string;
+  status: PermissionStatus;
+  resource: string;
+  action: string;
+  isSystem: boolean;
+  category: string;
+  priority: number;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  updatedBy: string;
+}
+
+export type PermissionStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
+
+// 역할 생성/수정 요청
+export interface RoleCreateRequest {
+  roleKey: string;
+  roleName: string;
+  description?: string;
+  priority?: number;
+  permissionKeys: string[];
+  isSystem?: boolean;
+}
+
+export interface RoleUpdateRequest {
+  roleName: string;
+  description?: string;
+  priority?: number;
+  permissionKeys: string[];
+}
+
+// 권한 생성/수정 요청
+export interface PermissionCreateRequest {
+  permissionKey: string;
+  permissionName: string;
+  description?: string;
+  resource: string;
+  action: string;
+  category: string;
+  priority?: number;
+}
+
+export interface PermissionUpdateRequest {
+  permissionName: string;
+  description?: string;
+  resource: string;
+  action: string;
+  category: string;
+  priority?: number;
+}
+
+/**
+ * Authorization Types
+ */
+
+// 메뉴 권한 관련
+export interface MenuPermission {
+  id: number;
+  menuId: number;
+  permissionId: number;
+  permissionKey: string;
+  permissionName: string;
+  accessType: AccessType;
+  accessTypeDescription: string;
+  createdAt: string;
+}
+
+export type AccessType = 'READ' | 'WRITE' | 'DELETE';
+
+// 테넌트 컨텍스트
+export interface TenantContext {
+  tenantKey: string;
+  tenantName: string;
+  tenantId?: number;
+}
+
+// 권한 확인 요청/응답
+export interface AuthorizationCheckRequest {
+  permissionKey?: string;
+  roleKey?: string;
+}
+
+export interface AuthorizationCheckResponse {
+  hasPermission?: boolean;
+  hasRole?: boolean;
+}
+
+// 메뉴 타입
+export interface Menu {
+  id: number;
+  menuKey: string;
+  menuName: string;
+  description?: string;
+  url?: string;
+  icon?: string;
+  sortOrder: number;
+  isActive: boolean;
+  isSystem: boolean;
+  parentId?: number;
+  children?: Menu[];
+  permissions?: MenuPermission[];
+  createdAt: string;
+  updatedAt: string;
+}
+

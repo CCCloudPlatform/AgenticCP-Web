@@ -8,6 +8,8 @@ import { ROUTES } from '@/constants';
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
 const DashboardPage = lazy(() => import('@/pages/dashboard/DashboardPage'));
+const RolesPermissionsPage = lazy(() => import('@/pages/settings/RolesPermissionsPage'));
+const PermissionTestPage = lazy(() => import('@/pages/settings/PermissionTestPage'));
 const NotFoundPage = lazy(() => import('@/pages/error/NotFoundPage'));
 
 // Layout
@@ -33,6 +35,10 @@ const AppRoutes = () => {
           <Route element={<MainLayout />}>
             <Route path={ROUTES.HOME} element={<Navigate to={ROUTES.DASHBOARD} replace />} />
             <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
+            
+            {/* Settings */}
+            <Route path={ROUTES.ROLES_PERMISSIONS} element={<RolesPermissionsPage />} />
+            <Route path="/settings/permission-test" element={<PermissionTestPage />} />
             
             {/* Add more routes here */}
           </Route>

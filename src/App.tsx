@@ -2,15 +2,18 @@ import { ConfigProvider } from 'antd';
 import koKR from 'antd/locale/ko_KR';
 import { useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
+import { useTenantStore } from '@/store/tenantStore';
 import AppRoutes from '@/routes';
 
 function App() {
   const { initAuth } = useAuthStore();
+  const { initTenant } = useTenantStore();
 
   useEffect(() => {
-    // Initialize authentication on app load
+    // Initialize authentication and tenant context on app load
     initAuth();
-  }, [initAuth]);
+    initTenant();
+  }, [initAuth, initTenant]);
 
   return (
     <ConfigProvider

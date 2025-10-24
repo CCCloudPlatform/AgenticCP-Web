@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ROUTES } from '@/constants';
 import { useAuth } from '@/hooks/useAuth';
+import { usePermission } from '@/hooks/usePermission';
 import Logo from '@/components/common/Logo';
 import './Sidebar.scss';
 
@@ -13,15 +14,54 @@ interface MenuItem {
   key: string;
   icon: string;
   label: string;
+  path?: string;
   children?: MenuItem[];
   disabled?: boolean;
+  requiredPermission?: string;
+  requiredRole?: string | string[];
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { hasRole } = useAuth();
+  const { hasPermission, hasRole: hasServerRole } = usePermission();
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
+
+  // 권한 기반 메뉴 필터링 함수
+  const filterMenuItems = (items: MenuItem[]): MenuItem[] => {
+    return items.filter(item => {
+      // 권한 검증
+      if (item.requiredPermission) {
+        if (!hasPermission(item.requiredPermission)) {
+          return false;
+        }
+      }
+
+      // 역할 검증
+      if (item.requiredRole) {
+        if (!hasServerRole(item.requiredRole)) {
+          return false;
+        }
+      }
+
+      // 기존 disabled 체크
+      if (item.disabled) {
+        return false;
+      }
+
+      // 하위 메뉴가 있는 경우 재귀적으로 필터링
+      if (item.children) {
+        const filteredChildren = filterMenuItems(item.children);
+        if (filteredChildren.length === 0) {
+          return false; // 하위 메뉴가 모두 필터링되면 부모도 숨김
+        }
+        item.children = filteredChildren;
+      }
+
+      return true;
+    });
+  };
 
   const menuItems: MenuItem[] = [
     {
@@ -33,27 +73,31 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       key: 'tenants',
       icon: '👥',
       label: '테넌트 관리',
-      disabled: !hasRole(['SUPER_ADMIN', 'TENANT_ADMIN']),
+      requiredRole: ['SUPER_ADMIN', 'TENANT_ADMIN'],
     },
     {
       key: 'cloud',
       icon: '☁️',
       label: '클라우드 리소스',
+      requiredPermission: 'cloud.read',
       children: [
         {
           key: ROUTES.PROVIDERS,
           icon: '🏢',
           label: '프로바이더',
+          requiredPermission: 'cloud.provider.read',
         },
         {
           key: ROUTES.RESOURCES,
           icon: '📦',
           label: '리소스',
+          requiredPermission: 'cloud.resource.read',
         },
         {
           key: ROUTES.INVENTORY,
           icon: '📋',
           label: '인벤토리',
+          requiredPermission: 'cloud.inventory.read',
         },
       ],
     },
@@ -100,24 +144,27 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       key: 'security',
       icon: '🔒',
       label: '보안 & 컴플라이언스',
+      requiredPermission: 'security.read',
       children: [
         {
           key: ROUTES.USERS,
           icon: '👤',
           label: '사용자',
+          requiredPermission: 'user.read',
         },
         {
           key: ROUTES.ROLES,
           icon: '🎭',
           label: '역할',
+          requiredPermission: 'role.read',
         },
         {
           key: ROUTES.POLICIES,
           icon: '📋',
           label: '정책',
+          requiredPermission: 'policy.read',
         },
       ],
-      disabled: !hasRole(['SUPER_ADMIN', 'TENANT_ADMIN']),
     },
     {
       key: 'cost',
@@ -181,11 +228,29 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       label: '알림',
     },
     {
-      key: ROUTES.SETTINGS,
+      key: 'settings',
       icon: '⚙️',
       label: '설정',
+      requiredRole: ['SUPER_ADMIN', 'TENANT_ADMIN'],
+      children: [
+        {
+          key: ROUTES.ROLES_PERMISSIONS,
+          icon: '🎭',
+          label: '역할 및 권한',
+          requiredPermission: 'role.read',
+        },
+        {
+          key: '/settings/permission-test',
+          icon: '🧪',
+          label: '권한 테스트',
+          requiredRole: ['SUPER_ADMIN', 'TENANT_ADMIN'],
+        },
+      ],
     },
   ];
+
+  // 필터링된 메뉴 아이템 사용
+  const filteredMenuItems = filterMenuItems(menuItems);
 
   const isActive = (key: string) => {
     return location.pathname.startsWith(key);
@@ -277,7 +342,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       </div>
       
       <nav className="nav-menu">
-        {menuItems.map(renderMenuItem)}
+        {filteredMenuItems.map(renderMenuItem)}
       </nav>
 
       <div className="sidebar-footer">

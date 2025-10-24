@@ -85,6 +85,7 @@ export const ROUTES = {
   // Settings
   SETTINGS: '/settings',
   PROFILE: '/settings/profile',
+  ROLES_PERMISSIONS: '/settings/roles-permissions',
   
   // Agent
   AGENT_CHAT: '/agent/chat',
@@ -115,5 +116,27 @@ export const HTTP_STATUS = {
   NOT_FOUND: 404,
   CONFLICT: 409,
   INTERNAL_SERVER_ERROR: 500,
+} as const;
+
+/**
+ * Tenant Constants
+ */
+export const DEFAULT_TENANT = {
+  TENANT_KEY: 'tenant-default',
+  TENANT_NAME: '기본 테넌트',
+} as const;
+
+export const TENANT_HEADER = 'X-Tenant-Key';
+
+/**
+ * Permission Categories
+ */
+export const PERMISSION_CATEGORIES = {
+  USER_MANAGEMENT: 'USER_MANAGEMENT',
+  TENANT_MANAGEMENT: 'TENANT_MANAGEMENT',
+  CLOUD_MANAGEMENT: 'CLOUD_MANAGEMENT',
+  SECURITY_MANAGEMENT: 'SECURITY_MANAGEMENT',
+  MONITORING: 'MONITORING',
+  COST_MANAGEMENT: 'COST_MANAGEMENT',
 } as const;
 

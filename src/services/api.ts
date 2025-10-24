@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
-import { API_BASE_URL, API_TIMEOUT, STORAGE_KEYS } from '@/constants';
+import { API_BASE_URL, API_TIMEOUT, STORAGE_KEYS, DEFAULT_TENANT, TENANT_HEADER } from '@/constants';
 import { storage } from '@/utils/storage';
 import { ErrorResponse } from '@/types';
 
@@ -19,10 +19,15 @@ const api: AxiosInstance = axios.create({
  */
 api.interceptors.request.use(
   (config) => {
+    // 토큰 추가
     const token = storage.get<string>(STORAGE_KEYS.TOKEN);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    
+    // 테넌트 헤더 추가 (더미)
+    config.headers[TENANT_HEADER] = DEFAULT_TENANT.TENANT_KEY;
+    
     return config;
   },
   (error) => {
@@ -44,6 +49,13 @@ api.interceptors.response.use(
     const token = storage.get<string>(STORAGE_KEYS.TOKEN);
     if (token && token.startsWith('mock-jwt-token')) {
       console.log('🔓 개발 모드: API 에러 무시');
+      return Promise.reject(error);
+    }
+
+    // Handle 403 Forbidden - Access denied
+    if (error.response?.status === 403) {
+      console.error('접근 권한이 없습니다:', error.response.data);
+      // 사용자에게 권한 부족 메시지 표시 (추후 UI 라이브러리 연동)
       return Promise.reject(error);
     }
 
