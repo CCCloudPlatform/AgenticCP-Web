@@ -29,20 +29,7 @@ export const authService = {
    * Login
    */
   login: (credentials: LoginRequest): Promise<LoginResponse> => {
-    // 🔧 개발 모드: 하드코딩된 계정 체크
-    if (
-      credentials.username === DEV_ACCOUNT.username &&
-      credentials.password === DEV_ACCOUNT.password
-    ) {
-      console.log('🔓 개발용 하드코딩 계정으로 로그인');
-      return Promise.resolve({
-        token: MOCK_TOKEN,
-        refreshToken: MOCK_REFRESH_TOKEN,
-        user: MOCK_USER,
-      });
-    }
-
-    // 실제 API 호출 (백엔드 연동 후)
+    // 실제 API 호출
     return apiRequest.post<LoginResponse>('/api/v1/auth/login', credentials);
   },
 
@@ -57,13 +44,6 @@ export const authService = {
    * Get current user
    */
   getCurrentUser: (): Promise<User> => {
-    // 🔧 개발 모드: Mock 사용자 반환
-    const token = localStorage.getItem('agenticcp_token');
-    if (token && token.startsWith('mock-jwt-token')) {
-      console.log('🔓 개발용 Mock 사용자 반환');
-      return Promise.resolve(MOCK_USER);
-    }
-
     return apiRequest.get<User>('/api/v1/auth/me');
   },
 

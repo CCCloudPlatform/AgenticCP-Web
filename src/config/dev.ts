@@ -20,8 +20,8 @@ export const DEV_CONFIG = {
     },
   },
 
-  // Mock 모드 활성화
-  ENABLE_MOCK: true,
+  // Mock 모드 비활성화 - 실제 API 사용
+  ENABLE_MOCK: false,
 
   // Mock API 딜레이 (ms)
   MOCK_API_DELAY: 1000,
