@@ -30,11 +30,6 @@ const Header: React.FC<HeaderProps> = ({ collapsed, onToggle }) => {
         >
           {collapsed ? '☰' : '✕'}
         </button>
-        
-        <div className="logo">
-          <div className="logo-icon">AC</div>
-          <span className="logo-text">AgenticCP</span>
-        </div>
       </div>
 
       <div className="header-center">
