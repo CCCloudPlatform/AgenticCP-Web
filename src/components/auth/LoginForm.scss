@@ -1,0 +1,145 @@
+/* ===========================================
+   LOGIN FORM COMPONENT
+   =========================================== */
+
+.login-form {
+  .ant-form-item {
+    margin-bottom: 12px; // Unified margin-bottom
+  }
+
+  .ant-form-item-label {
+    padding-bottom: 4px; // Unified padding-bottom
+    margin-bottom: 0; // Ensure no extra margin
+    
+    label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+  }
+
+  .ant-input,
+  .ant-input-password {
+    height: 40px !important; // Unified height
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px !important; // Unified font size
+    line-height: 40px !important; // Unified line-height for vertical centering
+    text-align: left !important; // Left align text
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex !important; // Use flexbox for vertical alignment
+    align-items: center !important; // Center items vertically
+
+    &:hover {
+      border-color: var(--color-primary);
+    }
+
+    &:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+    }
+
+    &::placeholder {
+      color: #9ca3af !important;
+      font-size: 14px !important;
+      line-height: 40px !important;
+      text-align: left !important;
+    }
+  }
+
+  .ant-input-password {
+    height: 40px !important; // Unified height for password wrapper
+    display: flex !important; // Ensure flexbox for password wrapper
+    align-items: center !important; // Center items vertically in password wrapper
+    
+    .ant-input {
+      height: 40px !important; // Unified height for inner password input
+      border: none;
+      box-shadow: none;
+      font-size: 14px !important; // Unified font size
+      line-height: 40px !important; // Unified line-height
+      text-align: left !important; // Left align text
+      display: flex !important; // Ensure flexbox for inner password input
+      align-items: center !important; // Center items vertically in inner password input
+      
+      &:focus {
+        box-shadow: none;
+      }
+
+      &::placeholder {
+        color: #9ca3af !important;
+        font-size: 14px !important;
+        line-height: 40px !important;
+        text-align: left !important;
+      }
+    }
+  }
+
+  .ant-input-prefix {
+    color: #9ca3af;
+    margin-right: 8px;
+  }
+
+  .ant-input-suffix {
+    color: #9ca3af;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+
+  .ant-btn {
+    height: 44px; // Unified button height
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) !important; // Static background
+    border: none !important; // Static border
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    transition: none; // No transition for hover
+
+    &:hover {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) !important; // Static background on hover
+      border: none !important; // Static border on hover
+      color: white !important;
+      transform: none; // No transform on hover
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); // Static shadow on hover
+    }
+
+    &:focus {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) !important;
+      border: none !important;
+      color: white !important;
+    }
+
+    &:active {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) !important;
+      border: none !important;
+      color: white !important;
+      transform: none;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) !important;
+    }
+  }
+
+  .error-message {
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 8px;
+    color: #ef4444;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+  }
+}

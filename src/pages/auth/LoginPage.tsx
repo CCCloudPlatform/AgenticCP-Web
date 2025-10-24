@@ -1,9 +1,9 @@
-import { Form, Input, Button, Card, Typography, message } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Card, Typography, message, Space } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/constants';
 import { useEffect } from 'react';
+import LoginForm from '@/components/auth/LoginForm';
 import './LoginPage.scss';
 
 const { Title, Text } = Typography;
@@ -11,12 +11,12 @@ const { Title, Text } = Typography;
 interface LoginFormValues {
   username: string;
   password: string;
+  totpCode?: string;
 }
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login, isAuthenticated, isLoading, error, clearError } = useAuth();
-  const [form] = Form.useForm();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -25,12 +25,10 @@ const LoginPage = () => {
   }, [isAuthenticated, navigate]);
 
   // 🔧 개발용: 기본값 설정
-  useEffect(() => {
-    form.setFieldsValue({
-      username: 'agenticcp',
-      password: 'agenticcpwebpw',
-    });
-  }, [form]);
+  const defaultValues = {
+    username: 'agenticcp',
+    password: 'agenticcpwebpw',
+  };
 
   useEffect(() => {
     if (error) {
@@ -51,59 +49,56 @@ const LoginPage = () => {
 
   return (
     <div className="login-page">
-      <Card className="login-card">
-        <div className="login-header">
-          <Title level={2}>AgenticCP</Title>
-          <Text type="secondary">Multi-Cloud Platform</Text>
-          <div style={{ marginTop: 16, padding: 12, background: '#fff7e6', borderRadius: 4 }}>
-            <Text type="warning" style={{ fontSize: 12 }}>
-              🔧 개발 모드: 하드코딩 계정
-            </Text>
-            <br />
-            <Text code style={{ fontSize: 11 }}>
-              ID: agenticcp / PW: agenticcpwebpw
-            </Text>
+      <div className="login-container">
+        <Card className="login-card">
+          <div className="login-header">
+            <div className="logo-section">
+              <div className="logo-icon">
+                <div className="logo-inner">
+                  <span className="logo-text">AC</span>
+                </div>
+                <div className="logo-glow"></div>
+              </div>
+              <div className="logo-content">
+                <Title level={2} className="brand-title">
+                  AgenticCP
+                </Title>
+                <Text className="brand-subtitle">
+                  Multi-Cloud Platform
+                </Text>
+              </div>
+            </div>
+            
+            <div className="welcome-section">
+              <div className="welcome-badge">
+                <span className="badge-icon">🔓</span>
+                <span className="badge-text">로그인하여 시작하세요</span>
+              </div>
+            </div>
           </div>
-        </div>
-        <Form
-          form={form}
-          name="login"
-          onFinish={handleSubmit}
-          size="large"
-          layout="vertical"
-        >
-          <Form.Item
-            name="username"
-            rules={[{ required: true, message: '사용자명을 입력하세요' }]}
-          >
-            <Input
-              prefix={<UserOutlined />}
-              placeholder="사용자명"
-              autoComplete="username"
-            />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: '비밀번호를 입력하세요' }]}
-          >
-            <Input.Password
-              prefix={<LockOutlined />}
-              placeholder="비밀번호"
-              autoComplete="current-password"
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              loading={isLoading}
-              block
-            >
-              로그인
-            </Button>
-          </Form.Item>
-        </Form>
-      </Card>
+
+          <LoginForm
+            onSubmit={handleSubmit}
+            loading={isLoading}
+            error={error}
+            defaultValues={defaultValues}
+          />
+
+          <div className="login-footer">
+            <Space direction="vertical" size="small" style={{ width: '100%', textAlign: 'center' }}>
+              <Text type="secondary" className="footer-text">
+                계정이 없으신가요?
+              </Text>
+              <a 
+                href={ROUTES.REGISTER} 
+                className="register-link"
+              >
+                회원가입하기
+              </a>
+            </Space>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };
