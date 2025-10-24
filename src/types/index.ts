@@ -48,12 +48,12 @@ export interface User {
   updatedAt: string;
 }
 
-export type UserRole = 
-  | 'SUPER_ADMIN' 
-  | 'TENANT_ADMIN' 
-  | 'CLOUD_ADMIN' 
-  | 'DEVELOPER' 
-  | 'VIEWER' 
+export type UserRole =
+  | 'SUPER_ADMIN'
+  | 'TENANT_ADMIN'
+  | 'CLOUD_ADMIN'
+  | 'DEVELOPER'
+  | 'VIEWER'
   | 'AUDITOR';
 
 export type UserStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
@@ -87,12 +87,30 @@ export interface CloudProvider {
   type: ProviderType;
   status: ProviderStatus;
   region?: string;
+  credentials?: ProviderCredentials;
+  resources?: Resource[];
+  cost?: number;
   createdAt: string;
   updatedAt: string;
 }
 
 export type ProviderType = 'AWS' | 'GCP' | 'AZURE';
-export type ProviderStatus = 'ACTIVE' | 'INACTIVE' | 'ERROR';
+export type ProviderStatus = 'ACTIVE' | 'INACTIVE' | 'ERROR' | 'CONNECTING';
+
+export interface ProviderCredentials {
+  accessKey?: string;
+  secretKey?: string;
+  region?: string;
+  projectId?: string;
+  subscriptionId?: string;
+}
+
+export interface ProviderStats {
+  totalResources: number;
+  runningResources: number;
+  monthlyCost: number;
+  lastSync: string;
+}
 
 export interface Resource {
   id: number;
@@ -135,4 +153,3 @@ export interface AgentSession {
   updatedAt: string;
   messageCount: number;
 }
-

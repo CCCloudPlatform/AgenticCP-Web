@@ -39,5 +39,37 @@ export const cloudService = {
   getResourceById: (id: number): Promise<Resource> => {
     return apiRequest.get<Resource>(`/api/v1/cloud/resources/${id}`);
   },
-};
 
+  /**
+   * Update provider
+   */
+  updateProvider: (id: number, data: Partial<CloudProvider>): Promise<CloudProvider> => {
+    return apiRequest.put<CloudProvider>(`/api/v1/cloud/providers/${id}`, data);
+  },
+
+  /**
+   * Delete provider
+   */
+  deleteProvider: (id: number): Promise<void> => {
+    return apiRequest.delete<void>(`/api/v1/cloud/providers/${id}`);
+  },
+
+  /**
+   * Sync provider resources
+   */
+  syncProvider: (id: number): Promise<void> => {
+    return apiRequest.post<void>(`/api/v1/cloud/providers/${id}/sync`);
+  },
+
+  /**
+   * Test provider connection
+   */
+  testConnection: (
+    data: Partial<CloudProvider>
+  ): Promise<{ success: boolean; message: string }> => {
+    return apiRequest.post<{ success: boolean; message: string }>(
+      '/api/v1/cloud/providers/test',
+      data
+    );
+  },
+};

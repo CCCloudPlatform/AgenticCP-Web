@@ -1,0 +1,549 @@
+/* ===========================================
+   CLOUD PROVIDERS PAGE - MDC DESIGN SYSTEM
+   =========================================== */
+
+.cloud-providers-page {
+  padding: var(--space-6);
+  background: var(--bg-primary);
+  min-height: 100vh;
+  position: relative;
+
+  // 페이지 헤더
+  .page-header {
+    margin-bottom: var(--space-8);
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-6);
+
+      .header-text {
+        flex: 1;
+
+        .page-title {
+          font-size: var(--font-size-4xl);
+          font-weight: var(--font-weight-bold);
+          color: var(--text-primary);
+          margin: 0 0 var(--space-2) 0;
+          background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .page-description {
+          font-size: var(--font-size-lg);
+          color: var(--text-secondary);
+          margin: 0;
+        }
+      }
+
+      .header-actions {
+        .add-provider-btn {
+          background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+          border: none;
+          border-radius: var(--radius-lg);
+          box-shadow: var(--shadow-md);
+          transition: all var(--transition-normal);
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+          }
+        }
+      }
+    }
+  }
+
+  // 통계 섹션
+  .stats-section {
+    margin-bottom: var(--space-8);
+
+    .stat-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+      }
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--color-primary);
+      }
+
+      &.total-providers::before {
+        background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+      }
+
+      &.active-providers::before {
+        background: linear-gradient(90deg, var(--color-success), #34d399);
+      }
+
+      &.total-resources::before {
+        background: linear-gradient(90deg, var(--color-info), #60a5fa);
+      }
+
+      &.total-cost::before {
+        background: linear-gradient(90deg, var(--color-warning), #fbbf24);
+      }
+
+      .ant-statistic {
+        .ant-statistic-title {
+          color: var(--text-secondary);
+          font-size: var(--font-size-sm);
+          font-weight: var(--font-weight-medium);
+          margin-bottom: var(--space-2);
+        }
+
+        .ant-statistic-content {
+          .ant-statistic-content-value {
+            font-size: var(--font-size-3xl);
+            font-weight: var(--font-weight-bold);
+          }
+
+          .ant-statistic-content-prefix {
+            margin-right: var(--space-2);
+            font-size: var(--font-size-xl);
+          }
+        }
+      }
+    }
+  }
+
+  // 프로바이더 카드
+  .providers-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+
+    &.glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border-light);
+
+      .card-title {
+        .card-title-text {
+          font-size: var(--font-size-2xl);
+          font-weight: var(--font-weight-semibold);
+          color: var(--text-primary);
+          margin: 0 0 var(--space-1) 0;
+        }
+
+        .card-description {
+          font-size: var(--font-size-base);
+          color: var(--text-secondary);
+          margin: 0;
+        }
+      }
+
+      .card-actions {
+        .refresh-btn {
+          border-radius: var(--radius-lg);
+          transition: all var(--transition-fast);
+
+          &:hover {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+
+    .table-container {
+      .providers-table {
+        .ant-table {
+          .ant-table-thead > tr > th {
+            background: var(--bg-secondary);
+            border-bottom: 2px solid var(--border-light);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+            padding: var(--space-4);
+          }
+
+          .ant-table-tbody > tr {
+            transition: all var(--transition-fast);
+
+            &:hover {
+              background: var(--bg-secondary);
+              transform: scale(1.01);
+            }
+
+            > td {
+              padding: var(--space-4);
+              border-bottom: 1px solid var(--border-light);
+            }
+          }
+        }
+
+        // 프로바이더 셀
+        .provider-cell {
+          display: flex;
+          align-items: center;
+          gap: var(--space-3);
+
+          .provider-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+
+            .provider-icon {
+              font-size: var(--font-size-xl);
+              color: white;
+
+              &.aws-icon {
+                color: #ff9900;
+              }
+
+              &.gcp-icon {
+                color: #4285f4;
+              }
+
+              &.azure-icon {
+                color: #0078d4;
+              }
+            }
+          }
+
+          .provider-info {
+            .provider-name {
+              font-weight: var(--font-weight-semibold);
+              color: var(--text-primary);
+              margin-bottom: var(--space-1);
+            }
+
+            .provider-type {
+              font-size: var(--font-size-sm);
+              color: var(--text-secondary);
+            }
+          }
+        }
+
+        // 상태 태그
+        .status-tag {
+          border-radius: var(--radius-md);
+          font-weight: var(--font-weight-medium);
+          padding: var(--space-1) var(--space-3);
+
+          &.status-active {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--color-success);
+            color: var(--color-success);
+          }
+
+          &.status-inactive {
+            background: rgba(107, 114, 128, 0.1);
+            border-color: var(--color-gray-400);
+            color: var(--color-gray-600);
+          }
+
+          &.status-error {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--color-error);
+            color: var(--color-error);
+          }
+
+          &.status-connecting {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--color-info);
+            color: var(--color-info);
+          }
+        }
+
+        // 리소스 셀
+        .resources-cell {
+          .resource-count {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-1);
+
+            .resource-label {
+              font-size: var(--font-size-sm);
+              color: var(--text-secondary);
+            }
+          }
+
+          .resource-detail {
+            .running-count {
+              font-size: var(--font-size-xs);
+            }
+          }
+        }
+
+        // 비용 셀
+        .cost-cell {
+          display: flex;
+          align-items: center;
+          gap: var(--space-2);
+
+          .cost-amount {
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+          }
+
+          .cost-icon {
+            color: var(--color-warning);
+          }
+        }
+
+        // 날짜 셀
+        .date-cell {
+          display: flex;
+          align-items: center;
+          gap: var(--space-2);
+
+          .date-icon {
+            color: var(--text-tertiary);
+          }
+        }
+
+        // 액션 셀
+        .actions-cell {
+          .action-btn {
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+
+            &:hover {
+              transform: scale(1.1);
+            }
+
+            &.sync-btn:hover {
+              color: var(--color-info);
+              background: rgba(59, 130, 246, 0.1);
+            }
+
+            &.view-btn:hover {
+              color: var(--color-primary);
+              background: rgba(99, 102, 241, 0.1);
+            }
+
+            &.edit-btn:hover {
+              color: var(--color-warning);
+              background: rgba(245, 158, 11, 0.1);
+            }
+
+            &.settings-btn:hover {
+              color: var(--color-gray-600);
+              background: rgba(107, 114, 128, 0.1);
+            }
+
+            &.delete-btn:hover {
+              color: var(--color-error);
+              background: rgba(239, 68, 68, 0.1);
+            }
+          }
+        }
+      }
+
+      .table-pagination {
+        margin-top: var(--space-6);
+        text-align: center;
+
+        .ant-pagination {
+          .ant-pagination-item {
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+
+            &:hover {
+              border-color: var(--color-primary);
+            }
+
+            &.ant-pagination-item-active {
+              background: var(--color-primary);
+              border-color: var(--color-primary);
+            }
+          }
+
+          .ant-pagination-prev,
+          .ant-pagination-next {
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+
+            &:hover {
+              border-color: var(--color-primary);
+              color: var(--color-primary);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 모달 스타일
+  .provider-modal {
+    .modal-title {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+
+      .modal-title-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-lg);
+        background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: var(--font-size-lg);
+      }
+
+      .modal-title-text {
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary);
+      }
+    }
+
+    .provider-form {
+      .provider-option {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+
+        .aws-icon {
+          color: #ff9900;
+        }
+
+        .gcp-icon {
+          color: #4285f4;
+        }
+
+        .azure-icon {
+          color: #0078d4;
+        }
+      }
+
+      .status-option {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+
+        .status-icon {
+          &.active {
+            color: var(--color-success);
+          }
+
+          &.inactive {
+            color: var(--color-gray-500);
+          }
+        }
+      }
+    }
+  }
+
+  // 반응형 디자인
+  @media (max-width: 1024px) {
+    padding: var(--space-4);
+
+    .page-header {
+      .header-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-4);
+      }
+    }
+
+    .stats-section {
+      .stat-card {
+        margin-bottom: var(--space-4);
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: var(--space-3);
+
+    .page-header {
+      margin-bottom: var(--space-6);
+
+      .header-content {
+        .header-text {
+          .page-title {
+            font-size: var(--font-size-3xl);
+          }
+
+          .page-description {
+            font-size: var(--font-size-base);
+          }
+        }
+      }
+    }
+
+    .stats-section {
+      margin-bottom: var(--space-6);
+    }
+
+    .providers-card {
+      .card-header {
+        flex-direction: column;
+        gap: var(--space-4);
+        align-items: stretch;
+      }
+
+      .table-container {
+        overflow-x: auto;
+
+        .providers-table {
+          min-width: 800px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: var(--space-2);
+
+    .page-header {
+      .header-content {
+        .header-text {
+          .page-title {
+            font-size: var(--font-size-2xl);
+          }
+        }
+      }
+    }
+
+    .stats-section {
+      .stat-card {
+        .ant-statistic {
+          .ant-statistic-content {
+            .ant-statistic-content-value {
+              font-size: var(--font-size-2xl);
+            }
+          }
+        }
+      }
+    }
+  }
+}
