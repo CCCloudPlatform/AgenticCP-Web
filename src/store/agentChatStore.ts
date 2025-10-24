@@ -10,6 +10,14 @@ export interface ChatMessage {
     action?: string;
     result?: unknown;
     error?: string;
+    agent_used?: string;
+    confidence?: number;
+    processing_time?: number;
+    routing_info?: {
+      intent: string;
+      confidence: number;
+      processing_time: number;
+    };
   };
 }
 
