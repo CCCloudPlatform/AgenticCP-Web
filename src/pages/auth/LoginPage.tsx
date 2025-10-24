@@ -1,9 +1,9 @@
-import { Form, Input, Button, Card, Typography, message } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Card, Typography, message, Switch } from 'antd';
+import { UserOutlined, LockOutlined, SafetyOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/constants';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './LoginPage.scss';
 
 const { Title, Text } = Typography;
@@ -11,12 +11,14 @@ const { Title, Text } = Typography;
 interface LoginFormValues {
   username: string;
   password: string;
+  totpCode?: string;
 }
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login, isAuthenticated, isLoading, error, clearError } = useAuth();
   const [form] = Form.useForm();
+  const [showTotp, setShowTotp] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -92,6 +94,35 @@ const LoginPage = () => {
               autoComplete="current-password"
             />
           </Form.Item>
+          
+          <div style={{ marginBottom: 16 }}>
+            <Switch
+              checked={showTotp}
+              onChange={setShowTotp}
+              size="small"
+            />
+            <Text style={{ marginLeft: 8, fontSize: 12 }}>
+              2단계 인증 (2FA) 사용
+            </Text>
+          </div>
+          
+          {showTotp && (
+            <Form.Item
+              name="totpCode"
+              rules={[
+                { required: showTotp, message: '인증 코드를 입력하세요' },
+                { len: 6, message: '인증 코드는 6자리여야 합니다' },
+                { pattern: /^\d{6}$/, message: '숫자만 입력 가능합니다' }
+              ]}
+            >
+              <Input
+                prefix={<SafetyOutlined />}
+                placeholder="6자리 인증 코드"
+                maxLength={6}
+                style={{ textAlign: 'center', letterSpacing: '0.2em' }}
+              />
+            </Form.Item>
+          )}
           <Form.Item>
             <Button
               type="primary"
