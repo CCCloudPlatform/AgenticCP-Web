@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { User, LoginRequest, LoginResponse } from '@/types';
+import { User, LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from '@/types';
 import { authService } from '@/services/authService';
 import { storage } from '@/utils/storage';
 import { STORAGE_KEYS } from '@/constants';
@@ -11,6 +11,7 @@ interface AuthState {
   isLoading: boolean;
   error: string | null;
   login: (credentials: LoginRequest) => Promise<LoginResponse>;
+  register: (userData: RegisterRequest) => Promise<RegisterResponse>;
   logout: () => Promise<void>;
   initAuth: () => void;
   clearError: () => void;
@@ -96,6 +97,37 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
     }
     return isAuth;
+  },
+
+  register: async (userData: RegisterRequest) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await authService.register(userData);
+      const { accessToken, refreshToken } = response;
+
+      // 토큰 저장
+      storage.set(STORAGE_KEYS.TOKEN, accessToken);
+      storage.set(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
+
+      // 사용자 정보 가져오기
+      const user = await authService.getCurrentUser();
+      storage.set(STORAGE_KEYS.USER_INFO, user);
+
+      set({
+        user,
+        token: accessToken,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+
+      return response;
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : '회원가입에 실패했습니다.',
+        isLoading: false,
+      });
+      throw error;
+    }
   },
 
   clearError: () => set({ error: null }),

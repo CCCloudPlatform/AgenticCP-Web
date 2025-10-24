@@ -1,5 +1,5 @@
 import { apiRequest } from './api';
-import { LoginRequest, LoginResponse, LoginApiResponse, LoginErrorResponse, User } from '@/types';
+import { LoginRequest, LoginResponse, LoginApiResponse, LoginErrorResponse, RegisterRequest, RegisterResponse, RegisterApiResponse, RegisterErrorResponse, User } from '@/types';
 
 // 🔧 개발용 하드코딩 계정 (백엔드 연동 전까지 사용)
 const DEV_ACCOUNT = {
@@ -158,6 +158,41 @@ export const authService = {
    */
   getRefreshToken: (): string | null => {
     return localStorage.getItem('refreshToken');
+  },
+
+  /**
+   * Register new user
+   */
+  register: async (userData: RegisterRequest): Promise<RegisterResponse> => {
+    try {
+      // 🔧 개발 모드: 하드코딩된 계정 체크 (중복 방지)
+      if (userData.username === DEV_ACCOUNT.username) {
+        throw new Error('사용자명이 이미 존재합니다.');
+      }
+
+      // 실제 API 호출 (백엔드 연동 후)
+      const response = await apiRequest.post<RegisterApiResponse>('/auth/register', {
+        ...userData,
+        tenantKey: userData.tenantKey || 'default'
+      });
+      
+      if (response.success) {
+        // 토큰을 localStorage에 저장
+        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('refreshToken', response.data.refreshToken);
+        localStorage.setItem('tokenType', response.data.tokenType);
+        localStorage.setItem('expiresIn', response.data.expiresIn.toString());
+        localStorage.setItem('refreshExpiresIn', response.data.refreshExpiresIn.toString());
+        localStorage.setItem('tokenTimestamp', Date.now().toString());
+        
+        return response.data;
+      } else {
+        throw new Error('회원가입에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('회원가입 오류:', error);
+      throw error;
+    }
   },
 };
 
