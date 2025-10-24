@@ -2,6 +2,23 @@
    NEXT-GEN MINIMAL DESIGN SYSTEM
    =========================================== */
 
+/* Ant Design Message z-index fix */
+.ant-message {
+  z-index: 10001 !important; /* 헤더보다 높게 설정 */
+}
+
+.ant-notification {
+  z-index: 10001 !important; /* 헤더보다 높게 설정 */
+}
+
+/* AI 채팅이 열려있을 때 메시지 위치 조정 */
+.agent-chat-open .ant-message {
+  left: calc(100vw - var(--agent-chat-width, 350px) - 400px) !important;
+  right: auto !important;
+  top: 80px !important; /* 헤더 아래로 조금 더 내림 */
+  transform: none !important;
+}
+
 /* CSS Variables - Design Tokens */
 :root {
   /* Color Palette - Modern & Minimal */

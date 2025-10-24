@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants';
@@ -14,6 +14,8 @@ const Header: React.FC<HeaderProps> = ({ collapsed, onToggle }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { isOpen: isAgentChatOpen, toggleChat } = useAgentChatStore();
+
+
 
   const handleLogout = async () => {
     await logout();
