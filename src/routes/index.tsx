@@ -7,7 +7,7 @@ import { ROUTES } from '@/constants';
 // Lazy load pages
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
 const DashboardPage = lazy(() => import('@/pages/dashboard/DashboardPage'));
-const CloudProvidersPage = lazy(() => import('@/pages/cloud/CloudProvidersPage'));
+const ProjectsPage = lazy(() => import('@/pages/projects/ProjectsPage'));
 const NotFoundPage = lazy(() => import('@/pages/error/NotFoundPage'));
 
 // Layout
@@ -33,8 +33,8 @@ const AppRoutes = () => {
             <Route path={ROUTES.HOME} element={<Navigate to={ROUTES.DASHBOARD} replace />} />
             <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
 
-            {/* Cloud Management Routes */}
-            <Route path={ROUTES.PROVIDERS} element={<CloudProvidersPage />} />
+            {/* Project Management Routes */}
+            <Route path={ROUTES.PROJECT} element={<ProjectsPage />} />
 
             {/* Add more routes here */}
           </Route>
