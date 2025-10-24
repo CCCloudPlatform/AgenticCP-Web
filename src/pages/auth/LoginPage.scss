@@ -170,6 +170,94 @@
           }
         }
 
+        .totp-section {
+          margin-bottom: var(--space-6);
+          padding: var(--space-4);
+          background: rgba(99, 102, 241, 0.05);
+          border: 1px solid rgba(99, 102, 241, 0.1);
+          border-radius: var(--radius-lg);
+          transition: all var(--transition-fast);
+
+          .totp-toggle {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-4);
+
+            .toggle-switch {
+              position: relative;
+              width: 40px;
+              height: 20px;
+              background: var(--border-light);
+              border-radius: 10px;
+              cursor: pointer;
+              transition: background var(--transition-fast);
+
+              &.active {
+                background: var(--color-primary);
+              }
+
+              .toggle-slider {
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                width: 16px;
+                height: 16px;
+                background: var(--color-white);
+                border-radius: 50%;
+                transition: transform var(--transition-fast);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+              }
+
+              &.active .toggle-slider {
+                transform: translateX(20px);
+              }
+            }
+
+            .totp-label {
+              font-size: var(--font-size-sm);
+              color: var(--text-secondary);
+              font-weight: var(--font-weight-medium);
+            }
+          }
+
+          .totp-input {
+            .ant-input {
+              text-align: center;
+              letter-spacing: 0.2em;
+              font-size: var(--font-size-lg);
+              font-weight: var(--font-weight-semibold);
+              border: 2px solid var(--border-light);
+              border-radius: var(--radius-lg);
+              transition: all var(--transition-fast);
+
+              &:focus {
+                border-color: var(--color-primary);
+                box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+              }
+            }
+          }
+        }
+
+        .error-message {
+          margin-bottom: var(--space-4);
+          padding: var(--space-3);
+          background: rgba(239, 68, 68, 0.05);
+          border: 1px solid rgba(239, 68, 68, 0.2);
+          border-radius: var(--radius-lg);
+          color: var(--color-error);
+          font-size: var(--font-size-sm);
+          font-weight: var(--font-weight-medium);
+          text-align: center;
+          animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-5px); }
+          75% { transform: translateX(5px); }
+        }
+
         .login-button {
           width: 100%;
           height: 48px;
