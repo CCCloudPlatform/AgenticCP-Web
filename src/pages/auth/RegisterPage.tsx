@@ -1,4 +1,4 @@
-import { Card, Typography, message } from 'antd';
+import { Card, Typography, message, Space } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/constants';
@@ -46,30 +46,55 @@ const RegisterPage = () => {
 
   return (
     <div className="register-page">
-      <Card className="register-card">
-        <div className="register-header">
-          <Title level={2}>AgenticCP</Title>
-          <Text type="secondary">Multi-Cloud Platform</Text>
-          <div style={{ marginTop: 16, padding: 12, background: '#f0f9ff', borderRadius: 4 }}>
-            <Text type="secondary" style={{ fontSize: 12 }}>
-              🎉 새로운 계정을 만들어보세요
-            </Text>
+      <div className="register-container">
+        <Card className="register-card">
+          <div className="register-header">
+            <div className="logo-section">
+              <div className="logo-icon">
+                <div className="logo-inner">
+                  <span className="logo-text">AC</span>
+                </div>
+                <div className="logo-glow"></div>
+              </div>
+              <div className="logo-content">
+                <Title level={2} className="brand-title">
+                  AgenticCP
+                </Title>
+                <Text className="brand-subtitle">
+                  Multi-Cloud Platform
+                </Text>
+              </div>
+            </div>
+            
+            <div className="welcome-section">
+              <div className="welcome-badge">
+                <span className="badge-icon">🚀</span>
+                <span className="badge-text">새로운 계정을 만들어보세요</span>
+              </div>
+            </div>
           </div>
-        </div>
-        <RegisterForm
-          onSubmit={handleSubmit}
-          loading={isLoading}
-          error={error}
-        />
-        <div className="register-footer">
-          <Text type="secondary">
-            이미 계정이 있으신가요?{' '}
-            <a href={ROUTES.LOGIN} style={{ color: '#1890ff' }}>
-              로그인
-            </a>
-          </Text>
-        </div>
-      </Card>
+
+          <RegisterForm
+            onSubmit={handleSubmit}
+            loading={isLoading}
+            error={error}
+          />
+
+          <div className="register-footer">
+            <Space direction="vertical" size="small" style={{ width: '100%', textAlign: 'center' }}>
+              <Text type="secondary" className="footer-text">
+                이미 계정이 있으신가요?
+              </Text>
+              <a 
+                href={ROUTES.LOGIN} 
+                className="login-link"
+              >
+                로그인하기
+              </a>
+            </Space>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };

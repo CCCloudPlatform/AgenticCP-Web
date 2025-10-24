@@ -1,5 +1,5 @@
 /* ===========================================
-   MODERN REGISTER PAGE COMPONENT
+   CLEAN REGISTER PAGE COMPONENT
    =========================================== */
 
 .register-page {
@@ -8,9 +8,11 @@
   align-items: center;
   min-height: 100vh;
   background: linear-gradient(135deg, 
-    var(--color-primary) 0%, 
-    var(--color-primary-light) 50%, 
-    var(--color-secondary) 100%);
+    #f8f4ff 0%, 
+    #f1e8ff 25%,
+    #e9d5ff 50%, 
+    #ddd6fe 75%,
+    #c4b5fd 100%);
   position: relative;
   overflow: hidden;
 
@@ -23,8 +25,9 @@
     right: 0;
     bottom: 0;
     background: 
-      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.6) 0%, transparent 70%),
+      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.4) 0%, transparent 70%),
+      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 80%);
     pointer-events: none;
   }
 
@@ -32,8 +35,8 @@
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 450px;
-    padding: var(--space-6);
+    max-width: 520px;
+    padding: var(--space-2);
 
     .register-card {
       background: var(--bg-glass);
@@ -42,7 +45,7 @@
       border-radius: var(--radius-2xl);
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: var(--shadow-glass);
-      padding: var(--space-8);
+      padding: var(--space-4);
       transition: all var(--transition-normal);
 
       &:hover {
@@ -52,201 +55,107 @@
 
       .register-header {
         text-align: center;
-        margin-bottom: var(--space-8);
+        margin-bottom: var(--space-2);
 
-        .logo {
-          width: 64px;
-          height: 64px;
-          background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
-          border-radius: var(--radius-xl);
+        .logo-section {
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: 0 auto var(--space-4);
-          box-shadow: var(--shadow-lg);
+          gap: var(--space-2);
+          margin-bottom: var(--space-1);
 
           .logo-icon {
-            color: var(--color-white);
-            font-size: var(--font-size-2xl);
-            font-weight: var(--font-weight-bold);
-          }
-        }
-
-        .register-title {
-          font-size: var(--font-size-3xl);
-          font-weight: var(--font-weight-bold);
-          color: var(--text-primary);
-          margin-bottom: var(--space-2);
-          letter-spacing: -0.025em;
-        }
-
-        .register-subtitle {
-          font-size: var(--font-size-base);
-          color: var(--text-secondary);
-          line-height: var(--line-height-relaxed);
-        }
-      }
-
-      .register-form {
-        .form-group {
-          margin-bottom: var(--space-6);
-
-          .form-label {
-            display: block;
-            font-size: var(--font-size-sm);
-            font-weight: var(--font-weight-medium);
-            color: var(--text-primary);
-            margin-bottom: var(--space-2);
-          }
-
-          .form-input {
-            width: 100%;
+            width: 48px;
             height: 48px;
-            padding: 0 var(--space-4);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-lg);
-            background: var(--bg-primary);
-            font-size: var(--font-size-base);
-            color: var(--text-primary);
-            transition: all var(--transition-fast);
-
-            &::placeholder {
-              color: var(--text-tertiary);
-            }
-
-            &:focus {
-              outline: none;
-              border-color: var(--color-primary);
-              box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-            }
-
-            &.error {
-              border-color: var(--color-error);
-              box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-            }
-          }
-
-          .form-error {
-            font-size: var(--font-size-xs);
-            color: var(--color-error);
-            margin-top: var(--space-1);
-          }
-        }
-
-        .error-message {
-          margin-bottom: var(--space-4);
-          padding: var(--space-3);
-          background: rgba(239, 68, 68, 0.05);
-          border: 1px solid rgba(239, 68, 68, 0.2);
-          border-radius: var(--radius-lg);
-          color: var(--color-error);
-          font-size: var(--font-size-sm);
-          font-weight: var(--font-weight-medium);
-          text-align: center;
-          animation: shake 0.5s ease-in-out;
-        }
-
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          25% { transform: translateX(-5px); }
-          75% { transform: translateX(5px); }
-        }
-
-        .register-button {
-          width: 100%;
-          height: 48px;
-          background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
-          border: none;
-          border-radius: var(--radius-lg);
-          color: var(--color-white);
-          font-size: var(--font-size-base);
-          font-weight: var(--font-weight-semibold);
-          cursor: pointer;
-          transition: all var(--transition-fast);
-          box-shadow: var(--shadow-md);
-
-          &:hover {
-            transform: translateY(-1px);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             box-shadow: var(--shadow-lg);
+
+            .logo-inner {
+              .logo-text {
+                color: var(--color-white);
+                font-size: var(--font-size-2xl);
+                font-weight: var(--font-weight-bold);
+              }
+            }
           }
 
-          &:active {
-            transform: translateY(0);
+          .logo-content {
+            text-align: left;
+
+            .brand-title {
+              font-size: var(--font-size-xl);
+              font-weight: var(--font-weight-bold);
+              color: var(--text-primary);
+              margin: 0 0 2px 0;
+              letter-spacing: -0.025em;
+            }
+
+            .brand-subtitle {
+              font-size: var(--font-size-xs);
+              color: var(--text-secondary);
+              font-weight: var(--font-weight-medium);
+            }
+          }
+        }
+
+        .welcome-section {
+          .welcome-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 8px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: var(--radius-lg);
+            margin-bottom: 6px;
+
+            .badge-icon {
+              font-size: var(--font-size-base);
+            }
+
+            .badge-text {
+              font-size: var(--font-size-sm);
+              color: var(--color-primary);
+              font-weight: var(--font-weight-semibold);
+            }
           }
 
-          &:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-          }
         }
       }
+
+
 
       .register-footer {
         text-align: center;
-        margin-top: var(--space-8);
-        padding-top: var(--space-6);
+        margin-top: var(--space-2);
+        padding-top: var(--space-1);
         border-top: 1px solid var(--border-light);
 
-        .login-link {
-          font-size: var(--font-size-sm);
+        .footer-text {
           color: var(--text-secondary);
+          font-size: var(--font-size-sm);
+          margin-bottom: var(--space-2);
+        }
 
-          a {
-            color: var(--color-primary);
-            text-decoration: none;
-            font-weight: var(--font-weight-medium);
-            transition: color var(--transition-fast);
+        .login-link {
+          color: var(--color-primary);
+          text-decoration: none;
+          font-weight: var(--font-weight-medium);
+          font-size: var(--font-size-sm);
+          transition: color var(--transition-fast);
 
-            &:hover {
-              color: var(--color-primary-dark);
-            }
+          &:hover {
+            color: var(--color-primary-dark);
           }
         }
       }
     }
   }
 
-  /* Floating elements for visual interest */
-  .floating-element {
-    position: absolute;
-    border-radius: var(--radius-full);
-    background: rgba(255, 255, 255, 0.1);
-    animation: float 6s ease-in-out infinite;
-
-    &:nth-child(1) {
-      width: 80px;
-      height: 80px;
-      top: 20%;
-      left: 10%;
-      animation-delay: 0s;
-    }
-
-    &:nth-child(2) {
-      width: 120px;
-      height: 120px;
-      top: 60%;
-      right: 15%;
-      animation-delay: 2s;
-    }
-
-    &:nth-child(3) {
-      width: 60px;
-      height: 60px;
-      bottom: 20%;
-      left: 20%;
-      animation-delay: 4s;
-    }
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-20px) rotate(180deg);
-  }
 }
 
 /* Responsive Design */
@@ -255,14 +164,29 @@
     padding: var(--space-4);
 
     .register-container {
+      max-width: 100%;
+      padding: var(--space-4);
+
       .register-card {
         padding: var(--space-6);
 
         .register-header {
           margin-bottom: var(--space-6);
 
-          .register-title {
-            font-size: var(--font-size-2xl);
+          .logo-section {
+            flex-direction: column;
+            text-align: center;
+            gap: var(--space-3);
+
+            .logo-content {
+              text-align: center;
+            }
+          }
+
+          .welcome-section {
+            .welcome-badge {
+              font-size: var(--font-size-sm);
+            }
           }
         }
       }

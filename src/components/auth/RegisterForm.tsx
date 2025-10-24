@@ -1,6 +1,7 @@
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, MailOutlined, LockOutlined, IdcardOutlined } from '@ant-design/icons';
 import { useState } from 'react';
+import './RegisterForm.scss';
 
 interface RegisterFormValues {
   username: string;
@@ -39,13 +40,14 @@ const RegisterForm = ({ onSubmit, loading = false, error }: RegisterFormProps) =
   };
 
   return (
-    <Form
-      form={form}
-      name="register"
-      onFinish={handleSubmit}
-      size="large"
-      layout="vertical"
-    >
+    <div className="register-form">
+      <Form
+        form={form}
+        name="register"
+        onFinish={handleSubmit}
+        size="large"
+        layout="vertical"
+      >
       <Form.Item
         name="username"
         label="사용자명"
@@ -165,7 +167,8 @@ const RegisterForm = ({ onSubmit, loading = false, error }: RegisterFormProps) =
           {loading ? '회원가입 중...' : '회원가입'}
         </Button>
       </Form.Item>
-    </Form>
+      </Form>
+    </div>
   );
 };
 
