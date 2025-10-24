@@ -1,9 +1,9 @@
-import { Form, Input, Button, Card, Typography, message, Switch } from 'antd';
-import { UserOutlined, LockOutlined, SafetyOutlined } from '@ant-design/icons';
+import { Card, Typography, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/constants';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import LoginForm from '@/components/auth/LoginForm';
 import './LoginPage.scss';
 
 const { Title, Text } = Typography;
@@ -17,8 +17,6 @@ interface LoginFormValues {
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login, isAuthenticated, isLoading, error, clearError } = useAuth();
-  const [form] = Form.useForm();
-  const [showTotp, setShowTotp] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -27,12 +25,10 @@ const LoginPage = () => {
   }, [isAuthenticated, navigate]);
 
   // 🔧 개발용: 기본값 설정
-  useEffect(() => {
-    form.setFieldsValue({
-      username: 'agenticcp',
-      password: 'agenticcpwebpw',
-    });
-  }, [form]);
+  const defaultValues = {
+    username: 'agenticcp',
+    password: 'agenticcpwebpw',
+  };
 
   useEffect(() => {
     if (error) {
@@ -67,73 +63,12 @@ const LoginPage = () => {
             </Text>
           </div>
         </div>
-        <Form
-          form={form}
-          name="login"
-          onFinish={handleSubmit}
-          size="large"
-          layout="vertical"
-        >
-          <Form.Item
-            name="username"
-            rules={[{ required: true, message: '사용자명을 입력하세요' }]}
-          >
-            <Input
-              prefix={<UserOutlined />}
-              placeholder="사용자명"
-              autoComplete="username"
-            />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: '비밀번호를 입력하세요' }]}
-          >
-            <Input.Password
-              prefix={<LockOutlined />}
-              placeholder="비밀번호"
-              autoComplete="current-password"
-            />
-          </Form.Item>
-          
-          <div style={{ marginBottom: 16 }}>
-            <Switch
-              checked={showTotp}
-              onChange={setShowTotp}
-              size="small"
-            />
-            <Text style={{ marginLeft: 8, fontSize: 12 }}>
-              2단계 인증 (2FA) 사용
-            </Text>
-          </div>
-          
-          {showTotp && (
-            <Form.Item
-              name="totpCode"
-              rules={[
-                { required: showTotp, message: '인증 코드를 입력하세요' },
-                { len: 6, message: '인증 코드는 6자리여야 합니다' },
-                { pattern: /^\d{6}$/, message: '숫자만 입력 가능합니다' }
-              ]}
-            >
-              <Input
-                prefix={<SafetyOutlined />}
-                placeholder="6자리 인증 코드"
-                maxLength={6}
-                style={{ textAlign: 'center', letterSpacing: '0.2em' }}
-              />
-            </Form.Item>
-          )}
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              loading={isLoading}
-              block
-            >
-              로그인
-            </Button>
-          </Form.Item>
-        </Form>
+        <LoginForm
+          onSubmit={handleSubmit}
+          loading={isLoading}
+          error={error}
+          defaultValues={defaultValues}
+        />
       </Card>
     </div>
   );
