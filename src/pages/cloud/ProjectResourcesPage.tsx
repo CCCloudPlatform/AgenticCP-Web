@@ -1,5 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Table, Button, Typography, Tag, Badge, Dropdown, Avatar, Tabs } from 'antd';
+import {
+  Card,
+  Table,
+  Button,
+  Typography,
+  Tag,
+  Badge,
+  Dropdown,
+  Avatar,
+  Tabs,
+  Modal,
+  message,
+  Popconfirm,
+  Input,
+  Space,
+} from 'antd';
 import {
   ArrowLeftOutlined,
   PlusOutlined,
@@ -11,6 +26,10 @@ import {
   PauseCircleOutlined,
   DeleteOutlined,
   SettingOutlined,
+  ExclamationCircleOutlined,
+  EditOutlined,
+  CheckOutlined,
+  CloseOutlined,
 } from '@ant-design/icons';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { projectService } from '@/services/projectService';
@@ -47,6 +66,8 @@ const ProjectResourcesPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [project, setProject] = useState<Project | null>(null);
   const [activeTab, setActiveTab] = useState<string>('all');
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingName, setEditingName] = useState<string>('');
 
   useEffect(() => {
     fetchProjectResources();
@@ -154,6 +175,157 @@ const ProjectResourcesPage: React.FC = () => {
     }
   };
 
+  /**
+   * 리소스 시작
+   */
+  const handleStartResource = async (resource: Resource) => {
+    try {
+      message.loading({ content: `${resource.name} 시작 중...`, key: 'resourceAction' });
+
+      // Mock: 실제로는 API 호출
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      // 상태 업데이트
+      if (project) {
+        const updatedResources = project.resources.map((r) =>
+          r.id === resource.id ? { ...r, status: 'running' } : r
+        );
+        setProject({ ...project, resources: updatedResources });
+      }
+
+      message.success({ content: `${resource.name}이(가) 시작되었습니다`, key: 'resourceAction' });
+    } catch (error) {
+      message.error({ content: '리소스 시작 실패', key: 'resourceAction' });
+      console.error('리소스 시작 실패:', error);
+    }
+  };
+
+  /**
+   * 리소스 중지
+   */
+  const handleStopResource = async (resource: Resource) => {
+    try {
+      message.loading({ content: `${resource.name} 중지 중...`, key: 'resourceAction' });
+
+      // Mock: 실제로는 API 호출
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      // 상태 업데이트
+      if (project) {
+        const updatedResources = project.resources.map((r) =>
+          r.id === resource.id ? { ...r, status: 'stopped' } : r
+        );
+        setProject({ ...project, resources: updatedResources });
+      }
+
+      message.success({ content: `${resource.name}이(가) 중지되었습니다`, key: 'resourceAction' });
+    } catch (error) {
+      message.error({ content: '리소스 중지 실패', key: 'resourceAction' });
+      console.error('리소스 중지 실패:', error);
+    }
+  };
+
+  /**
+   * 리소스 설정
+   */
+  const handleSettingsResource = (resource: Resource) => {
+    const projectId = searchParams.get('projectId');
+    navigate(`/cloud/resource-settings?resourceId=${resource.id}&projectId=${projectId || ''}`);
+  };
+
+  /**
+   * 리소스 이름 편집 시작
+   */
+  const handleStartEdit = (resource: Resource) => {
+    setEditingId(resource.id);
+    setEditingName(resource.name);
+  };
+
+  /**
+   * 리소스 이름 저장
+   */
+  const handleSaveName = async (resource: Resource) => {
+    if (!editingName.trim()) {
+      message.error('리소스 이름을 입력하세요');
+      return;
+    }
+
+    try {
+      message.loading({ content: '이름 변경 중...', key: 'updateName' });
+
+      // Mock: 실제로는 API 호출
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      // 상태 업데이트
+      if (project) {
+        const updatedResources = project.resources.map((r) =>
+          r.id === resource.id ? { ...r, name: editingName } : r
+        );
+        setProject({ ...project, resources: updatedResources });
+      }
+
+      setEditingId(null);
+      setEditingName('');
+      message.success({ content: '이름이 변경되었습니다', key: 'updateName' });
+    } catch (error) {
+      message.error({ content: '이름 변경 실패', key: 'updateName' });
+      console.error('이름 변경 실패:', error);
+    }
+  };
+
+  /**
+   * 리소스 이름 편집 취소
+   */
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setEditingName('');
+  };
+
+  /**
+   * 리소스 삭제
+   */
+  const handleDeleteResource = async (resource: Resource) => {
+    Modal.confirm({
+      title: '리소스 삭제',
+      icon: <ExclamationCircleOutlined />,
+      content: (
+        <div>
+          <p>
+            정말로 <strong>{resource.name}</strong>을(를) 삭제하시겠습니까?
+          </p>
+          <p style={{ color: 'var(--color-error)', marginTop: '8px' }}>
+            ⚠️ 이 작업은 되돌릴 수 없습니다. 모든 데이터가 영구적으로 삭제됩니다.
+          </p>
+        </div>
+      ),
+      okText: '삭제',
+      okType: 'danger',
+      cancelText: '취소',
+      onOk: async () => {
+        try {
+          message.loading({ content: `${resource.name} 삭제 중...`, key: 'resourceAction' });
+
+          // Mock: 실제로는 API 호출
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+
+          // 리소스 제거
+          if (project) {
+            const updatedResources = project.resources.filter((r) => r.id !== resource.id);
+            setProject({ ...project, resources: updatedResources });
+          }
+
+          message.success({
+            content: `${resource.name}이(가) 삭제되었습니다`,
+            key: 'resourceAction',
+          });
+        } catch (error) {
+          message.error({ content: '리소스 삭제 실패', key: 'resourceAction' });
+          console.error('리소스 삭제 실패:', error);
+        }
+      },
+    });
+  };
+
   // 리소스 필터링
   const getFilteredResources = () => {
     if (!project) return [];
@@ -190,7 +362,36 @@ const ProjectResourcesPage: React.FC = () => {
         <div className="resource-cell">
           <div className="resource-icon">{getResourceIcon(record.type)}</div>
           <div className="resource-info">
-            <div className="resource-name">{text}</div>
+            {editingId === record.id ? (
+              <Space.Compact style={{ width: '100%' }}>
+                <Input
+                  value={editingName}
+                  onChange={(e) => setEditingName(e.target.value)}
+                  onPressEnter={() => handleSaveName(record)}
+                  placeholder="리소스 이름"
+                  autoFocus
+                  style={{ maxWidth: '250px' }}
+                />
+                <Button
+                  type="primary"
+                  icon={<CheckOutlined />}
+                  onClick={() => handleSaveName(record)}
+                  size="small"
+                />
+                <Button icon={<CloseOutlined />} onClick={handleCancelEdit} size="small" />
+              </Space.Compact>
+            ) : (
+              <div className="resource-name-wrapper">
+                <div className="resource-name">{text}</div>
+                <Button
+                  type="text"
+                  size="small"
+                  icon={<EditOutlined />}
+                  onClick={() => handleStartEdit(record)}
+                  className="edit-btn"
+                />
+              </div>
+            )}
             <div className="resource-type">{record.type}</div>
           </div>
         </div>
@@ -229,17 +430,20 @@ const ProjectResourcesPage: React.FC = () => {
             icon: <PlayCircleOutlined />,
             label: '시작',
             disabled: record.status.toLowerCase() === 'running',
+            onClick: () => handleStartResource(record),
           },
           {
             key: 'stop',
             icon: <PauseCircleOutlined />,
             label: '중지',
             disabled: record.status.toLowerCase() === 'stopped',
+            onClick: () => handleStopResource(record),
           },
           {
             key: 'settings',
             icon: <SettingOutlined />,
             label: '설정',
+            onClick: () => handleSettingsResource(record),
           },
           {
             type: 'divider' as const,
@@ -249,6 +453,7 @@ const ProjectResourcesPage: React.FC = () => {
             icon: <DeleteOutlined />,
             label: '삭제',
             danger: true,
+            onClick: () => handleDeleteResource(record),
           },
         ];
 
@@ -360,28 +565,28 @@ const ProjectResourcesPage: React.FC = () => {
         </div>
         <div className="create-actions-buttons">
           <Button
-            type="primary"
-            icon={<PlusOutlined />}
+            type="text"
             onClick={() => handleCreateResource('server')}
             className="create-btn server"
           >
-            <CloudServerOutlined /> 서버 생성
+            <CloudServerOutlined />
+            <span>서버 생성</span>
           </Button>
           <Button
-            type="primary"
-            icon={<PlusOutlined />}
+            type="text"
             onClick={() => handleCreateResource('storage')}
             className="create-btn storage"
           >
-            <DatabaseOutlined /> 스토리지 생성
+            <DatabaseOutlined />
+            <span>스토리지 생성</span>
           </Button>
           <Button
-            type="primary"
-            icon={<PlusOutlined />}
+            type="text"
             onClick={() => handleCreateResource('network')}
             className="create-btn network"
           >
-            <GlobalOutlined /> 네트워크 생성
+            <GlobalOutlined />
+            <span>네트워크 생성</span>
           </Button>
         </div>
       </Card>
