@@ -10,6 +10,7 @@ const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
 const DashboardPage = lazy(() => import('@/pages/dashboard/DashboardPage'));
 const RolesPermissionsPage = lazy(() => import('@/pages/settings/RolesPermissionsPage'));
 const PermissionTestPage = lazy(() => import('@/pages/settings/PermissionTestPage'));
+const OrganizationPage = lazy(() => import('@/pages/organization/OrganizationPage'));
 const NotFoundPage = lazy(() => import('@/pages/error/NotFoundPage'));
 
 // Layout
@@ -39,6 +40,9 @@ const AppRoutes = () => {
             {/* Settings */}
             <Route path={ROUTES.ROLES_PERMISSIONS} element={<RolesPermissionsPage />} />
             <Route path="/settings/permission-test" element={<PermissionTestPage />} />
+            
+            {/* Organization Management */}
+            <Route path={ROUTES.ORGANIZATIONS} element={<OrganizationPage />} />
             
             {/* Add more routes here */}
           </Route>

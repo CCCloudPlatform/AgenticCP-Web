@@ -31,6 +31,9 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
   // 권한 기반 메뉴 필터링 함수
   const filterMenuItems = (items: MenuItem[]): MenuItem[] => {
     return items.filter(item => {
+      // TODO: API 서버 연결 후 권한 체크 활성화 필요
+      // 현재는 API 서버가 연결되지 않아 권한 체크를 임시로 비활성화
+      /*
       // 권한 검증
       if (item.requiredPermission) {
         if (!hasPermission(item.requiredPermission)) {
@@ -44,8 +47,9 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           return false;
         }
       }
+      */
 
-      // 기존 disabled 체크
+      // 기존 disabled 체크만 유지
       if (item.disabled) {
         return false;
       }
@@ -74,6 +78,12 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       icon: '👥',
       label: '테넌트 관리',
       requiredRole: ['SUPER_ADMIN', 'TENANT_ADMIN'],
+    },
+    {
+      key: ROUTES.ORGANIZATIONS,
+      icon: '🏢',
+      label: '조직 관리',
+      requiredPermission: 'organization.read',
     },
     {
       key: 'cloud',

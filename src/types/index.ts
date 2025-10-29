@@ -330,3 +330,106 @@ export interface Menu {
   updatedAt: string;
 }
 
+/**
+ * Organization Types
+ */
+
+// 조직 기본 정보
+export interface Organization {
+  id: number;
+  orgName: string;
+  description?: string;
+  orgType: OrganizationType;
+  parentId?: number;
+  depth: number;
+  contactEmail?: string;
+  contactPhone?: string;
+  address?: string;
+  status: OrganizationStatus;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  updatedBy: string;
+}
+
+export type OrganizationType = 'COMPANY' | 'DEPARTMENT' | 'TEAM' | 'GROUP';
+export type OrganizationStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
+
+// 조직 계층 구조
+export interface OrganizationHierarchy {
+  organization: Organization;
+  children: OrganizationHierarchy[];
+}
+
+// 조직 경로 정보
+export interface OrganizationPath {
+  path: Organization[];
+  fullPath: string;
+}
+
+// 조직 통계
+export interface OrganizationStats {
+  totalOrganizations: number;
+  activeOrganizations: number;
+  inactiveOrganizations: number;
+  suspendedOrganizations: number;
+  organizationsByType: Record<OrganizationType, number>;
+  maxDepth: number;
+}
+
+// 조직 구성원
+export interface OrganizationMember {
+  id: number;
+  type: 'USER' | 'ORGANIZATION';
+  name: string;
+  email?: string;
+  role?: string;
+  status: string;
+  joinedAt: string;
+  data: User | Organization;
+}
+
+// 조직 생성 요청
+export interface CreateOrganizationRequest {
+  orgName: string;
+  description?: string;
+  orgType: OrganizationType;
+  parentId?: number;
+  contactEmail?: string;
+  contactPhone?: string;
+  address?: string;
+}
+
+// 조직 수정 요청
+export interface UpdateOrganizationRequest {
+  orgName?: string;
+  description?: string;
+  orgType?: OrganizationType;
+  contactEmail?: string;
+  contactPhone?: string;
+  address?: string;
+}
+
+// 조직 이동 요청
+export interface MoveOrganizationRequest {
+  newParentId?: number;
+}
+
+// 사용자를 조직에 추가 요청
+export interface AddUserToOrganizationRequest {
+  userId: number;
+  role?: string;
+}
+
+// 조직 응답 타입들
+export interface OrganizationResponse extends Organization {
+  parentName?: string;
+  childrenCount: number;
+  membersCount: number;
+  tenantsCount: number;
+}
+
+export interface OrganizationHierarchyResponse extends OrganizationHierarchy {}
+export interface OrganizationPathResponse extends OrganizationPath {}
+export interface OrganizationStatsResponse extends OrganizationStats {}
+

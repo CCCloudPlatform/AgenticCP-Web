@@ -87,6 +87,9 @@ export const ROUTES = {
   PROFILE: '/settings/profile',
   ROLES_PERMISSIONS: '/settings/roles-permissions',
   
+  // Organization Management
+  ORGANIZATIONS: '/organizations',
+  
   // Agent
   AGENT_CHAT: '/agent/chat',
 } as const;
