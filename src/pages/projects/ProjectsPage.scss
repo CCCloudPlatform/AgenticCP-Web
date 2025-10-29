@@ -168,7 +168,7 @@
           transition: all var(--transition-fast);
 
           &:hover {
-            transform: rotate(180deg);
+            // 회전 효과 제거
           }
         }
       }
