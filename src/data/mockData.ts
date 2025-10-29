@@ -137,9 +137,11 @@ export const mockProviders: CloudProvider[] = [
 
 /**
  * Mock Resources Data for E-Commerce Platform Projects
+ * 인벤토리에는 서버(EC2/Compute Engine/VM), 스토리지(S3/Cloud Storage), 네트워크(VPC)만 표시
  */
 export const mockResources: Resource[] = [
   // Frontend Web Application Resources (AWS)
+  // 서버
   {
     id: 1,
     name: 'ecommerce-web-frontend',
@@ -148,36 +150,39 @@ export const mockResources: Resource[] = [
     providerId: 1, // E-Commerce Production AWS
     status: 'RUNNING',
     region: 'us-east-1',
-    tags: { Environment: 'Production', Project: 'Frontend Web App' },
+    tags: { Environment: 'Production', Project: 'Frontend Web App', Category: 'Server' },
     createdAt: '2024-01-15T09:00:00Z',
     updatedAt: '2024-01-20T14:30:00Z',
   },
+  // 스토리지
   {
     id: 2,
-    name: 'ecommerce-api-gateway',
-    type: 'API Gateway',
+    name: 'ecommerce-web-assets',
+    type: 'S3',
     provider: 'AWS',
     providerId: 1, // E-Commerce Production AWS
     status: 'RUNNING',
     region: 'us-east-1',
-    tags: { Environment: 'Production', Project: 'Frontend Web App' },
+    tags: { Environment: 'Production', Project: 'Frontend Web App', Category: 'Storage' },
     createdAt: '2024-01-15T09:00:00Z',
     updatedAt: '2024-01-20T14:30:00Z',
   },
+  // 네트워크
   {
     id: 3,
-    name: 'ecommerce-web-db',
-    type: 'RDS',
+    name: 'ecommerce-production-vpc',
+    type: 'VPC',
     provider: 'AWS',
     providerId: 1, // E-Commerce Production AWS
     status: 'RUNNING',
     region: 'us-east-1',
-    tags: { Environment: 'Production', Project: 'Frontend Web App' },
+    tags: { Environment: 'Production', Project: 'Frontend Web App', Category: 'Network' },
     createdAt: '2024-01-15T09:00:00Z',
     updatedAt: '2024-01-20T14:30:00Z',
   },
 
   // Backend API Services Resources (GCP)
+  // 서버
   {
     id: 4,
     name: 'ecommerce-api-server',
@@ -186,36 +191,39 @@ export const mockResources: Resource[] = [
     providerId: 2, // E-Commerce Development GCP
     status: 'RUNNING',
     region: 'asia-northeast-1',
-    tags: { Environment: 'Development', Project: 'Backend API Services' },
+    tags: { Environment: 'Development', Project: 'Backend API Services', Category: 'Server' },
     createdAt: '2024-01-10T10:00:00Z',
     updatedAt: '2024-01-18T16:45:00Z',
   },
+  // 스토리지
   {
     id: 5,
-    name: 'ecommerce-api-db',
-    type: 'Cloud SQL',
+    name: 'ecommerce-api-backups',
+    type: 'Cloud Storage',
     provider: 'GCP',
     providerId: 2, // E-Commerce Development GCP
     status: 'RUNNING',
     region: 'asia-northeast-1',
-    tags: { Environment: 'Development', Project: 'Backend API Services' },
+    tags: { Environment: 'Development', Project: 'Backend API Services', Category: 'Storage' },
     createdAt: '2024-01-10T10:00:00Z',
     updatedAt: '2024-01-18T16:45:00Z',
   },
+  // 네트워크
   {
     id: 6,
-    name: 'ecommerce-microservices',
-    type: 'Kubernetes Engine',
+    name: 'ecommerce-development-vpc',
+    type: 'VPC',
     provider: 'GCP',
     providerId: 2, // E-Commerce Development GCP
     status: 'RUNNING',
     region: 'asia-northeast-1',
-    tags: { Environment: 'Development', Project: 'Backend API Services' },
+    tags: { Environment: 'Development', Project: 'Backend API Services', Category: 'Network' },
     createdAt: '2024-01-10T10:00:00Z',
     updatedAt: '2024-01-18T16:45:00Z',
   },
 
   // Staging Environment Resources (Azure)
+  // 서버
   {
     id: 7,
     name: 'ecommerce-staging-vm',
@@ -224,71 +232,102 @@ export const mockResources: Resource[] = [
     providerId: 3, // E-Commerce Staging Azure
     status: 'RUNNING',
     region: 'eastus',
-    tags: { Environment: 'Staging', Project: 'Staging Environment' },
+    tags: { Environment: 'Staging', Project: 'Staging Environment', Category: 'Server' },
     createdAt: '2024-01-05T08:00:00Z',
     updatedAt: '2024-01-22T11:20:00Z',
   },
+  // 스토리지
   {
     id: 8,
-    name: 'ecommerce-staging-db',
-    type: 'Azure SQL Database',
+    name: 'ecommerce-staging-storage',
+    type: 'Storage Account',
     provider: 'AZURE',
     providerId: 3, // E-Commerce Staging Azure
     status: 'RUNNING',
     region: 'eastus',
-    tags: { Environment: 'Staging', Project: 'Staging Environment' },
+    tags: { Environment: 'Staging', Project: 'Staging Environment', Category: 'Storage' },
+    createdAt: '2024-01-05T08:00:00Z',
+    updatedAt: '2024-01-22T11:20:00Z',
+  },
+  // 네트워크
+  {
+    id: 9,
+    name: 'ecommerce-staging-vnet',
+    type: 'Virtual Network',
+    provider: 'AZURE',
+    providerId: 3, // E-Commerce Staging Azure
+    status: 'RUNNING',
+    region: 'eastus',
+    tags: { Environment: 'Staging', Project: 'Staging Environment', Category: 'Network' },
     createdAt: '2024-01-05T08:00:00Z',
     updatedAt: '2024-01-22T11:20:00Z',
   },
 
   // Analytics & Data Processing Resources (AWS)
+  // 서버
   {
-    id: 9,
-    name: 'ecommerce-analytics-cluster',
-    type: 'EMR',
+    id: 10,
+    name: 'ecommerce-analytics-server',
+    type: 'EC2',
     provider: 'AWS',
     providerId: 4, // E-Commerce Analytics AWS
     status: 'RUNNING',
     region: 'us-west-2',
-    tags: { Environment: 'Production', Project: 'Analytics & Data Processing' },
+    tags: { Environment: 'Production', Project: 'Analytics & Data Processing', Category: 'Server' },
     createdAt: '2024-01-01T12:00:00Z',
     updatedAt: '2024-01-15T09:30:00Z',
   },
+  // 스토리지
   {
-    id: 10,
+    id: 11,
     name: 'ecommerce-data-lake',
     type: 'S3',
     provider: 'AWS',
     providerId: 4, // E-Commerce Analytics AWS
     status: 'RUNNING',
     region: 'us-west-2',
-    tags: { Environment: 'Production', Project: 'Analytics & Data Processing' },
+    tags: { Environment: 'Production', Project: 'Analytics & Data Processing', Category: 'Storage' },
+    createdAt: '2024-01-01T12:00:00Z',
+    updatedAt: '2024-01-15T09:30:00Z',
+  },
+  // 네트워크
+  {
+    id: 12,
+    name: 'ecommerce-analytics-vpc',
+    type: 'VPC',
+    provider: 'AWS',
+    providerId: 4, // E-Commerce Analytics AWS
+    status: 'RUNNING',
+    region: 'us-west-2',
+    tags: { Environment: 'Production', Project: 'Analytics & Data Processing', Category: 'Network' },
     createdAt: '2024-01-01T12:00:00Z',
     updatedAt: '2024-01-15T09:30:00Z',
   },
 
   // CDN & Content Delivery Resources (GCP)
+  // 스토리지
   {
-    id: 11,
-    name: 'ecommerce-cdn-global',
-    type: 'Cloud CDN',
-    provider: 'GCP',
-    providerId: 5, // E-Commerce CDN GCP
-    status: 'RUNNING',
-    region: 'global',
-    tags: { Environment: 'Production', Project: 'CDN & Content Delivery' },
-    createdAt: '2024-01-08T14:00:00Z',
-    updatedAt: '2024-01-25T10:15:00Z',
-  },
-  {
-    id: 12,
+    id: 13,
     name: 'ecommerce-static-assets',
     type: 'Cloud Storage',
     provider: 'GCP',
     providerId: 5, // E-Commerce CDN GCP
     status: 'RUNNING',
     region: 'global',
-    tags: { Environment: 'Production', Project: 'CDN & Content Delivery' },
+    tags: { Environment: 'Production', Project: 'CDN & Content Delivery', Category: 'Storage' },
+    createdAt: '2024-01-08T14:00:00Z',
+    updatedAt: '2024-01-25T10:15:00Z',
+  },
+  // 네트워크
+  {
+    id: 14,
+    name: 'ecommerce-cdn-vpc',
+    type: 'VPC',
+    provider: 'GCP',
+    providerId: 5, // E-Commerce CDN GCP
+    status: 'RUNNING',
+    region: 'global',
+    tags: { Environment: 'Production', Project: 'CDN & Content Delivery', Category: 'Network' },
     createdAt: '2024-01-08T14:00:00Z',
     updatedAt: '2024-01-25T10:15:00Z',
   },

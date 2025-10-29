@@ -56,27 +56,48 @@ export const cloudService = {
 
   /**
    * Get resources
+   * 인벤토리용: 서버(EC2/Compute Engine/VM), 스토리지(S3/Cloud Storage), 네트워크(VPC)만 반환
    */
   getResources: async (params?: PaginationParams): Promise<PagedResponse<Resource>> => {
     // Mock API delay
     await new Promise(resolve => setTimeout(resolve, 400));
     
+    // 허용된 리소스 타입 정의 (인벤토리용)
+    const allowedTypes = [
+      // 서버
+      'EC2',
+      'Compute Engine',
+      'Virtual Machine',
+      // 스토리지
+      'S3',
+      'Cloud Storage',
+      'Storage Account',
+      // 네트워크
+      'VPC',
+      'Virtual Network',
+    ];
+    
+    // 인벤토리용 리소스만 필터링
+    const inventoryResources = mockResources.filter((resource) =>
+      allowedTypes.includes(resource.type)
+    );
+    
     const page = params?.page || 0;
     const size = params?.size || 10;
     const start = page * size;
     const end = start + size;
-    const paginatedResources = mockResources.slice(start, end);
+    const paginatedResources = inventoryResources.slice(start, end);
     
     // Return mock resources data
     return Promise.resolve({
       content: paginatedResources,
       page,
       size,
-      totalElements: mockResources.length,
-      totalPages: Math.ceil(mockResources.length / size),
+      totalElements: inventoryResources.length,
+      totalPages: Math.ceil(inventoryResources.length / size),
       first: page === 0,
-      last: end >= mockResources.length,
-      hasNext: end < mockResources.length,
+      last: end >= inventoryResources.length,
+      hasNext: end < inventoryResources.length,
       hasPrevious: page > 0,
     });
   },

@@ -187,11 +187,17 @@ const InventoryPage: React.FC = () => {
   };
 
   const getTypeIcon = (type: string) => {
-    if (type.includes('EC2') || type.includes('Compute') || type.includes('VM')) {
+    // 서버 타입
+    if (type === 'EC2' || type === 'Compute Engine' || type === 'Virtual Machine') {
       return <ThunderboltOutlined className="type-icon" />;
     }
-    if (type.includes('RDS') || type.includes('SQL') || type.includes('Database')) {
+    // 스토리지 타입
+    if (type === 'S3' || type === 'Cloud Storage' || type === 'Storage Account') {
       return <DatabaseOutlined className="type-icon" />;
+    }
+    // 네트워크 타입
+    if (type === 'VPC' || type === 'Virtual Network') {
+      return <CloudOutlined className="type-icon" />;
     }
     return <CloudOutlined className="type-icon" />;
   };
