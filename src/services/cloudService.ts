@@ -1,5 +1,5 @@
 import { CloudProvider, Resource, PagedResponse, PaginationParams } from '@/types';
-import { mockApiResponses, mockProviders } from '@/data/mockData';
+import { mockApiResponses, mockProviders, mockResources } from '@/data/mockData';
 
 /**
  * Cloud Management Service
@@ -57,32 +57,42 @@ export const cloudService = {
   /**
    * Get resources
    */
-  getResources: async (_params?: PaginationParams): Promise<PagedResponse<Resource>> => {
+  getResources: async (params?: PaginationParams): Promise<PagedResponse<Resource>> => {
     // Mock API delay
     await new Promise(resolve => setTimeout(resolve, 400));
     
+    const page = params?.page || 0;
+    const size = params?.size || 10;
+    const start = page * size;
+    const end = start + size;
+    const paginatedResources = mockResources.slice(start, end);
+    
     // Return mock resources data
     return Promise.resolve({
-      content: [],
-      page: 0,
-      size: 10,
-      totalElements: 0,
-      totalPages: 0,
-      first: true,
-      last: true,
-      hasNext: false,
-      hasPrevious: false,
+      content: paginatedResources,
+      page,
+      size,
+      totalElements: mockResources.length,
+      totalPages: Math.ceil(mockResources.length / size),
+      first: page === 0,
+      last: end >= mockResources.length,
+      hasNext: end < mockResources.length,
+      hasPrevious: page > 0,
     });
   },
 
   /**
    * Get resource by ID
    */
-  getResourceById: async (_id: number): Promise<Resource> => {
+  getResourceById: async (id: number): Promise<Resource> => {
     // Mock API delay
     await new Promise(resolve => setTimeout(resolve, 300));
     
-    throw new Error('Resource not found');
+    const resource = mockResources.find(r => r.id === id);
+    if (!resource) {
+      throw new Error('Resource not found');
+    }
+    return Promise.resolve(resource);
   },
 
   /**

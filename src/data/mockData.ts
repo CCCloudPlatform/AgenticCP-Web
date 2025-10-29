@@ -145,6 +145,7 @@ export const mockResources: Resource[] = [
     name: 'ecommerce-web-frontend',
     type: 'EC2',
     provider: 'AWS',
+    providerId: 1, // E-Commerce Production AWS
     status: 'RUNNING',
     region: 'us-east-1',
     tags: { Environment: 'Production', Project: 'Frontend Web App' },
@@ -156,6 +157,7 @@ export const mockResources: Resource[] = [
     name: 'ecommerce-api-gateway',
     type: 'API Gateway',
     provider: 'AWS',
+    providerId: 1, // E-Commerce Production AWS
     status: 'RUNNING',
     region: 'us-east-1',
     tags: { Environment: 'Production', Project: 'Frontend Web App' },
@@ -167,6 +169,7 @@ export const mockResources: Resource[] = [
     name: 'ecommerce-web-db',
     type: 'RDS',
     provider: 'AWS',
+    providerId: 1, // E-Commerce Production AWS
     status: 'RUNNING',
     region: 'us-east-1',
     tags: { Environment: 'Production', Project: 'Frontend Web App' },
@@ -180,6 +183,7 @@ export const mockResources: Resource[] = [
     name: 'ecommerce-api-server',
     type: 'Compute Engine',
     provider: 'GCP',
+    providerId: 2, // E-Commerce Development GCP
     status: 'RUNNING',
     region: 'asia-northeast-1',
     tags: { Environment: 'Development', Project: 'Backend API Services' },
@@ -191,6 +195,7 @@ export const mockResources: Resource[] = [
     name: 'ecommerce-api-db',
     type: 'Cloud SQL',
     provider: 'GCP',
+    providerId: 2, // E-Commerce Development GCP
     status: 'RUNNING',
     region: 'asia-northeast-1',
     tags: { Environment: 'Development', Project: 'Backend API Services' },
@@ -202,6 +207,7 @@ export const mockResources: Resource[] = [
     name: 'ecommerce-microservices',
     type: 'Kubernetes Engine',
     provider: 'GCP',
+    providerId: 2, // E-Commerce Development GCP
     status: 'RUNNING',
     region: 'asia-northeast-1',
     tags: { Environment: 'Development', Project: 'Backend API Services' },
@@ -215,6 +221,7 @@ export const mockResources: Resource[] = [
     name: 'ecommerce-staging-vm',
     type: 'Virtual Machine',
     provider: 'AZURE',
+    providerId: 3, // E-Commerce Staging Azure
     status: 'RUNNING',
     region: 'eastus',
     tags: { Environment: 'Staging', Project: 'Staging Environment' },
@@ -226,6 +233,7 @@ export const mockResources: Resource[] = [
     name: 'ecommerce-staging-db',
     type: 'Azure SQL Database',
     provider: 'AZURE',
+    providerId: 3, // E-Commerce Staging Azure
     status: 'RUNNING',
     region: 'eastus',
     tags: { Environment: 'Staging', Project: 'Staging Environment' },
@@ -239,6 +247,7 @@ export const mockResources: Resource[] = [
     name: 'ecommerce-analytics-cluster',
     type: 'EMR',
     provider: 'AWS',
+    providerId: 4, // E-Commerce Analytics AWS
     status: 'RUNNING',
     region: 'us-west-2',
     tags: { Environment: 'Production', Project: 'Analytics & Data Processing' },
@@ -250,6 +259,7 @@ export const mockResources: Resource[] = [
     name: 'ecommerce-data-lake',
     type: 'S3',
     provider: 'AWS',
+    providerId: 4, // E-Commerce Analytics AWS
     status: 'RUNNING',
     region: 'us-west-2',
     tags: { Environment: 'Production', Project: 'Analytics & Data Processing' },
@@ -263,6 +273,7 @@ export const mockResources: Resource[] = [
     name: 'ecommerce-cdn-global',
     type: 'Cloud CDN',
     provider: 'GCP',
+    providerId: 5, // E-Commerce CDN GCP
     status: 'RUNNING',
     region: 'global',
     tags: { Environment: 'Production', Project: 'CDN & Content Delivery' },
@@ -274,6 +285,7 @@ export const mockResources: Resource[] = [
     name: 'ecommerce-static-assets',
     type: 'Cloud Storage',
     provider: 'GCP',
+    providerId: 5, // E-Commerce CDN GCP
     status: 'RUNNING',
     region: 'global',
     tags: { Environment: 'Production', Project: 'CDN & Content Delivery' },

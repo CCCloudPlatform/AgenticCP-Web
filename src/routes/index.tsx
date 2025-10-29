@@ -8,6 +8,7 @@ import { ROUTES } from '@/constants';
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
 const DashboardPage = lazy(() => import('@/pages/dashboard/DashboardPage'));
 const ProjectsPage = lazy(() => import('@/pages/projects/ProjectsPage'));
+const InventoryPage = lazy(() => import('@/pages/resources/InventoryPage'));
 const NotFoundPage = lazy(() => import('@/pages/error/NotFoundPage'));
 
 // Layout
@@ -35,6 +36,9 @@ const AppRoutes = () => {
 
             {/* Project Management Routes */}
             <Route path={ROUTES.PROJECT} element={<ProjectsPage />} />
+
+            {/* Cloud Management Routes */}
+            <Route path={ROUTES.INVENTORY} element={<InventoryPage />} />
 
             {/* Add more routes here */}
           </Route>
