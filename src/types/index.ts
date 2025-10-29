@@ -119,6 +119,7 @@ export interface Resource {
   provider: ProviderType;
   status: ResourceStatus;
   region: string;
+  cost?: number;
   tags: Record<string, string>;
   createdAt: string;
   updatedAt: string;
