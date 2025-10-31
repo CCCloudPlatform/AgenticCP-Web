@@ -17,6 +17,8 @@ const Header: React.FC<HeaderProps> = ({ collapsed, onToggle }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+
+
   const handleLogout = async () => {
     await logout();
     navigate(ROUTES.LOGIN);

@@ -16,6 +16,10 @@
       background: #1890ff;
       color: #fff;
       border-radius: 12px 12px 0 12px;
+      
+      p, div, span, strong, em, code, pre {
+        color: #fff !important;
+      }
     }
 
     .message-header {
@@ -28,6 +32,11 @@
       background: #fff;
       border: 1px solid #e8e8e8;
       border-radius: 12px 12px 12px 0;
+      color: #333;
+      
+      p, div, span, strong, em {
+        color: #333 !important;
+      }
     }
   }
 
@@ -61,6 +70,287 @@
     padding: 12px;
     word-wrap: break-word;
     word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    overflow: hidden;
+    
+    // 마크다운 스타일링
+    .markdown-content {
+      h1, h2, h3, h4, h5, h6 {
+        margin: 16px 0 8px 0;
+        font-weight: 600;
+        color: inherit;
+      }
+
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.25rem; }
+      h3 { font-size: 1.125rem; }
+
+      p {
+        margin: 8px 0;
+        line-height: 1.6;
+      }
+
+      ul, ol {
+        margin: 12px 0;
+        padding-left: 0;
+        list-style: none;
+      }
+
+      li {
+        margin: 6px 0;
+        padding: 8px 12px;
+        background: rgba(24, 144, 255, 0.05);
+        border-left: 3px solid #1890ff;
+        border-radius: 0 6px 6px 0;
+        position: relative;
+        
+        &::before {
+          content: '•';
+          color: #1890ff;
+          font-weight: bold;
+          position: absolute;
+          left: -8px;
+          top: 8px;
+        }
+      }
+
+      blockquote {
+        margin: 12px 0;
+        padding: 8px 16px;
+        border-left: 4px solid #1890ff;
+        background: rgba(24, 144, 255, 0.1);
+        border-radius: 0 8px 8px 0;
+      }
+
+      // 인라인 코드만 스타일 적용
+      > code:not(pre code) {
+        background: #f1f5f9;
+        color: #0f172a;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+        font-size: 0.9em;
+        border: 1px solid #e2e8f0;
+      }
+
+      pre {
+        margin: 12px 0;
+        padding: 16px;
+        background: #1e1e1e !important; // VS Code 다크 테마 배경
+        color: #d4d4d4 !important; // VS Code 기본 텍스트 색상
+        border-radius: 8px;
+        overflow-x: auto;
+        font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.5;
+        border: 1px solid #3c3c3c;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        position: relative;
+        
+        // VS Code 스타일 타이틀 바
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 30px;
+          background: #2d2d30;
+          border-radius: 8px 8px 0 0;
+          border-bottom: 1px solid #3c3c3c;
+        }
+        
+        // VS Code 스타일 점들
+        &::after {
+          content: '● ● ●';
+          position: absolute;
+          top: 8px;
+          left: 12px;
+          color: #666;
+          font-size: 12px;
+          letter-spacing: 2px;
+        }
+        
+        // 코드 내용을 타이틀 바 아래로 이동
+        padding-top: 40px;
+        
+        // pre 내부의 모든 code 태그 완전 초기화
+        code, 
+        code[class*="language-"],
+        code[class*="hljs"] {
+          background: transparent !important;
+          color: inherit !important;
+          padding: 0 !important;
+          border: none !important;
+          font-size: inherit !important;
+          font-family: inherit !important;
+          border-radius: 0 !important;
+          margin: 0 !important;
+          display: inline !important;
+        }
+        
+        // VS Code 스타일 키워드 하이라이팅
+        .keyword { color: #569cd6; } // 파란색
+        .string { color: #ce9178; } // 주황색
+        .number { color: #b5cea8; } // 연두색
+        .comment { color: #6a9955; } // 초록색
+        .function { color: #dcdcaa; } // 노란색
+        .variable { color: #9cdcfe; } // 하늘색
+        .type { color: #4ec9b0; } // 청록색
+        .operator { color: #d4d4d4; } // 기본 색상
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #e8e8e8;
+
+        th, td {
+          padding: 8px 12px;
+          text-align: left;
+          border-bottom: 1px solid #e8e8e8;
+        }
+
+        th {
+          background: #f5f5f5;
+          font-weight: 600;
+        }
+
+        tr:hover {
+          background: #f9f9f9;
+        }
+      }
+
+      a {
+        color: #1890ff;
+        text-decoration: none;
+        
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      strong {
+        font-weight: 600;
+      }
+
+      em {
+        font-style: italic;
+      }
+      
+      // EC2 제목 스타일링
+      .ec2-title {
+        font-weight: 600;
+        color: #1890ff;
+        margin-bottom: 12px;
+        font-size: 1.05em;
+        padding: 8px 12px;
+        background: rgba(24, 144, 255, 0.1);
+        border-radius: 6px;
+        border-left: 3px solid #1890ff;
+      }
+      
+      // EC2 인스턴스 컨테이너 - 그리드 레이아웃
+      .ec2-instances {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 12px;
+        margin-top: 8px;
+        
+        // 모바일에서는 1열로
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+        }
+      }
+      
+      // EC2 인스턴스 아이템 - 컴팩트 카드
+      .instance-item {
+        background: rgba(24, 144, 255, 0.05);
+        border: 1px solid rgba(24, 144, 255, 0.1);
+        border-radius: 8px;
+        padding: 10px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        
+        &:hover {
+          background: rgba(24, 144, 255, 0.08);
+          border-color: rgba(24, 144, 255, 0.2);
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
+        }
+        
+        // Terminated 인스턴스는 회색 배경
+        &:has(.status.terminated) {
+          background: rgba(140, 140, 140, 0.05);
+          border-color: rgba(140, 140, 140, 0.1);
+          
+          &:hover {
+            background: rgba(140, 140, 140, 0.08);
+            border-color: rgba(140, 140, 140, 0.2);
+          }
+        }
+        
+        .instance-info {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          margin-bottom: 6px;
+        }
+        
+        .instance-id {
+          font-family: 'JetBrains Mono', 'Fira Code', monospace;
+          font-size: 0.85em;
+          color: #333;
+          font-weight: 500;
+          line-height: 1.3;
+          word-break: break-all;
+        }
+        
+        .status {
+          padding: 3px 6px;
+          border-radius: 10px;
+          font-size: 0.7em;
+          font-weight: 600;
+          text-transform: uppercase;
+          display: inline-block;
+          width: fit-content;
+          
+          &.running {
+            background: #f6ffed;
+            color: #52c41a;
+            border: 1px solid #b7eb8f;
+          }
+          
+          &.terminated {
+            background: #fff2f0;
+            color: #ff4d4f;
+            border: 1px solid #ffccc7;
+          }
+          
+          &.shutting-down {
+            background: #fffbe6;
+            color: #faad14;
+            border: 1px solid #ffe58f;
+          }
+        }
+        
+        .public-ip {
+          font-size: 0.75em;
+          color: #666;
+          margin-top: 4px;
+          
+          .ip-address {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            color: #1890ff;
+            font-weight: 500;
+          }
+        }
+      }
+    }
   }
 }
 

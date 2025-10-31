@@ -28,6 +28,7 @@ export const authService = {
   /**
    * Login
    */
+
   login: async (credentials: LoginRequest): Promise<LoginResponse> => {
     try {
       // 🔧 개발 모드: 하드코딩된 계정 체크
@@ -100,13 +101,6 @@ export const authService = {
    * Get current user
    */
   getCurrentUser: (): Promise<User> => {
-    // 🔧 개발 모드: Mock 사용자 반환
-    const token = localStorage.getItem('agenticcp_token');
-    if (token && token.startsWith('mock-jwt-token')) {
-      console.log('🔓 개발용 Mock 사용자 반환');
-      return Promise.resolve(MOCK_USER);
-    }
-
     return apiRequest.get<User>('/api/v1/auth/me');
   },
 
