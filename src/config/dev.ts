@@ -28,6 +28,9 @@ export const DEV_CONFIG = {
 
   // 개발 모드 로그
   ENABLE_DEV_LOG: true,
+
+  // 슈퍼 계정 자동 로그인 (개발 모드에서만)
+  ENABLE_AUTO_LOGIN: import.meta.env.DEV || import.meta.env.MODE === 'development',
 };
 
 /**

@@ -16,6 +16,7 @@ interface AuthState {
   initAuth: () => void;
   clearError: () => void;
   checkAuth: () => boolean;
+  devQuickLogin: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -131,5 +132,31 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   clearError: () => set({ error: null }),
+
+  devQuickLogin: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const { user, token } = await authService.devQuickLogin();
+      
+      // 사용자 정보와 토큰 저장
+      storage.set(STORAGE_KEYS.TOKEN, token);
+      storage.set(STORAGE_KEYS.USER_INFO, user);
+      
+      set({
+        user,
+        token,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+      
+      console.log('✅ [DEV] 슈퍼 계정 로그인 완료:', user.username);
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : '자동 로그인에 실패했습니다.',
+        isLoading: false,
+      });
+      console.error('❌ [DEV] 슈퍼 계정 로그인 실패:', error);
+    }
+  },
 }));
 

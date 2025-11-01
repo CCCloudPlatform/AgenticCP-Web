@@ -1,11 +1,13 @@
 import { Avatar, Typography, Tag, Card, Space, Button, Tooltip } from 'antd';
-import { UserOutlined, RobotOutlined, InfoCircleOutlined, CopyOutlined, CheckOutlined } from '@ant-design/icons';
+import { UserOutlined, RobotOutlined, InfoCircleOutlined, CopyOutlined, CheckOutlined, ToolOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import type { ChatMessage } from '@/store/agentChatStore';
 import { formatDate } from '@/utils/format';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useState } from 'react';
+import ExecutionStatus from './ExecutionStatus';
+import InteractiveResult from './InteractiveResult';
 import './ChatMessageItem.scss';
 
 const { Text, Paragraph } = Typography;
@@ -191,25 +193,58 @@ const ChatMessageItem = ({ message }: ChatMessageItemProps) => {
   };
 
 
+  // 실행 단계 표시 여부 (Agent 메시지이고 아직 완료되지 않았거나 실행 컨텍스트가 있는 경우)
+  const showExecutionStatus = isAgent && (
+    message.executionStep || 
+    message.executionContext || 
+    (message.status === 'sending' && !message.executionStep)
+  );
+
+  // 인터랙티브 결과 표시 여부
+  const showInteractiveResult = isAgent && (
+    message.resultType ||
+    message.metadata?.result ||
+    message.metadata?.interactive_actions?.length > 0
+  );
+
+  const handleAction = (action: string, params?: Record<string, any>) => {
+    if (action === 'navigate' && params?.path) {
+      navigate(params.path);
+    } else {
+      console.log('Action:', action, params);
+    }
+  };
+
   return (
-    <div className={`chat-message-item ${message.role}`}>
+    <div className={`chat-message-item ${message.role} next-gen`}>
       <div className="message-avatar">{getAvatar()}</div>
       <div className="message-content">
         <div className="message-header">
-          <Text strong>{getRoleName()}</Text>
-          <Text type="secondary" style={{ fontSize: 12, marginLeft: 8 }}>
-            {formatDate(message.timestamp, 'HH:mm')}
-          </Text>
-          {message.status === 'sending' && (
-            <Tag color="processing" style={{ marginLeft: 8 }}>
-              전송 중
-            </Tag>
-          )}
-          {message.status === 'error' && (
-            <Tag color="error" style={{ marginLeft: 8 }}>
-              오류
-            </Tag>
-          )}
+          <Space>
+            <Text strong>{getRoleName()}</Text>
+            <Text type="secondary" style={{ fontSize: 12 }}>
+              {formatDate(message.timestamp, 'HH:mm')}
+            </Text>
+            {message.status === 'sending' && (
+              <Tag color="processing" style={{ marginLeft: 8 }}>
+                전송 중
+              </Tag>
+            )}
+            {message.status === 'error' && (
+              <Tag color="error" style={{ marginLeft: 8 }}>
+                오류
+              </Tag>
+            )}
+            {message.metadata?.tools_used && message.metadata.tools_used.length > 0 && (
+              <Tag 
+                icon={<ToolOutlined />} 
+                color="purple" 
+                style={{ marginLeft: 8 }}
+              >
+                {message.metadata.tools_used.length}개 도구 사용
+              </Tag>
+            )}
+          </Space>
           {!isUser && (
             <Space>
               <Tooltip title={copied ? '복사됨!' : '복사하기'}>
@@ -224,19 +259,54 @@ const ChatMessageItem = ({ message }: ChatMessageItemProps) => {
             </Space>
           )}
         </div>
+
+        {/* 차세대: 실행 상태 표시 */}
+        {showExecutionStatus && (
+          <ExecutionStatus
+            currentStep={message.executionStep || 'thinking'}
+            steps={message.steps}
+            context={message.executionContext}
+          />
+        )}
+
         <div className="message-body">
-          {isAgent ? (
-            <div className="markdown-content">
-              {formatEC2Content(message.content)}
+          {/* 스트리밍 중인 내용 표시 */}
+          {isAgent && message.streamedContent && (
+            <div className="streaming-content">
+              <Paragraph style={{ marginBottom: 0, whiteSpace: 'pre-wrap' }}>
+                {message.streamedContent}
+                <span className="cursor-blink">▋</span>
+              </Paragraph>
             </div>
-          ) : (
-            <Paragraph style={{ marginBottom: 0, whiteSpace: 'pre-wrap' }}>
-              {message.content}
-            </Paragraph>
+          )}
+
+          {/* 일반 메시지 내용 */}
+          {!message.streamedContent && (
+            <>
+              {isAgent ? (
+                <div className="markdown-content">
+                  {formatEC2Content(message.content)}
+                </div>
+              ) : (
+                <Paragraph style={{ marginBottom: 0, whiteSpace: 'pre-wrap' }}>
+                  {message.content}
+                </Paragraph>
+              )}
+            </>
           )}
           
-          {/* AI 응답에 따른 액션 버튼들 */}
-          {isAgent && getActionButtons() && (
+          {/* 차세대: 인터랙티브 결과 표시 */}
+          {showInteractiveResult && (
+            <InteractiveResult
+              message={message}
+              resultType={message.resultType}
+              data={message.metadata?.result}
+              onAction={handleAction}
+            />
+          )}
+          
+          {/* 기존 액션 버튼들 (차세대 인터페이스와 병행) */}
+          {isAgent && getActionButtons() && !showInteractiveResult && (
             <div className="action-buttons" style={{ marginTop: 12 }}>
               <Space wrap>
                 {getActionButtons()?.map((action, index) => (
@@ -257,22 +327,45 @@ const ChatMessageItem = ({ message }: ChatMessageItemProps) => {
             </div>
           )}
           
-          {/* Show agent metadata for agent messages */}
-          {isAgent && message.metadata?.agent_used && (
-            <Card size="small" style={{ marginTop: 8, background: '#f0f9ff' }}>
-              <Space direction="vertical" size="small">
-                <Text type="secondary" style={{ fontSize: 12 }}>
-                  사용된 Agent: <Tag color="blue">{message.metadata.agent_used}</Tag>
-                </Text>
-                {message.metadata.confidence && (
-                  <Text type="secondary" style={{ fontSize: 12 }}>
-                    신뢰도: {(message.metadata.confidence * 100).toFixed(1)}%
-                  </Text>
+          {/* 실행 컨텍스트 및 메타데이터 */}
+          {isAgent && (message.metadata?.agent_used || message.metadata?.tools_used?.length) && (
+            <Card size="small" className="execution-metadata" style={{ marginTop: 8 }}>
+              <Space direction="vertical" size="small" style={{ width: '100%' }}>
+                {message.metadata.agent_used && (
+                  <div className="metadata-item">
+                    <Text type="secondary" style={{ fontSize: 11 }}>Agent:</Text>
+                    <Tag color="blue" style={{ marginLeft: 8 }}>
+                      {message.metadata.agent_used}
+                    </Tag>
+                  </div>
                 )}
-                {message.metadata.processing_time && (
-                  <Text type="secondary" style={{ fontSize: 12 }}>
-                    처리 시간: {message.metadata.processing_time}초
-                  </Text>
+                {message.metadata.tools_used && message.metadata.tools_used.length > 0 && (
+                  <div className="metadata-item">
+                    <Text type="secondary" style={{ fontSize: 11 }}>도구:</Text>
+                    <Space wrap style={{ marginLeft: 8 }}>
+                      {message.metadata.tools_used.map((tool, idx) => (
+                        <Tag key={idx} color="purple" style={{ fontSize: 10 }}>
+                          {tool}
+                        </Tag>
+                      ))}
+                    </Space>
+                  </div>
+                )}
+                {message.metadata.confidence && (
+                  <div className="metadata-item">
+                    <Text type="secondary" style={{ fontSize: 11 }}>신뢰도:</Text>
+                    <Text strong style={{ marginLeft: 8 }}>
+                      {(message.metadata.confidence * 100).toFixed(1)}%
+                    </Text>
+                  </div>
+                )}
+                {message.executionContext?.duration && (
+                  <div className="metadata-item">
+                    <Text type="secondary" style={{ fontSize: 11 }}>실행 시간:</Text>
+                    <Text strong style={{ marginLeft: 8 }}>
+                      {message.executionContext.duration}ms
+                    </Text>
+                  </div>
                 )}
               </Space>
             </Card>

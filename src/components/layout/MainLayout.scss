@@ -25,12 +25,12 @@
     }
 
     &.agent-chat-open {
-      margin-right: var(--agent-chat-width, 350px); /* Dynamic agent chat width - 기본값 350px */
+      margin-right: var(--agent-chat-width, 420px); /* Dynamic agent chat width - 기본값 420px */
     }
 
     &.agent-chat-open.sidebar-collapsed {
       margin-left: 80px;
-      margin-right: var(--agent-chat-width, 350px);
+      margin-right: var(--agent-chat-width, 420px);
     }
 
     .site-content {

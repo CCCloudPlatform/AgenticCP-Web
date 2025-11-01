@@ -188,5 +188,29 @@ export const authService = {
       throw error;
     }
   },
+
+  /**
+   * 🔧 개발용: 슈퍼 계정으로 빠른 로그인 (로그인 화면 무시)
+   */
+  devQuickLogin: async (): Promise<{ user: User; token: string }> => {
+    console.log('🚀 [DEV] 슈퍼 계정으로 자동 로그인');
+    
+    // Mock 토큰 생성
+    const mockToken = 'dev-super-token-' + Date.now();
+    const mockRefreshToken = 'dev-super-refresh-token-' + Date.now();
+    
+    // 토큰 저장
+    localStorage.setItem('accessToken', mockToken);
+    localStorage.setItem('refreshToken', mockRefreshToken);
+    localStorage.setItem('tokenType', 'Bearer');
+    localStorage.setItem('expiresIn', '86400'); // 24시간
+    localStorage.setItem('refreshExpiresIn', '604800'); // 7일
+    localStorage.setItem('tokenTimestamp', Date.now().toString());
+    
+    return {
+      user: MOCK_USER,
+      token: mockToken,
+    };
+  },
 };
 

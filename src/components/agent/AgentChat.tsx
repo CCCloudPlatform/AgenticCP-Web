@@ -10,11 +10,13 @@ import {
   MonitorOutlined,
   DragOutlined,
 } from '@ant-design/icons';
+import Logo from '@/components/common/Logo';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useAgentChatStore } from '@/store/agentChatStore';
 import { agentService } from '@/services/agentService';
 import { API_BASE_URL } from '@/constants';
 import { message } from 'antd';
+import type { ChatMessage, ExecutionStep } from '@/store/agentChatStore';
 import ChatMessageItem from './ChatMessageItem';
 import './AgentChat.scss';
 
@@ -33,6 +35,7 @@ const AgentChat: React.FC<AgentChatProps> = ({ sidebarCollapsed = false }) => {
     isLoading,
     closeChat,
     addMessage,
+    updateMessage,
     clearMessages,
     setLoading,
   } = useAgentChatStore();
@@ -45,19 +48,25 @@ const AgentChat: React.FC<AgentChatProps> = ({ sidebarCollapsed = false }) => {
     const sidebarWidth = sidebarCollapsed ? 80 : 256; // 사이드바 너비
     const minContentWidth = sidebarCollapsed ? 400 : 500; // 사이드바가 닫혀있으면 더 넓게 사용 가능
     const availableWidth = window.innerWidth - sidebarWidth - minContentWidth;
-    const maxWidth = sidebarCollapsed ? 600 : 400; // 사이드바가 닫혀있으면 최대 600px까지
-    return Math.min(maxWidth, Math.max(250, availableWidth));
+    const maxWidth = sidebarCollapsed ? 700 : 550; // 사이드바가 닫혀있으면 최대 700px까지
+    return Math.min(maxWidth, Math.max(320, availableWidth));
   };
   
   const maxChatWidth = getMaxChatWidth();
-  const [chatWidth, setChatWidth] = useState(Math.min(350, maxChatWidth)); // 초기 너비를 350px로 제한
+  // 초기 너비를 420px로 설정 (더 넓고 사용하기 편함)
+  const [chatWidth, setChatWidth] = useState(() => {
+    const calculatedMaxWidth = getMaxChatWidth();
+    return Math.min(420, calculatedMaxWidth);
+  });
 
   // 초기 CSS 변수 설정
   useEffect(() => {
-    const initialWidth = Math.min(350, maxChatWidth);
+    const calculatedMaxWidth = getMaxChatWidth();
+    const initialWidth = Math.min(420, calculatedMaxWidth);
+    setChatWidth(initialWidth);
     document.documentElement.style.setProperty('--agent-chat-width', `${initialWidth}px`);
-    document.documentElement.style.setProperty('--agent-chat-max-width', `${maxChatWidth}px`);
-  }, [maxChatWidth]);
+    document.documentElement.style.setProperty('--agent-chat-max-width', `${calculatedMaxWidth}px`);
+  }, []);
 
   // API 서버 상태 확인 (개발 모드에서만)
   useEffect(() => {
@@ -155,7 +164,7 @@ const AgentChat: React.FC<AgentChatProps> = ({ sidebarCollapsed = false }) => {
     if (!isResizing) return;
     
     const newWidth = window.innerWidth - e.clientX;
-    const minWidth = 300;
+    const minWidth = 320; // 최소 너비 증가
     const currentMaxWidth = getMaxChatWidth(); // 현재 사이드바 상태에 따른 최대 너비
     
     if (newWidth >= minWidth && newWidth <= currentMaxWidth) {
@@ -164,7 +173,7 @@ const AgentChat: React.FC<AgentChatProps> = ({ sidebarCollapsed = false }) => {
       // 리사이즈 중 CSS 변수 업데이트
       document.documentElement.style.setProperty('--agent-chat-width', `${newWidth}px`);
     }
-  }, [isResizing, sidebarCollapsed]); // sidebarCollapsed 의존성으로 변경
+  }, [isResizing, sidebarCollapsed]);
 
   const handleMouseUp = useCallback(() => {
     setIsResizing(false);
@@ -203,6 +212,46 @@ const AgentChat: React.FC<AgentChatProps> = ({ sidebarCollapsed = false }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // 실행 단계 시뮬레이션
+  const simulateExecutionSteps = async (messageId: string) => {
+    const steps: ExecutionStep[] = ['thinking', 'analyzing', 'fetching', 'processing', 'executing', 'rendering', 'completed'];
+    
+    for (let i = 0; i < steps.length - 1; i++) {
+      await new Promise(resolve => setTimeout(resolve, 300 + Math.random() * 400));
+      updateMessage(messageId, { 
+        executionStep: steps[i],
+        steps: steps.slice(0, i + 1),
+        executionContext: {
+          tool: i >= 2 ? 'AWS API' : undefined,
+          endpoint: i >= 2 ? '/api/v1/cloud/ec2/instances' : undefined,
+          duration: 300 + Math.random() * 400,
+        }
+      });
+    }
+  };
+
+  // 스트리밍 응답 시뮬레이션
+  const streamResponse = async (messageId: string, fullContent: string) => {
+    const words = fullContent.split(' ');
+    let streamedContent = '';
+
+    for (let i = 0; i < words.length; i++) {
+      await new Promise(resolve => setTimeout(resolve, 30 + Math.random() * 50));
+      streamedContent += (i > 0 ? ' ' : '') + words[i];
+      updateMessage(messageId, { streamedContent });
+    }
+
+    // 스트리밍 완료 후 실제 content로 업데이트
+    // 모든 단계를 포함하여 마지막 단계도 완료 표시되도록 함
+    const allSteps: ExecutionStep[] = ['thinking', 'analyzing', 'fetching', 'processing', 'executing', 'rendering', 'completed'];
+    updateMessage(messageId, { 
+      content: fullContent,
+      streamedContent: undefined,
+      executionStep: 'completed',
+      steps: allSteps, // 모든 단계 포함
+    });
+  };
+
   const handleSend = async () => {
     if (!inputValue.trim() || isLoading) return;
 
@@ -218,22 +267,37 @@ const AgentChat: React.FC<AgentChatProps> = ({ sidebarCollapsed = false }) => {
 
     // Send to agent
     setLoading(true);
+    
+    // 차세대: Agent 메시지 미리 생성 (실행 단계 표시용)
+    const agentMessageId = addMessage({
+      role: 'agent',
+      content: '',
+      status: 'sending',
+      executionStep: 'thinking',
+      steps: ['thinking'],
+    });
+
     try {
       const response = await agentService.sendMessage({
         message: userMessage,
       });
 
-      // Add agent response
-      addMessage({
-        role: 'agent',
-        content: response.response,
-        status: 'sent',
-        metadata: {
-          agent_used: response.agent_used,
-          confidence: response.confidence,
-          processing_time: response.processing_time,
-          routing_info: response.routing_info,
-        },
+      // 실행 단계 시뮬레이션 시작 (비동기)
+      simulateExecutionSteps(agentMessageId).then(() => {
+        // 스트리밍 응답 시뮬레이션
+        return streamResponse(agentMessageId, response.response);
+      }).then(() => {
+        // 최종 메시지 업데이트
+        updateMessage(agentMessageId, {
+          status: 'sent',
+          metadata: {
+            agent_used: response.agent_used,
+            confidence: response.confidence,
+            processing_time: response.processing_time,
+            routing_info: response.routing_info,
+            tools_used: ['AWS API', 'Data Processor'],
+          },
+        });
       });
     } catch (error) {
       message.error('Agent 응답 실패');
@@ -271,11 +335,9 @@ const AgentChat: React.FC<AgentChatProps> = ({ sidebarCollapsed = false }) => {
         top: 0,
         bottom: 0,
         height: '100vh',
-        zIndex: 100, // 헤더보다 낮게 설정
-        background: '#fff',
-        boxShadow: '-2px 0 8px rgba(0, 0, 0, 0.15)',
+        zIndex: 100,
         overflow: 'hidden',
-        borderLeft: '1px solid #e8e8e8',
+        borderLeft: '1px solid rgba(99, 102, 241, 0.1)',
       }}
       ref={chatRef}
     >
@@ -283,60 +345,25 @@ const AgentChat: React.FC<AgentChatProps> = ({ sidebarCollapsed = false }) => {
         {/* AI Chat Header */}
         <div className="agent-chat-header">
           <div className="chat-header-left">
-            <RobotOutlined style={{ fontSize: 24, color: '#1890ff' }} />
-            <div>
-              <Title level={4} style={{ margin: 0 }}>
-                AI Agent
-              </Title>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                자연어로 명령을 수행하세요
-                {import.meta.env.DEV && (
-                  <>
-                    {apiServerStatus === 'online' && (
-                      <span style={{ color: '#52c41a', marginLeft: 8 }}>🟢 온라인</span>
-                    )}
-                    {apiServerStatus === 'offline' && (
-                      <span style={{ color: '#ff4d4f', marginLeft: 8 }}>🔴 오프라인 (Mock)</span>
-                    )}
-                    {apiServerStatus === 'checking' && (
-                      <span style={{ color: '#faad14', marginLeft: 8 }}>🟡 확인 중</span>
-                    )}
-                  </>
-                )}
-              </Text>
-            </div>
+            <RobotOutlined className="chat-header-icon" />
+            <Title level={5} className="chat-header-title">
+              AI Agent
+            </Title>
+            {import.meta.env.DEV && apiServerStatus === 'online' && (
+              <span className="status-indicator" />
+            )}
           </div>
-          <Space>
-            <Dropdown
-              menu={{
-                items: quickCommands.map(cmd => ({
-                  key: cmd.key,
-                  label: (
-                    <Space>
-                      {cmd.icon}
-                      {cmd.label}
-                    </Space>
-                  ),
-                  onClick: () => handleQuickCommand(cmd.command),
-                })),
-              }}
-              trigger={['click']}
-              placement="bottomRight"
-            >
-              <Button
-                type="text"
-                icon={<ThunderboltOutlined />}
-                title="빠른 명령어"
-              />
-            </Dropdown>
+          <Space size="small">
             <Button
               type="text"
+              size="small"
               icon={<ClearOutlined />}
               onClick={handleClear}
               title="대화 내역 삭제"
             />
             <Button
               type="text"
+              size="small"
               icon={<CloseOutlined />}
               onClick={closeChat}
               title="닫기"
@@ -347,23 +374,54 @@ const AgentChat: React.FC<AgentChatProps> = ({ sidebarCollapsed = false }) => {
         {/* Messages */}
         <div className="agent-chat-messages">
           {messages.length === 0 ? (
-            <Empty
-              image={<RobotOutlined style={{ fontSize: 64, color: '#d9d9d9' }} />}
-              description={
-                <div>
-                  <Text>AI Agent와 대화를 시작하세요</Text>
-                  <div style={{ marginTop: 16 }}>
-                    <Text type="secondary" style={{ fontSize: 12 }}>
-                      예시: "AWS EC2 인스턴스 목록을 보여줘"
-                    </Text>
-                    <br />
-                    <Text type="secondary" style={{ fontSize: 12 }}>
-                      "비용이 가장 많이 나오는 리소스를 찾아줘"
-                    </Text>
-                  </div>
+            <div className="empty-state-container">
+              <div className="empty-state-content">
+                <div className="empty-state-icon-wrapper">
+                  <div className="empty-state-icon-bg" />
+                  <Logo 
+                    variant="square" 
+                    width={80} 
+                    height={80}
+                    className="empty-state-logo"
+                    animated={true}
+                    glow={true}
+                  />
+                  <div className="empty-state-glow" />
                 </div>
-              }
-            />
+                <Title level={3} className="empty-state-title">
+                  AI Agent와 대화를 시작하세요
+                </Title>
+                <Text type="secondary" className="empty-state-subtitle">
+                  자연어로 명령하면 Agent가 클라우드 리소스를 관리해드립니다
+                </Text>
+                
+                <div className="quick-commands-grid">
+                  {quickCommands.map((cmd) => (
+                    <button
+                      key={cmd.key}
+                      className="quick-command-card"
+                      onClick={() => handleQuickCommand(cmd.command)}
+                      type="button"
+                    >
+                      <div className="quick-command-icon">
+                        {cmd.icon}
+                      </div>
+                      <div className="quick-command-content">
+                        <Text strong className="quick-command-label">
+                          {cmd.label}
+                        </Text>
+                        <Text type="secondary" className="quick-command-hint">
+                          클릭하여 실행
+                        </Text>
+                      </div>
+                      <div className="quick-command-arrow">
+                        →
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           ) : (
             <>
               {messages.map((msg) => (
