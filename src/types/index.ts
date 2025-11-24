@@ -48,12 +48,12 @@ export interface User {
   updatedAt: string;
 }
 
-export type UserRole = 
-  | 'SUPER_ADMIN' 
-  | 'TENANT_ADMIN' 
-  | 'CLOUD_ADMIN' 
-  | 'DEVELOPER' 
-  | 'VIEWER' 
+export type UserRole =
+  | 'SUPER_ADMIN'
+  | 'TENANT_ADMIN'
+  | 'CLOUD_ADMIN'
+  | 'DEVELOPER'
+  | 'VIEWER'
   | 'AUDITOR';
 
 export type UserStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
@@ -87,12 +87,30 @@ export interface CloudProvider {
   type: ProviderType;
   status: ProviderStatus;
   region?: string;
+  credentials?: ProviderCredentials;
+  resources?: Resource[];
+  cost?: number;
   createdAt: string;
   updatedAt: string;
 }
 
 export type ProviderType = 'AWS' | 'GCP' | 'AZURE';
-export type ProviderStatus = 'ACTIVE' | 'INACTIVE' | 'ERROR';
+export type ProviderStatus = 'ACTIVE' | 'INACTIVE' | 'ERROR' | 'CONNECTING';
+
+export interface ProviderCredentials {
+  accessKey?: string;
+  secretKey?: string;
+  region?: string;
+  projectId?: string;
+  subscriptionId?: string;
+}
+
+export interface ProviderStats {
+  totalResources: number;
+  runningResources: number;
+  monthlyCost: number;
+  lastSync: string;
+}
 
 export interface Resource {
   id: number;
@@ -101,6 +119,7 @@ export interface Resource {
   provider: ProviderType;
   status: ResourceStatus;
   region: string;
+  cost?: number;
   tags: Record<string, string>;
   createdAt: string;
   updatedAt: string;
@@ -136,3 +155,37 @@ export interface AgentSession {
   messageCount: number;
 }
 
+/**
+ * Organization Types
+ */
+export interface Organization {
+  id: number;
+  name: string;
+  description?: string;
+  status: OrganizationStatus;
+  totalProjects: number;
+  totalCost: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type OrganizationStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
+
+export interface Project {
+  id: number;
+  name: string;
+  description?: string;
+  organizationId: number;
+  organization: Organization;
+  providerId: number;
+  provider: CloudProvider;
+  status: ProjectStatus;
+  environment: ProjectEnvironment;
+  resources?: Resource[];
+  cost?: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type ProjectStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED' | 'ARCHIVED';
+export type ProjectEnvironment = 'DEVELOPMENT' | 'STAGING' | 'PRODUCTION' | 'TESTING';

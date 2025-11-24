@@ -28,63 +28,63 @@ export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
   DASHBOARD: '/dashboard',
-  
+
   // Platform Management
   PLATFORM: '/platform',
   PLATFORM_CONFIG: '/platform/config',
   FEATURE_FLAGS: '/platform/features',
-  
-  // Tenant Management
-  TENANTS: '/tenants',
+
+  // Project Management
+  PROJECT: '/projects',
   TENANT_DETAIL: '/tenants/:id',
-  
+
   // Cloud Management
   CLOUD: '/cloud',
-  PROVIDERS: '/cloud/providers',
+  // PROVIDERS: '/cloud/providers', // Removed
   RESOURCES: '/cloud/resources',
   INVENTORY: '/cloud/inventory',
-  
+
   // Security & Compliance
   SECURITY: '/security',
   USERS: '/security/users',
   ROLES: '/security/roles',
   PERMISSIONS: '/security/permissions',
   POLICIES: '/security/policies',
-  
+
   // Monitoring & Analytics
   MONITORING: '/monitoring',
   METRICS: '/monitoring/metrics',
   LOGS: '/monitoring/logs',
   ALERTS: '/monitoring/alerts',
-  
+
   // Cost Management
   COST: '/cost',
   COST_TRACKING: '/cost/tracking',
   BUDGETS: '/cost/budgets',
   OPTIMIZATION: '/cost/optimization',
-  
+
   // Resource Orchestration
   ORCHESTRATION: '/orchestration',
   DEPLOYMENTS: '/orchestration/deployments',
   SCALING: '/orchestration/scaling',
-  
+
   // Infrastructure as Code
   IAC: '/iac',
   TEMPLATES: '/iac/templates',
   PIPELINES: '/iac/pipelines',
-  
+
   // Integration & API
   INTEGRATION: '/integration',
   API_MANAGEMENT: '/integration/api',
   WEBHOOKS: '/integration/webhooks',
-  
+
   // Notification
   NOTIFICATIONS: '/notifications',
-  
+
   // Settings
   SETTINGS: '/settings',
   PROFILE: '/settings/profile',
-  
+
   // Agent
   AGENT_CHAT: '/agent/chat',
 } as const;
@@ -115,4 +115,3 @@ export const HTTP_STATUS = {
   CONFLICT: 409,
   INTERNAL_SERVER_ERROR: 500,
 } as const;
-

@@ -1,0 +1,496 @@
+import { CloudProvider, Project, Resource, Organization } from '@/types';
+
+/**
+ * E-Commerce Platform Organization Structure
+ * 조직: E-커머스 플랫폼
+ * 프로젝트들: 각각 하나의 프로바이더를 가짐
+ */
+
+/**
+ * Mock Organizations Data
+ */
+export const mockOrganizations: Organization[] = [
+  {
+    id: 1,
+    name: 'E-Commerce Platform Organization',
+    description: '온라인 쇼핑몰 플랫폼의 전체 인프라 및 서비스 관리',
+    status: 'ACTIVE',
+    totalProjects: 8,
+    totalCost: 5400,
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-25T10:15:00Z',
+  },
+  {
+    id: 2,
+    name: 'Mobile App Development',
+    description: '모바일 애플리케이션 개발 및 운영 조직',
+    status: 'ACTIVE',
+    totalProjects: 3,
+    totalCost: 1200,
+    createdAt: '2024-01-10T00:00:00Z',
+    updatedAt: '2024-01-20T14:30:00Z',
+  },
+  {
+    id: 3,
+    name: 'Data Analytics Team',
+    description: '데이터 분석 및 머신러닝 팀',
+    status: 'ACTIVE',
+    totalProjects: 2,
+    totalCost: 800,
+    createdAt: '2024-01-15T00:00:00Z',
+    updatedAt: '2024-01-22T11:20:00Z',
+  },
+  {
+    id: 4,
+    name: 'Legacy Systems',
+    description: '레거시 시스템 관리 및 마이그레이션',
+    status: 'INACTIVE',
+    totalProjects: 1,
+    totalCost: 0,
+    createdAt: '2023-12-01T00:00:00Z',
+    updatedAt: '2024-01-10T13:45:00Z',
+  },
+];
+
+/**
+ * Mock Cloud Providers Data for E-Commerce Platform
+ */
+export const mockProviders: CloudProvider[] = [
+  {
+    id: 1,
+    name: 'E-Commerce Production AWS',
+    type: 'AWS',
+    status: 'ACTIVE',
+    region: 'us-east-1',
+    credentials: {
+      accessKey: 'AKIA...',
+      secretKey: '***',
+      region: 'us-east-1',
+    },
+    resources: [],
+    cost: 2500,
+    createdAt: '2024-01-15T09:00:00Z',
+    updatedAt: '2024-01-20T14:30:00Z',
+  },
+  {
+    id: 2,
+    name: 'E-Commerce Development GCP',
+    type: 'GCP',
+    status: 'ACTIVE',
+    region: 'asia-northeast-1',
+    credentials: {
+      projectId: 'ecommerce-dev-123',
+      region: 'asia-northeast-1',
+    },
+    resources: [],
+    cost: 1200,
+    createdAt: '2024-01-10T10:00:00Z',
+    updatedAt: '2024-01-18T16:45:00Z',
+  },
+  {
+    id: 3,
+    name: 'E-Commerce Staging Azure',
+    type: 'AZURE',
+    status: 'ACTIVE',
+    region: 'eastus',
+    credentials: {
+      subscriptionId: 'ecommerce-sub-123',
+      region: 'eastus',
+    },
+    resources: [],
+    cost: 800,
+    createdAt: '2024-01-05T08:00:00Z',
+    updatedAt: '2024-01-22T11:20:00Z',
+  },
+  {
+    id: 4,
+    name: 'E-Commerce Analytics AWS',
+    type: 'AWS',
+    status: 'ACTIVE',
+    region: 'us-west-2',
+    credentials: {
+      accessKey: 'AKIA...',
+      secretKey: '***',
+      region: 'us-west-2',
+    },
+    resources: [],
+    cost: 600,
+    createdAt: '2024-01-01T12:00:00Z',
+    updatedAt: '2024-01-15T09:30:00Z',
+  },
+  {
+    id: 5,
+    name: 'E-Commerce CDN GCP',
+    type: 'GCP',
+    status: 'ACTIVE',
+    region: 'global',
+    credentials: {
+      projectId: 'ecommerce-cdn-456',
+      region: 'global',
+    },
+    resources: [],
+    cost: 300,
+    createdAt: '2024-01-08T14:00:00Z',
+    updatedAt: '2024-01-25T10:15:00Z',
+  },
+];
+
+/**
+ * Mock Resources Data for E-Commerce Platform Projects
+ */
+export const mockResources: Resource[] = [
+  // Frontend Web Application Resources (AWS)
+  {
+    id: 1,
+    name: 'ecommerce-web-frontend',
+    type: 'EC2',
+    provider: 'AWS',
+    status: 'RUNNING',
+    region: 'us-east-1',
+    cost: 150,
+    tags: { Environment: 'Production', Project: 'Frontend Web App' },
+    createdAt: '2024-01-15T09:00:00Z',
+    updatedAt: '2024-01-20T14:30:00Z',
+  },
+  {
+    id: 2,
+    name: 'ecommerce-api-gateway',
+    type: 'API Gateway',
+    provider: 'AWS',
+    status: 'RUNNING',
+    region: 'us-east-1',
+    cost: 80,
+    tags: { Environment: 'Production', Project: 'Frontend Web App' },
+    createdAt: '2024-01-15T09:00:00Z',
+    updatedAt: '2024-01-20T14:30:00Z',
+  },
+  {
+    id: 3,
+    name: 'ecommerce-web-db',
+    type: 'RDS',
+    provider: 'AWS',
+    status: 'RUNNING',
+    region: 'us-east-1',
+    cost: 320,
+    tags: { Environment: 'Production', Project: 'Frontend Web App' },
+    createdAt: '2024-01-15T09:00:00Z',
+    updatedAt: '2024-01-20T14:30:00Z',
+  },
+
+  // Backend API Services Resources (GCP)
+  {
+    id: 4,
+    name: 'ecommerce-api-server',
+    type: 'Compute Engine',
+    provider: 'GCP',
+    status: 'RUNNING',
+    region: 'asia-northeast-1',
+    cost: 120,
+    tags: { Environment: 'Development', Project: 'Backend API Services' },
+    createdAt: '2024-01-10T10:00:00Z',
+    updatedAt: '2024-01-18T16:45:00Z',
+  },
+  {
+    id: 5,
+    name: 'ecommerce-api-db',
+    type: 'Cloud SQL',
+    provider: 'GCP',
+    status: 'RUNNING',
+    region: 'asia-northeast-1',
+    cost: 280,
+    tags: { Environment: 'Development', Project: 'Backend API Services' },
+    createdAt: '2024-01-10T10:00:00Z',
+    updatedAt: '2024-01-18T16:45:00Z',
+  },
+  {
+    id: 6,
+    name: 'ecommerce-microservices',
+    type: 'Kubernetes Engine',
+    provider: 'GCP',
+    status: 'RUNNING',
+    region: 'asia-northeast-1',
+    cost: 450,
+    tags: { Environment: 'Development', Project: 'Backend API Services' },
+    createdAt: '2024-01-10T10:00:00Z',
+    updatedAt: '2024-01-18T16:45:00Z',
+  },
+
+  // Staging Environment Resources (Azure)
+  {
+    id: 7,
+    name: 'ecommerce-staging-vm',
+    type: 'Virtual Machine',
+    provider: 'AZURE',
+    status: 'RUNNING',
+    region: 'eastus',
+    cost: 180,
+    tags: { Environment: 'Staging', Project: 'Staging Environment' },
+    createdAt: '2024-01-05T08:00:00Z',
+    updatedAt: '2024-01-22T11:20:00Z',
+  },
+  {
+    id: 8,
+    name: 'ecommerce-staging-db',
+    type: 'Azure SQL Database',
+    provider: 'AZURE',
+    status: 'RUNNING',
+    region: 'eastus',
+    cost: 250,
+    tags: { Environment: 'Staging', Project: 'Staging Environment' },
+    createdAt: '2024-01-05T08:00:00Z',
+    updatedAt: '2024-01-22T11:20:00Z',
+  },
+
+  // Analytics & Data Processing Resources (AWS)
+  {
+    id: 9,
+    name: 'ecommerce-analytics-cluster',
+    type: 'EMR',
+    provider: 'AWS',
+    status: 'RUNNING',
+    region: 'us-west-2',
+    cost: 580,
+    tags: { Environment: 'Production', Project: 'Analytics & Data Processing' },
+    createdAt: '2024-01-01T12:00:00Z',
+    updatedAt: '2024-01-15T09:30:00Z',
+  },
+  {
+    id: 10,
+    name: 'ecommerce-data-lake',
+    type: 'S3',
+    provider: 'AWS',
+    status: 'RUNNING',
+    region: 'us-west-2',
+    cost: 120,
+    tags: { Environment: 'Production', Project: 'Analytics & Data Processing' },
+    createdAt: '2024-01-01T12:00:00Z',
+    updatedAt: '2024-01-15T09:30:00Z',
+  },
+
+  // CDN & Content Delivery Resources (GCP)
+  {
+    id: 11,
+    name: 'ecommerce-cdn-global',
+    type: 'Cloud CDN',
+    provider: 'GCP',
+    status: 'RUNNING',
+    region: 'global',
+    cost: 350,
+    tags: { Environment: 'Production', Project: 'CDN & Content Delivery' },
+    createdAt: '2024-01-08T14:00:00Z',
+    updatedAt: '2024-01-25T10:15:00Z',
+  },
+  {
+    id: 12,
+    name: 'ecommerce-static-assets',
+    type: 'Cloud Storage',
+    provider: 'GCP',
+    status: 'RUNNING',
+    region: 'global',
+    cost: 90,
+    tags: { Environment: 'Production', Project: 'CDN & Content Delivery' },
+    createdAt: '2024-01-08T14:00:00Z',
+    updatedAt: '2024-01-25T10:15:00Z',
+  },
+];
+
+/**
+ * Mock Projects Data for E-Commerce Platform Organization
+ * 각 프로젝트는 하나의 프로바이더를 가짐
+ */
+export const mockProjects: Project[] = [
+  {
+    id: 1,
+    name: 'Frontend Web Application',
+    description: 'E-커머스 플랫폼의 사용자 인터페이스 및 웹 애플리케이션',
+    organizationId: 1,
+    organization: mockOrganizations[0], // E-Commerce Platform Organization
+    providerId: 1,
+    provider: mockProviders[0], // E-Commerce Production AWS
+    status: 'ACTIVE',
+    environment: 'PRODUCTION',
+    resources: mockResources.filter((r) => r.tags.Project === 'Frontend Web App'),
+    cost: 2500,
+    createdAt: '2024-01-15T09:00:00Z',
+    updatedAt: '2024-01-20T14:30:00Z',
+  },
+  {
+    id: 2,
+    name: 'Backend API Services',
+    description: 'E-커머스 플랫폼의 백엔드 API 및 마이크로서비스',
+    organizationId: 1,
+    organization: mockOrganizations[0], // E-Commerce Platform Organization
+    providerId: 2,
+    provider: mockProviders[1], // E-Commerce Development GCP
+    status: 'ACTIVE',
+    environment: 'DEVELOPMENT',
+    resources: mockResources.filter((r) => r.tags.Project === 'Backend API Services'),
+    cost: 1200,
+    createdAt: '2024-01-10T10:00:00Z',
+    updatedAt: '2024-01-18T16:45:00Z',
+  },
+  {
+    id: 3,
+    name: 'Staging Environment',
+    description: 'E-커머스 플랫폼의 스테이징 및 테스트 환경',
+    organizationId: 1,
+    organization: mockOrganizations[0], // E-Commerce Platform Organization
+    providerId: 3,
+    provider: mockProviders[2], // E-Commerce Staging Azure
+    status: 'ACTIVE',
+    environment: 'STAGING',
+    resources: mockResources.filter((r) => r.tags.Project === 'Staging Environment'),
+    cost: 800,
+    createdAt: '2024-01-05T08:00:00Z',
+    updatedAt: '2024-01-22T11:20:00Z',
+  },
+  {
+    id: 4,
+    name: 'Analytics & Data Processing',
+    description: 'E-커머스 플랫폼의 데이터 분석 및 처리 시스템',
+    organizationId: 3,
+    organization: mockOrganizations[2], // Data Analytics Team
+    providerId: 4,
+    provider: mockProviders[3], // E-Commerce Analytics AWS
+    status: 'ACTIVE',
+    environment: 'PRODUCTION',
+    resources: mockResources.filter((r) => r.tags.Project === 'Analytics & Data Processing'),
+    cost: 600,
+    createdAt: '2024-01-01T12:00:00Z',
+    updatedAt: '2024-01-15T09:30:00Z',
+  },
+  {
+    id: 5,
+    name: 'CDN & Content Delivery',
+    description: 'E-커머스 플랫폼의 콘텐츠 전송 네트워크 및 정적 자산 관리',
+    organizationId: 1,
+    organization: mockOrganizations[0], // E-Commerce Platform Organization
+    providerId: 5,
+    provider: mockProviders[4], // E-Commerce CDN GCP
+    status: 'ACTIVE',
+    environment: 'PRODUCTION',
+    resources: mockResources.filter((r) => r.tags.Project === 'CDN & Content Delivery'),
+    cost: 300,
+    createdAt: '2024-01-08T14:00:00Z',
+    updatedAt: '2024-01-25T10:15:00Z',
+  },
+  {
+    id: 6,
+    name: 'Payment Gateway Integration',
+    description: 'E-커머스 플랫폼의 결제 시스템 통합 (개발 중)',
+    organizationId: 1,
+    organization: mockOrganizations[0], // E-Commerce Platform Organization
+    providerId: 2,
+    provider: mockProviders[1], // E-Commerce Development GCP
+    status: 'INACTIVE',
+    environment: 'DEVELOPMENT',
+    resources: [],
+    cost: 0,
+    createdAt: '2024-01-12T11:00:00Z',
+    updatedAt: '2024-01-20T15:30:00Z',
+  },
+  {
+    id: 7,
+    name: 'Mobile App Backend',
+    description: 'E-커머스 플랫폼의 모바일 애플리케이션 백엔드 서비스',
+    organizationId: 2,
+    organization: mockOrganizations[1], // Mobile App Development
+    providerId: 3,
+    provider: mockProviders[2], // E-Commerce Staging Azure
+    status: 'SUSPENDED',
+    environment: 'STAGING',
+    resources: [],
+    cost: 200,
+    createdAt: '2024-01-18T14:00:00Z',
+    updatedAt: '2024-01-25T10:15:00Z',
+  },
+  {
+    id: 8,
+    name: 'Legacy System Migration',
+    description: 'E-커머스 플랫폼의 레거시 시스템 클라우드 마이그레이션 (완료)',
+    organizationId: 4,
+    organization: mockOrganizations[3], // Legacy Systems
+    providerId: 1,
+    provider: mockProviders[0], // E-Commerce Production AWS
+    status: 'ARCHIVED',
+    environment: 'PRODUCTION',
+    resources: [],
+    cost: 0,
+    createdAt: '2023-12-20T16:00:00Z',
+    updatedAt: '2024-01-10T13:45:00Z',
+  },
+];
+
+/**
+ * Mock API Responses
+ */
+export const mockApiResponses = {
+  getProjects: {
+    content: mockProjects,
+    page: 0,
+    size: 10,
+    totalElements: mockProjects.length,
+    totalPages: 1,
+    first: true,
+    last: true,
+    hasNext: false,
+    hasPrevious: false,
+  },
+  getProviders: {
+    content: mockProviders,
+    page: 0,
+    size: 10,
+    totalElements: mockProviders.length,
+    totalPages: 1,
+    first: true,
+    last: true,
+    hasNext: false,
+    hasPrevious: false,
+  },
+  getOrganizations: {
+    content: mockOrganizations,
+    page: 0,
+    size: 10,
+    totalElements: mockOrganizations.length,
+    totalPages: 1,
+    first: true,
+    last: true,
+    hasNext: false,
+    hasPrevious: false,
+  },
+};
+
+/**
+ * Mock Statistics for E-Commerce Platform Organization
+ */
+export const mockStats = {
+  totalProjects: mockProjects.length,
+  activeProjects: mockProjects.filter((p) => p.status === 'ACTIVE').length,
+  totalResources: mockProjects.reduce((sum, p) => sum + (p.resources?.length || 0), 0),
+  totalCost: mockProjects.reduce((sum, p) => sum + (p.cost || 0), 0),
+  projectsByStatus: {
+    ACTIVE: mockProjects.filter((p) => p.status === 'ACTIVE').length,
+    INACTIVE: mockProjects.filter((p) => p.status === 'INACTIVE').length,
+    SUSPENDED: mockProjects.filter((p) => p.status === 'SUSPENDED').length,
+    ARCHIVED: mockProjects.filter((p) => p.status === 'ARCHIVED').length,
+  },
+  projectsByEnvironment: {
+    DEVELOPMENT: mockProjects.filter((p) => p.environment === 'DEVELOPMENT').length,
+    STAGING: mockProjects.filter((p) => p.environment === 'STAGING').length,
+    PRODUCTION: mockProjects.filter((p) => p.environment === 'PRODUCTION').length,
+    TESTING: mockProjects.filter((p) => p.environment === 'TESTING').length,
+  },
+  projectsByProvider: {
+    AWS: mockProjects.filter((p) => p.provider.type === 'AWS').length,
+    GCP: mockProjects.filter((p) => p.provider.type === 'GCP').length,
+    AZURE: mockProjects.filter((p) => p.provider.type === 'AZURE').length,
+  },
+  organizationInfo: {
+    name: 'E-Commerce Platform Organization',
+    description: '온라인 쇼핑몰 플랫폼의 전체 인프라 및 서비스 관리',
+    totalProviders: mockProviders.length,
+    totalResources: mockResources.length,
+    monthlyCost: mockProjects.reduce((sum, p) => sum + (p.cost || 0), 0),
+    lastUpdated: '2024-01-25T10:15:00Z',
+  },
+};
