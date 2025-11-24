@@ -173,6 +173,7 @@ export interface Resource {
   name: string;
   type: string;
   provider: ProviderType;
+  providerId?: number; // 프로바이더 인스턴스 ID
   status: ResourceStatus;
   region: string;
   tags: Record<string, string>;
