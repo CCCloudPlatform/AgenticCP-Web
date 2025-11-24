@@ -8,6 +8,7 @@ import { ROUTES } from '@/constants';
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
 const DashboardPage = lazy(() => import('@/pages/dashboard/DashboardPage'));
+const CloudProvidersPage = lazy(() => import('@/pages/cloud/CloudProvidersPage'));
 const NotFoundPage = lazy(() => import('@/pages/error/NotFoundPage'));
 
 // Layout
@@ -33,7 +34,10 @@ const AppRoutes = () => {
           <Route element={<MainLayout />}>
             <Route path={ROUTES.HOME} element={<Navigate to={ROUTES.DASHBOARD} replace />} />
             <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
-            
+
+            {/* Cloud Management Routes */}
+            <Route path={ROUTES.PROVIDERS} element={<CloudProvidersPage />} />
+
             {/* Add more routes here */}
           </Route>
         </Route>
@@ -46,4 +50,3 @@ const AppRoutes = () => {
 };
 
 export default AppRoutes;
-
