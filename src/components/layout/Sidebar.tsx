@@ -30,9 +30,9 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       label: '대시보드',
     },
     {
-      key: 'tenants',
-      icon: '👥',
-      label: '테넌트 관리',
+      key: ROUTES.PROJECT,
+      icon: '📁',
+      label: '프로젝트 관리',
       disabled: !hasRole(['SUPER_ADMIN', 'TENANT_ADMIN']),
     },
     {
@@ -40,11 +40,6 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       icon: '☁️',
       label: '클라우드 리소스',
       children: [
-        {
-          key: ROUTES.PROVIDERS,
-          icon: '🏢',
-          label: '프로바이더',
-        },
         {
           key: ROUTES.RESOURCES,
           icon: '📦',
@@ -196,10 +191,8 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
   };
 
   const toggleExpanded = (key: string) => {
-    setExpandedItems(prev => 
-      prev.includes(key) 
-        ? prev.filter(item => item !== key)
-        : [...prev, key]
+    setExpandedItems((prev) =>
+      prev.includes(key) ? prev.filter((item) => item !== key) : [...prev, key]
     );
   };
 
@@ -226,18 +219,14 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           {!collapsed && (
             <>
               <span className="nav-text">{item.label}</span>
-              {hasChildren && (
-                <span className={`nav-arrow ${expanded ? 'expanded' : ''}`}>
-                  ▼
-                </span>
-              )}
+              {hasChildren && <span className={`nav-arrow ${expanded ? 'expanded' : ''}`}>▼</span>}
             </>
           )}
         </div>
-        
+
         {hasChildren && !collapsed && expanded && (
           <div className="nav-submenu">
-            {item.children!.map(child => (
+            {item.children!.map((child) => (
               <div key={child.key} className="nav-subitem">
                 <div
                   className={`nav-sublink ${isActive(child.key) ? 'active' : ''}`}
@@ -275,10 +264,8 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
           />
         )}
       </div>
-      
-      <nav className="nav-menu">
-        {menuItems.map(renderMenuItem)}
-      </nav>
+
+      <nav className="nav-menu">{menuItems.map(renderMenuItem)}</nav>
 
       <div className="sidebar-footer">
         <div className="footer-content">
@@ -294,4 +281,3 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
 };
 
 export default Sidebar;
-

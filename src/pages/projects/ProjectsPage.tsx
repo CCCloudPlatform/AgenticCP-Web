@@ -22,103 +22,126 @@ import {
   PlusOutlined,
   EditOutlined,
   DeleteOutlined,
-  SyncOutlined,
-  CloudOutlined,
-  SettingOutlined,
   EyeOutlined,
-  DollarOutlined,
-  CalendarOutlined,
+  FolderOutlined,
+  ThunderboltOutlined,
+  DatabaseOutlined,
+  CloudOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined,
-  ClockCircleOutlined,
   StopOutlined,
+  DollarOutlined,
+  CalendarOutlined,
 } from '@ant-design/icons';
-import { CloudProvider, ProviderStatus } from '@/types';
+import { Project, ProjectStatus, CloudProvider, ProviderType, Organization } from '@/types';
+import { projectService } from '@/services/projectService';
 import { cloudService } from '@/services/cloudService';
+import { organizationService } from '@/services/organizationService';
 import { formatDate, formatCurrency } from '@/utils/format';
-import './CloudProvidersPage.scss';
+import './ProjectsPage.scss';
 
 const { Title, Text } = Typography;
-
 const { Option } = Select;
 
-const CloudProvidersPage: React.FC = () => {
+const ProjectsPage: React.FC = () => {
+  const [projects, setProjects] = useState<Project[]>([]);
   const [providers, setProviders] = useState<CloudProvider[]>([]);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [editingProvider, setEditingProvider] = useState<CloudProvider | null>(null);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [form] = Form.useForm();
 
   useEffect(() => {
+    fetchProjects();
     fetchProviders();
+    fetchOrganizations();
   }, []);
 
-  const fetchProviders = async () => {
+  const fetchProjects = async () => {
     setLoading(true);
     try {
-      const response = await cloudService.getProviders();
-      setProviders(response.content || []);
+      const response = await projectService.getProjects();
+      setProjects(response.content || []);
     } catch (error) {
-      message.error('프로바이더 목록을 불러오는데 실패했습니다.');
+      message.error('프로젝트 목록을 불러오는데 실패했습니다.');
     } finally {
       setLoading(false);
     }
   };
 
+  const fetchProviders = async () => {
+    try {
+      const response = await cloudService.getProviders();
+      setProviders(response.content || []);
+    } catch (error) {
+      console.error('프로바이더 목록을 불러오는데 실패했습니다.');
+    }
+  };
+
+  const fetchOrganizations = async () => {
+    try {
+      const response = await organizationService.getOrganizations();
+      setOrganizations(response.content || []);
+    } catch (error) {
+      console.error('조직 목록을 불러오는데 실패했습니다.');
+    }
+  };
+
   // 통계 계산
   const getStats = () => {
-    const totalProviders = providers.length;
-    const activeProviders = providers.filter((p) => p.status === 'ACTIVE').length;
-    const totalResources = providers.reduce((sum, p) => sum + (p.resources?.length || 0), 0);
-    const totalCost = providers.reduce((sum, p) => sum + (p.cost || 0), 0);
+    const totalProjects = projects.length;
+    const activeProjects = projects.filter((p) => p.status === 'ACTIVE').length;
+    const totalResources = projects.reduce((sum, p) => sum + (p.resources?.length || 0), 0);
+    const totalCost = projects.reduce((sum, p) => sum + (p.cost || 0), 0);
 
     return {
-      totalProviders,
-      activeProviders,
+      totalProjects,
+      activeProjects,
       totalResources,
       totalCost,
     };
   };
 
-  const handleAddProvider = () => {
-    setEditingProvider(null);
+  const handleAddProject = () => {
+    setEditingProject(null);
     setModalVisible(true);
     form.resetFields();
   };
 
-  const handleEditProvider = (provider: CloudProvider) => {
-    setEditingProvider(provider);
+  const handleEditProject = (project: Project) => {
+    setEditingProject(project);
     setModalVisible(true);
-    form.setFieldsValue(provider);
+    form.setFieldsValue(project);
   };
 
-  const handleDeleteProvider = async (id: number) => {
+  const handleDeleteProject = async (id: number) => {
     try {
-      await cloudService.deleteProvider(id);
-      message.success('프로바이더가 삭제되었습니다.');
-      fetchProviders();
+      await projectService.deleteProject(id);
+      message.success('프로젝트가 삭제되었습니다.');
+      fetchProjects();
     } catch (error) {
-      message.error('프로바이더 삭제에 실패했습니다.');
+      message.error('프로젝트 삭제에 실패했습니다.');
     }
   };
 
   const handleModalSubmit = async (values: any) => {
     try {
-      if (editingProvider) {
-        await cloudService.updateProvider(editingProvider.id, values);
-        message.success('프로바이더가 수정되었습니다.');
+      if (editingProject) {
+        await projectService.updateProject(editingProject.id, values);
+        message.success('프로젝트가 수정되었습니다.');
       } else {
-        await cloudService.createProvider(values);
-        message.success('프로바이더가 추가되었습니다.');
+        await projectService.createProject(values);
+        message.success('프로젝트가 생성되었습니다.');
       }
       setModalVisible(false);
-      fetchProviders();
+      fetchProjects();
     } catch (error) {
-      message.error('프로바이더 저장에 실패했습니다.');
+      message.error('프로젝트 저장에 실패했습니다.');
     }
   };
 
-  const getStatusConfig = (status: ProviderStatus) => {
+  const getStatusConfig = (status: ProjectStatus) => {
     switch (status) {
       case 'ACTIVE':
         return {
@@ -134,36 +157,79 @@ const CloudProvidersPage: React.FC = () => {
           text: '비활성',
           className: 'status-inactive',
         };
-      case 'ERROR':
+      case 'SUSPENDED':
         return {
-          color: 'error',
+          color: 'warning',
           icon: <ExclamationCircleOutlined />,
-          text: '오류',
-          className: 'status-error',
+          text: '정지',
+          className: 'status-suspended',
         };
-      case 'CONNECTING':
+      case 'ARCHIVED':
         return {
-          color: 'processing',
-          icon: <ClockCircleOutlined />,
-          text: '연결 중',
-          className: 'status-connecting',
+          color: 'default',
+          icon: <StopOutlined />,
+          text: '아카이브',
+          className: 'status-archived',
         };
       default:
         return {
           color: 'default',
-          icon: <CloudOutlined />,
+          icon: <FolderOutlined />,
           text: '알 수 없음',
           className: 'status-unknown',
         };
     }
   };
 
+  const getProviderIcon = (type: ProviderType) => {
+    const iconMap = {
+      AWS: <ThunderboltOutlined className="provider-icon aws-icon" />,
+      GCP: <DatabaseOutlined className="provider-icon gcp-icon" />,
+      AZURE: <CloudOutlined className="provider-icon azure-icon" />,
+    };
+    return iconMap[type] || <CloudOutlined className="provider-icon" />;
+  };
+
   const columns = [
+    {
+      title: '프로젝트',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text: string, record: Project) => (
+        <div className="project-cell">
+          <div className="project-icon-wrapper">
+            <FolderOutlined className="project-icon" />
+          </div>
+          <div className="project-info">
+            <div className="project-name">{text}</div>
+            <div className="project-description">{record.description || '-'}</div>
+            <div className="project-organization">
+              <Text type="secondary" className="org-label">
+                🏢 {record.organization.name}
+              </Text>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      title: '프로바이더',
+      key: 'provider',
+      render: (record: Project) => (
+        <div className="provider-cell">
+          <div className="provider-icon-wrapper">{getProviderIcon(record.provider.type)}</div>
+          <div className="provider-info">
+            <div className="provider-name">{record.provider.name}</div>
+            <div className="provider-type">{record.provider.type}</div>
+          </div>
+        </div>
+      ),
+    },
     {
       title: '상태',
       dataIndex: 'status',
       key: 'status',
-      render: (status: ProviderStatus) => {
+      render: (status: ProjectStatus) => {
         const config = getStatusConfig(status);
         return (
           <Tag color={config.color} icon={config.icon} className={`status-tag ${config.className}`}>
@@ -173,19 +239,9 @@ const CloudProvidersPage: React.FC = () => {
       },
     },
     {
-      title: '리전',
-      dataIndex: 'region',
-      key: 'region',
-      render: (region: string) => (
-        <div className="region-cell">
-          <Text type="secondary">{region || '-'}</Text>
-        </div>
-      ),
-    },
-    {
       title: '리소스',
       key: 'resources',
-      render: (record: CloudProvider) => {
+      render: (record: Project) => {
         const totalResources = record.resources?.length || 0;
         const runningResources =
           record.resources?.filter((r) => r.status === 'RUNNING').length || 0;
@@ -233,17 +289,9 @@ const CloudProvidersPage: React.FC = () => {
     {
       title: '작업',
       key: 'actions',
-      render: (record: CloudProvider) => (
+      render: (record: Project) => (
         <div className="actions-cell">
           <Space>
-            <Tooltip title="동기화">
-              <Button
-                type="text"
-                icon={<SyncOutlined />}
-                onClick={() => fetchProviders()}
-                className="action-btn sync-btn"
-              />
-            </Tooltip>
             <Tooltip title="상세 보기">
               <Button type="text" icon={<EyeOutlined />} className="action-btn view-btn" />
             </Tooltip>
@@ -251,16 +299,13 @@ const CloudProvidersPage: React.FC = () => {
               <Button
                 type="text"
                 icon={<EditOutlined />}
-                onClick={() => handleEditProvider(record)}
+                onClick={() => handleEditProject(record)}
                 className="action-btn edit-btn"
               />
             </Tooltip>
-            <Tooltip title="설정">
-              <Button type="text" icon={<SettingOutlined />} className="action-btn settings-btn" />
-            </Tooltip>
             <Popconfirm
-              title="이 프로바이더를 삭제하시겠습니까?"
-              onConfirm={() => handleDeleteProvider(record.id)}
+              title="이 프로젝트를 삭제하시겠습니까?"
+              onConfirm={() => handleDeleteProject(record.id)}
               okText="삭제"
               cancelText="취소"
               okType="danger"
@@ -283,27 +328,27 @@ const CloudProvidersPage: React.FC = () => {
   const stats = getStats();
 
   return (
-    <div className="cloud-providers-page">
+    <div className="projects-page">
       {/* 페이지 헤더 */}
       <div className="page-header">
         <div className="header-content">
           <div className="header-text">
             <Title level={1} className="page-title">
-              클라우드 프로바이더
+              프로젝트 관리
             </Title>
             <Text className="page-description">
-              연결된 클라우드 프로바이더를 관리하고 모니터링합니다.
+              조직별 프로젝트를 관리합니다. 각 프로젝트는 하나의 클라우드 프로바이더와 연결됩니다.
             </Text>
           </div>
           <div className="header-actions">
             <Button
               type="primary"
               icon={<PlusOutlined />}
-              onClick={handleAddProvider}
-              className="add-provider-btn"
+              onClick={handleAddProject}
+              className="add-project-btn"
               size="large"
             >
-              프로바이더 추가
+              프로젝트 생성
             </Button>
           </div>
         </div>
@@ -312,20 +357,20 @@ const CloudProvidersPage: React.FC = () => {
       {/* 통계 카드 */}
       <Row gutter={[24, 24]} className="stats-section">
         <Col xs={24} sm={12} lg={6}>
-          <Card className="stat-card total-providers">
+          <Card className="stat-card total-projects">
             <Statistic
-              title="총 프로바이더"
-              value={stats.totalProviders}
-              prefix={<CloudOutlined />}
+              title="총 프로젝트"
+              value={stats.totalProjects}
+              prefix={<FolderOutlined />}
               valueStyle={{ color: 'var(--color-primary)' }}
             />
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card className="stat-card active-providers">
+          <Card className="stat-card active-projects">
             <Statistic
-              title="활성 프로바이더"
-              value={stats.activeProviders}
+              title="활성 프로젝트"
+              value={stats.activeProjects}
               prefix={<CheckCircleOutlined />}
               valueStyle={{ color: 'var(--color-success)' }}
             />
@@ -336,7 +381,7 @@ const CloudProvidersPage: React.FC = () => {
             <Statistic
               title="총 리소스"
               value={stats.totalResources}
-              prefix={<CloudOutlined />}
+              prefix={<DatabaseOutlined />}
               valueStyle={{ color: 'var(--color-info)' }}
             />
           </Card>
@@ -354,21 +399,21 @@ const CloudProvidersPage: React.FC = () => {
         </Col>
       </Row>
 
-      {/* 프로바이더 목록 */}
-      <Card className="providers-card glass-card">
+      {/* 프로젝트 목록 */}
+      <Card className="projects-card glass-card">
         <div className="card-header">
           <div className="card-title">
             <Title level={3} className="card-title-text">
-              프로바이더 목록
+              프로젝트 목록
             </Title>
             <Text className="card-description">
-              총 {providers.length}개의 프로바이더가 연결되어 있습니다.
+              총 {projects.length}개의 프로젝트가 등록되어 있습니다.
             </Text>
           </div>
           <div className="card-actions">
             <Button
-              icon={<SyncOutlined />}
-              onClick={fetchProviders}
+              icon={<FolderOutlined />}
+              onClick={fetchProjects}
               loading={loading}
               className="refresh-btn"
             >
@@ -380,10 +425,10 @@ const CloudProvidersPage: React.FC = () => {
         <div className="table-container">
           <Table
             columns={columns}
-            dataSource={providers}
+            dataSource={projects}
             loading={loading}
             rowKey="id"
-            className="providers-table"
+            className="projects-table"
             pagination={{
               pageSize: 10,
               showSizeChanger: true,
@@ -395,15 +440,15 @@ const CloudProvidersPage: React.FC = () => {
         </div>
       </Card>
 
-      {/* 프로바이더 추가/편집 모달 */}
+      {/* 프로젝트 생성/편집 모달 */}
       <Modal
         title={
           <div className="modal-title">
             <div className="modal-title-icon">
-              {editingProvider ? <EditOutlined /> : <PlusOutlined />}
+              {editingProject ? <EditOutlined /> : <PlusOutlined />}
             </div>
             <div className="modal-title-text">
-              {editingProvider ? '프로바이더 편집' : '프로바이더 추가'}
+              {editingProject ? '프로젝트 편집' : '프로젝트 생성'}
             </div>
           </div>
         }
@@ -411,58 +456,73 @@ const CloudProvidersPage: React.FC = () => {
         onCancel={() => setModalVisible(false)}
         onOk={() => form.submit()}
         width={700}
-        className="provider-modal"
+        className="project-modal"
         okText="저장"
         cancelText="취소"
       >
-        <Form form={form} layout="vertical" onFinish={handleModalSubmit} className="provider-form">
+        <Form form={form} layout="vertical" onFinish={handleModalSubmit} className="project-form">
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <Form.Item
                 name="name"
-                label="프로바이더 이름"
-                rules={[{ required: true, message: '프로바이더 이름을 입력해주세요.' }]}
+                label="프로젝트 이름"
+                rules={[{ required: true, message: '프로젝트 이름을 입력해주세요.' }]}
               >
-                <Input placeholder="예: Production AWS" prefix={<CloudOutlined />} size="large" />
+                <Input
+                  placeholder="예: E-Commerce Platform"
+                  prefix={<FolderOutlined />}
+                  size="large"
+                />
+              </Form.Item>
+            </Col>
+
+            <Col span={24}>
+              <Form.Item name="description" label="프로젝트 설명">
+                <Input.TextArea
+                  placeholder="프로젝트에 대한 간단한 설명을 입력해주세요."
+                  rows={3}
+                  size="large"
+                />
               </Form.Item>
             </Col>
 
             <Col span={12}>
               <Form.Item
-                name="type"
-                label="프로바이더 타입"
-                rules={[{ required: true, message: '프로바이더 타입을 선택해주세요.' }]}
+                name="organizationId"
+                label="조직"
+                rules={[{ required: true, message: '조직을 선택해주세요.' }]}
               >
-                <Select placeholder="프로바이더 타입을 선택하세요" size="large">
-                  <Option value="AWS">
-                    <div className="provider-option">
-                      <CloudOutlined className="aws-icon" />
-                      <span>Amazon Web Services</span>
-                    </div>
-                  </Option>
-                  <Option value="GCP">
-                    <div className="provider-option">
-                      <CloudOutlined className="gcp-icon" />
-                      <span>Google Cloud Platform</span>
-                    </div>
-                  </Option>
-                  <Option value="AZURE">
-                    <div className="provider-option">
-                      <CloudOutlined className="azure-icon" />
-                      <span>Microsoft Azure</span>
-                    </div>
-                  </Option>
+                <Select placeholder="조직을 선택하세요" size="large">
+                  {organizations.map((organization) => (
+                    <Option key={organization.id} value={organization.id}>
+                      <div className="organization-option">
+                        <span className="org-icon">🏢</span>
+                        <span>{organization.name}</span>
+                      </div>
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
             </Col>
 
             <Col span={12}>
               <Form.Item
-                name="region"
-                label="기본 리전"
-                rules={[{ required: true, message: '기본 리전을 입력해주세요.' }]}
+                name="providerId"
+                label="프로바이더"
+                rules={[{ required: true, message: '프로바이더를 선택해주세요.' }]}
               >
-                <Input placeholder="예: us-east-1, asia-northeast-1" size="large" />
+                <Select placeholder="프로바이더를 선택하세요" size="large">
+                  {providers.map((provider) => (
+                    <Option key={provider.id} value={provider.id}>
+                      <div className="provider-option">
+                        {getProviderIcon(provider.type)}
+                        <span>
+                          {provider.name} ({provider.type})
+                        </span>
+                      </div>
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
             </Col>
 
@@ -491,4 +551,4 @@ const CloudProvidersPage: React.FC = () => {
   );
 };
 
-export default CloudProvidersPage;
+export default ProjectsPage;

@@ -209,3 +209,38 @@ export interface AgentSession {
   updatedAt: string;
   messageCount: number;
 }
+
+/**
+ * Organization Types
+ */
+export interface Organization {
+  id: number;
+  name: string;
+  description?: string;
+  status: OrganizationStatus;
+  totalProjects: number;
+  totalCost: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type OrganizationStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
+
+export interface Project {
+  id: number;
+  name: string;
+  description?: string;
+  organizationId: number;
+  organization: Organization;
+  providerId: number;
+  provider: CloudProvider;
+  status: ProjectStatus;
+  environment: ProjectEnvironment;
+  resources?: Resource[];
+  cost?: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type ProjectStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED' | 'ARCHIVED';
+export type ProjectEnvironment = 'DEVELOPMENT' | 'STAGING' | 'PRODUCTION' | 'TESTING';
