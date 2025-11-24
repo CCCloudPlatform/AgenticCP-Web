@@ -14,6 +14,14 @@ const api: AxiosInstance = axios.create({
   },
 });
 
+// 🔧 개발 모드에서 CORS 및 연결 설정
+if (import.meta.env.DEV) {
+  console.log('🔧 개발 모드: API 설정', {
+    baseURL: API_BASE_URL,
+    timeout: API_TIMEOUT,
+  });
+}
+
 /**
  * Request interceptor
  */
@@ -40,12 +48,7 @@ api.interceptors.response.use(
   async (error: AxiosError<ErrorResponse>) => {
     const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
 
-    // 🔧 개발 모드: Mock 토큰 사용 시 에러 무시
-    const token = storage.get<string>(STORAGE_KEYS.TOKEN);
-    if (token && token.startsWith('mock-jwt-token')) {
-      console.log('🔓 개발 모드: API 에러 무시');
-      return Promise.reject(error);
-    }
+    // API 에러 처리
 
     // Handle 401 Unauthorized - Token expired
     if (error.response?.status === 401 && !originalRequest._retry) {

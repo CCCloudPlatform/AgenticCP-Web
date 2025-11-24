@@ -27,6 +27,7 @@ export const STORAGE_KEYS = {
 export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
+  REGISTER: '/register',
   DASHBOARD: '/dashboard',
 
   // Platform Management

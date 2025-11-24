@@ -3,32 +3,29 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/constants';
 import { useEffect } from 'react';
-import LoginForm from '@/components/auth/LoginForm';
-import './LoginPage.scss';
+import RegisterForm from '@/components/auth/RegisterForm';
+import './RegisterPage.scss';
 
 const { Title, Text } = Typography;
 
-interface LoginFormValues {
+interface RegisterFormValues {
   username: string;
+  email: string;
   password: string;
-  totpCode?: string;
+  confirmPassword: string;
+  name: string;
+  tenantKey?: string;
 }
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const navigate = useNavigate();
-  const { login, isAuthenticated, isLoading, error, clearError } = useAuth();
+  const { register, isAuthenticated, isLoading, error, clearError } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
       navigate(ROUTES.DASHBOARD);
     }
   }, [isAuthenticated, navigate]);
-
-  // 🔧 개발용: 기본값 설정
-  const defaultValues = {
-    username: 'agenticcp',
-    password: 'agenticcpwebpw',
-  };
 
   useEffect(() => {
     if (error) {
@@ -37,10 +34,10 @@ const LoginPage = () => {
     }
   }, [error, clearError]);
 
-  const handleSubmit = async (values: LoginFormValues) => {
+  const handleSubmit = async (values: RegisterFormValues) => {
     try {
-      await login(values);
-      message.success('로그인 성공');
+      await register(values);
+      message.success('회원가입이 완료되었습니다!');
       navigate(ROUTES.DASHBOARD);
     } catch (error) {
       // Error handled by useEffect
@@ -48,10 +45,10 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-container">
-        <Card className="login-card">
-          <div className="login-header">
+    <div className="register-page">
+      <div className="register-container">
+        <Card className="register-card">
+          <div className="register-header">
             <div className="logo-section">
               <div className="logo-icon">
                 <div className="logo-inner">
@@ -71,29 +68,28 @@ const LoginPage = () => {
             
             <div className="welcome-section">
               <div className="welcome-badge">
-                <span className="badge-icon">🔓</span>
-                <span className="badge-text">로그인하여 시작하세요</span>
+                <span className="badge-icon">🚀</span>
+                <span className="badge-text">새로운 계정을 만들어보세요</span>
               </div>
             </div>
           </div>
 
-          <LoginForm
+          <RegisterForm
             onSubmit={handleSubmit}
             loading={isLoading}
             error={error}
-            defaultValues={defaultValues}
           />
 
-          <div className="login-footer">
+          <div className="register-footer">
             <Space direction="vertical" size="small" style={{ width: '100%', textAlign: 'center' }}>
               <Text type="secondary" className="footer-text">
-                계정이 없으신가요?
+                이미 계정이 있으신가요?
               </Text>
               <a 
-                href={ROUTES.REGISTER} 
-                className="register-link"
+                href={ROUTES.LOGIN} 
+                className="login-link"
               >
-                회원가입하기
+                로그인하기
               </a>
             </Space>
           </div>
@@ -103,5 +99,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
-
+export default RegisterPage;

@@ -1,0 +1,164 @@
+/* ===========================================
+   REGISTER FORM COMPONENT
+   =========================================== */
+
+.register-form {
+  .ant-form-item {
+    margin-bottom: 12px;
+  }
+
+  .ant-form-item-label {
+    padding-bottom: 4px;
+    margin-bottom: 0;
+    
+    label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+  }
+
+  .ant-input,
+  .ant-input-password {
+    height: 40px !important;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px !important;
+    line-height: 40px !important;
+    text-align: left !important;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex !important;
+    align-items: center !important;
+
+    &:hover {
+      border-color: var(--color-primary);
+    }
+
+    &:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+    }
+
+    &::placeholder {
+      color: #9ca3af !important;
+      font-size: 14px !important;
+      line-height: 40px !important;
+      text-align: left !important;
+    }
+  }
+
+  .ant-input-password {
+    height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    
+    .ant-input {
+      height: 40px !important;
+      border: none;
+      box-shadow: none;
+      font-size: 14px !important;
+      line-height: 40px !important;
+      text-align: left !important;
+      display: flex !important;
+      align-items: center !important;
+      
+      &:focus {
+        box-shadow: none;
+      }
+
+      &::placeholder {
+        color: transparent !important;
+        font-size: 14px !important;
+        line-height: 40px !important;
+        text-align: left !important;
+      }
+    }
+  }
+
+  .ant-input-prefix {
+    color: #9ca3af;
+    margin-right: 8px;
+  }
+
+  .ant-input-suffix {
+    color: #9ca3af;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+
+  .ant-btn {
+    height: 40px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    transition: none;
+
+    &:hover {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) !important;
+      border: none !important;
+      color: white !important;
+      transform: none;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    &:focus {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) !important;
+      border: none !important;
+      color: white !important;
+    }
+
+    &:active {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) !important;
+      border: none !important;
+      color: white !important;
+      transform: none;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) !important;
+    }
+  }
+
+  .error-message {
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 6px;
+    color: var(--color-error);
+    font-size: 13px;
+    text-align: center;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .register-form {
+    .ant-form-item {
+      margin-bottom: 14px;
+    }
+
+    .ant-input,
+    .ant-input-password {
+      height: 40px;
+      font-size: 13px;
+    }
+
+    .ant-btn {
+      height: 44px;
+      font-size: 15px;
+    }
+  }
+}

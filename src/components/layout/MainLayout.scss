@@ -24,6 +24,15 @@
       margin-left: 0;
     }
 
+    &.agent-chat-open {
+      margin-right: var(--agent-chat-width, 420px); /* Dynamic agent chat width - 기본값 420px */
+    }
+
+    &.agent-chat-open.sidebar-collapsed {
+      margin-left: 80px;
+      margin-right: var(--agent-chat-width, 420px);
+    }
+
     .site-content {
       flex: 1;
       overflow-y: auto;
@@ -244,6 +253,16 @@
   .main-layout {
     .site-layout {
       margin-left: 0;
+      margin-right: 0; /* Reset agent chat margin on mobile */
+
+      &.agent-chat-open {
+        margin-right: 0; /* No agent chat margin on mobile */
+      }
+
+      /* 모바일에서 리사이즈 핸들 숨기기 */
+      .resize-handle {
+        display: none;
+      }
 
       .site-content {
         padding: var(--space-4);

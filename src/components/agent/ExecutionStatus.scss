@@ -1,0 +1,396 @@
+.execution-status {
+  padding: var(--space-4);
+  margin: var(--space-3) 0;
+  background: linear-gradient(135deg, 
+    rgba(99, 102, 241, 0.05) 0%, 
+    rgba(6, 182, 212, 0.05) 100%);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  .execution-header {
+    margin-bottom: var(--space-3);
+    display: flex;
+    align-items: center;
+  }
+
+  .execution-steps {
+    margin: var(--space-4) 0;
+    padding-left: var(--space-2);
+
+    // 세로 스텝 스타일 개선
+    .ant-steps-item {
+      padding-bottom: var(--space-3);
+      transition: all var(--transition-normal);
+
+      &:hover {
+        .ant-steps-item-title {
+          transform: translateX(2px);
+        }
+      }
+
+      .step-title-wrapper {
+        position: relative;
+        width: 100%;
+        
+        > span {
+          display: block;
+          margin-bottom: var(--space-2);
+        }
+      }
+
+      // 프로그레스 바 스타일
+      .step-progress-bar {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: rgba(99, 102, 241, 0.1);
+        border-radius: var(--radius-full);
+        overflow: hidden;
+        margin-top: var(--space-1);
+        
+        .step-progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, 
+            var(--color-primary) 0%, 
+            var(--color-primary-light) 100%);
+          border-radius: var(--radius-full);
+          width: 0%;
+          animation: progressFill 1.5s ease-out forwards;
+          box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+        }
+        
+        &.step-progress-complete {
+          .step-progress-fill-complete {
+            width: 0%;
+            background: linear-gradient(90deg, 
+              var(--color-success) 0%, 
+              #34d399 100%);
+            animation: progressComplete 0.8s ease-out forwards;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+          }
+        }
+      }
+
+      .step-icon-wrapper {
+        width: 28px;
+        height: 28px;
+        margin-right: var(--space-3);
+        border: 2px solid;
+        transition: all var(--transition-normal);
+        box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        position: relative;
+        
+        // 기본 아이콘 스타일
+        .anticon {
+          font-size: 16px;
+        }
+        
+        svg {
+          width: 16px;
+          height: 16px;
+        }
+
+        // 완료 상태일 때 체크 아이콘 팡 터지는 애니메이션 (활성 상태가 아닐 때만)
+        &.step-complete:not(.step-active) {
+          background: linear-gradient(135deg, var(--color-success), #34d399) !important;
+          border-color: var(--color-success) !important;
+          box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2) !important;
+          animation: iconCompleteTransition 0.8s ease-out;
+          
+          .check-icon {
+            opacity: 0;
+            animation: checkPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.3s forwards;
+            display: block !important;
+          }
+          
+          // 활성 아이콘 숨기기
+          .active-step-icon {
+            display: none !important;
+          }
+        }
+
+        // 활성 상태 (완료 상태가 아닐 때만)
+        &.step-active:not(.step-complete) {
+          background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) !important;
+          border-color: var(--color-primary) !important;
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
+          animation: pulse 2s ease-in-out infinite;
+          
+          .check-icon {
+            display: none !important;
+          }
+          
+          .active-step-icon {
+            display: flex !important;
+          }
+        }
+        
+        // 활성과 완료가 동시에 있으면 활성이 우선
+        &.step-active.step-complete {
+          background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) !important;
+          border-color: var(--color-primary) !important;
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
+          animation: pulse 2s ease-in-out infinite;
+          
+          .check-icon {
+            display: none !important;
+          }
+        }
+      }
+
+      .ant-steps-item-icon {
+        width: auto;
+        height: auto;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+      }
+
+      // 대기 상태 아이콘
+      .step-icon-wrapper.step-pending {
+        background: var(--bg-primary);
+        border-color: var(--color-gray-300);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        
+        .pending-icon-placeholder {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: var(--color-gray-400);
+        }
+      }
+
+      .ant-steps-item-title {
+        font-size: 13px;
+        font-weight: var(--font-weight-medium);
+        color: var(--text-secondary);
+        transition: all var(--transition-fast);
+        padding-bottom: var(--space-1);
+      }
+
+      .ant-steps-item-description {
+        font-size: 11px;
+        margin-top: 2px;
+      }
+
+      // 활성 상태
+      &.ant-steps-item-active,
+      &.ant-steps-item-process {
+        .step-icon-wrapper.step-active {
+          background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) !important;
+          border-color: var(--color-primary) !important;
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
+          animation: pulse 2s ease-in-out infinite;
+          
+          // 완료 스타일 제거
+          &:not(.step-complete) {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) !important;
+            border-color: var(--color-primary) !important;
+          }
+          
+          // 아이콘 내부 SVG 색상 강제 설정
+          svg {
+            color: var(--color-white) !important;
+            font-size: 16px !important;
+            z-index: 1;
+            position: relative;
+          }
+
+          // 로딩 애니메이션이 잘 보이도록
+          .anticon {
+            color: var(--color-white) !important;
+            font-size: 16px !important;
+          }
+
+          .active-step-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            
+            // LoadingOutlined는 이미 spin prop이 있으므로 추가 애니메이션 불필요
+            .anticon-loading,
+            .anticon-loading svg {
+              color: var(--color-white) !important;
+              font-size: 16px !important;
+            }
+            
+            // 다른 아이콘들
+            .anticon:not(.anticon-loading),
+            svg:not(.anticon-loading svg) {
+              color: var(--color-white) !important;
+              font-size: 16px !important;
+            }
+          }
+        }
+
+        .ant-steps-item-title {
+          color: var(--color-primary);
+          font-weight: var(--font-weight-semibold);
+        }
+      }
+
+      // 완료 상태
+      &.ant-steps-item-finish {
+        .step-icon-wrapper.step-complete {
+          // 이미 step-icon-wrapper에 정의됨
+        }
+
+        .ant-steps-item-title {
+          color: var(--color-success);
+          font-weight: var(--font-weight-semibold);
+        }
+
+        .ant-steps-item-tail {
+          background: linear-gradient(180deg, var(--color-success), rgba(16, 185, 129, 0.3));
+        }
+      }
+
+      // 대기 상태
+      &.ant-steps-item-wait {
+        .ant-steps-item-icon {
+          background: var(--bg-primary);
+          border-color: var(--color-gray-300);
+          color: var(--color-gray-400);
+        }
+
+        .ant-steps-item-title {
+          color: var(--text-secondary);
+        }
+
+        .ant-steps-item-tail {
+          background: var(--color-gray-200);
+        }
+      }
+
+      // 에러 상태
+      &.ant-steps-item-error {
+        .ant-steps-item-icon {
+          background: linear-gradient(135deg, var(--color-error), #f87171);
+          border-color: var(--color-error);
+          color: var(--color-white);
+          box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+        }
+
+        .ant-steps-item-title {
+          color: var(--color-error);
+        }
+      }
+
+      // 세로 연결선 스타일 개선
+      .ant-steps-item-tail {
+        position: absolute;
+        left: 13px;
+        top: 28px;
+        width: 2px;
+        background: linear-gradient(180deg, 
+          rgba(99, 102, 241, 0.3) 0%, 
+          rgba(99, 102, 241, 0.1) 100%);
+        transition: all var(--transition-normal);
+      }
+    }
+
+    // 첫 번째 스텝은 위쪽 여백 제거
+    .ant-steps-item:first-child {
+      padding-top: 0;
+    }
+
+    // 마지막 스텝은 연결선 없음
+    .ant-steps-item:last-child {
+      .ant-steps-item-tail {
+        display: none;
+      }
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+      transform: scale(1);
+    }
+    50% {
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.5);
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  // 프로그레스 바 채우기 애니메이션
+  @keyframes progressFill {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
+  }
+
+  // 완료 프로그레스 바 애니메이션
+  @keyframes progressComplete {
+    from {
+      width: 0%;
+      opacity: 0.7;
+    }
+    to {
+      width: 100%;
+      opacity: 1;
+    }
+  }
+
+  // 아이콘 완료 전환 애니메이션
+  @keyframes iconCompleteTransition {
+    0% {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+      border-color: var(--color-primary);
+    }
+    100% {
+      background: linear-gradient(135deg, var(--color-success), #34d399);
+      border-color: var(--color-success);
+    }
+  }
+
+  // 체크 아이콘 팡 터지는 애니메이션
+  @keyframes checkPop {
+    0% {
+      transform: scale(0) rotate(-180deg);
+      opacity: 0;
+    }
+    60% {
+      transform: scale(1.4) rotate(10deg);
+      opacity: 1;
+    }
+    80% {
+      transform: scale(0.9) rotate(-5deg);
+    }
+    100% {
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
+    }
+  }
+
+  .execution-context {
+    margin-top: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: rgba(99, 102, 241, 0.05);
+    border-radius: var(--radius-md);
+    border: 1px dashed rgba(99, 102, 241, 0.2);
+  }
+}
