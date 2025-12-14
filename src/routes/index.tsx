@@ -6,6 +6,7 @@ import { ROUTES } from '@/constants';
 
 // Lazy load pages
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
+const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
 const DashboardPage = lazy(() => import('@/pages/dashboard/DashboardPage'));
 const ProjectsPage = lazy(() => import('@/pages/projects/ProjectsPage'));
 const ProjectSelectionPage = lazy(() => import('@/pages/cloud/ProjectSelectionPage'));
@@ -39,6 +40,7 @@ const AppRoutes = () => {
       <Routes>
         {/* Public routes */}
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+        <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
 
         {/* Protected routes */}
         <Route element={<PrivateRoute />}>

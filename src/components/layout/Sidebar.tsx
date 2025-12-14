@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ROUTES } from '@/constants';
 import { useAuth } from '@/hooks/useAuth';
+import Logo from '@/components/common/Logo';
 import './Sidebar.scss';
 
 interface SidebarProps {
@@ -245,7 +246,23 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
   return (
     <aside className={`site-sider ${collapsed ? 'collapsed' : ''}`}>
       <div className="logo">
-        <h1>{collapsed ? 'AC' : 'AgenticCP'}</h1>
+        {collapsed ? (
+          <Logo 
+            variant="square" 
+            width={60} 
+            height={60} 
+            className="sidebar-logo-collapsed"
+            alt="AgenticCP Logo"
+          />
+        ) : (
+          <Logo 
+            variant="horizontal" 
+            width={220} 
+            height={55} 
+            className="sidebar-logo-expanded"
+            alt="AgenticCP Logo"
+          />
+        )}
       </div>
 
       <nav className="nav-menu">{menuItems.map(renderMenuItem)}</nav>

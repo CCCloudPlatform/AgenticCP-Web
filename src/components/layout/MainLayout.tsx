@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
@@ -9,6 +9,19 @@ import './MainLayout.scss';
 const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { isOpen: isAgentChatOpen } = useAgentChatStore();
+
+  // AI 채팅 상태에 따라 body 클래스 추가
+  useEffect(() => {
+    if (isAgentChatOpen) {
+      document.body.classList.add('agent-chat-open');
+    } else {
+      document.body.classList.remove('agent-chat-open');
+    }
+    
+    return () => {
+      document.body.classList.remove('agent-chat-open');
+    };
+  }, [isAgentChatOpen]);
 
   return (
     <div className="main-layout">
@@ -21,7 +34,7 @@ const MainLayout: React.FC = () => {
           <Outlet />
         </main>
       </div>
-      <AgentChat />
+      <AgentChat sidebarCollapsed={collapsed} />
     </div>
   );
 };

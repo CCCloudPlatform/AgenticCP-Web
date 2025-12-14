@@ -61,12 +61,68 @@ export type UserStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
 export interface LoginRequest {
   username: string;
   password: string;
+  totpCode?: string;
 }
 
 export interface LoginResponse {
-  token: string;
+  accessToken: string;
   refreshToken: string;
-  user: User;
+  tokenType: string;
+  expiresIn: number;
+  refreshExpiresIn: number;
+}
+
+export interface LoginApiResponse {
+  success: boolean;
+  message: string;
+  data: LoginResponse;
+  timestamp: string;
+}
+
+export interface LoginErrorResponse {
+  success: false;
+  error: {
+    code: string;
+    message: string;
+    details?: string | null;
+  };
+  timestamp: string;
+}
+
+export interface RegisterRequest {
+  username: string;
+  email: string;
+  password: string;
+  name: string;
+  tenantKey?: string;
+}
+
+export interface RegisterResponse {
+  accessToken: string;
+  refreshToken: string;
+  tokenType: string;
+  expiresIn: number;
+  refreshExpiresIn: number;
+}
+
+export interface RegisterApiResponse {
+  success: boolean;
+  message: string;
+  data: RegisterResponse;
+  timestamp: string;
+}
+
+export interface RegisterErrorResponse {
+  success: false;
+  error: {
+    code: string;
+    message: string;
+    details?: {
+      field?: string;
+      value?: string;
+    } | null;
+  };
+  timestamp: string;
 }
 
 export interface Tenant {
@@ -117,6 +173,7 @@ export interface Resource {
   name: string;
   type: string;
   provider: ProviderType;
+  providerId?: number; // 프로바이더 인스턴스 ID
   status: ResourceStatus;
   region: string;
   cost?: number;

@@ -5,7 +5,7 @@ import { UserRole } from '@/types';
  * Authentication Hook
  */
 export const useAuth = () => {
-  const { user, isAuthenticated, isLoading, error, login, logout, clearError } = useAuthStore();
+  const { user, isAuthenticated, isLoading, error, login, register, logout, clearError, checkAuth } = useAuthStore();
 
   const hasRole = (roles: UserRole | UserRole[]): boolean => {
     if (!user) return false;
@@ -27,8 +27,10 @@ export const useAuth = () => {
     isLoading,
     error,
     login,
+    register,
     logout,
     clearError,
+    checkAuth,
     hasRole,
     isSuperAdmin,
     isTenantAdmin,

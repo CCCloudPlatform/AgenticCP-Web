@@ -137,14 +137,17 @@ export const mockProviders: CloudProvider[] = [
 
 /**
  * Mock Resources Data for E-Commerce Platform Projects
+ * 인벤토리에는 서버(EC2/Compute Engine/VM), 스토리지(S3/Cloud Storage), 네트워크(VPC)만 표시
  */
 export const mockResources: Resource[] = [
   // Frontend Web Application Resources (AWS)
+  // 서버
   {
     id: 1,
     name: 'ecommerce-web-frontend',
     type: 'EC2',
     provider: 'AWS',
+    providerId: 1, // E-Commerce Production AWS
     status: 'RUNNING',
     region: 'us-east-1',
     cost: 150,
@@ -152,11 +155,13 @@ export const mockResources: Resource[] = [
     createdAt: '2024-01-15T09:00:00Z',
     updatedAt: '2024-01-20T14:30:00Z',
   },
+  // 스토리지
   {
     id: 2,
-    name: 'ecommerce-api-gateway',
-    type: 'API Gateway',
+    name: 'ecommerce-web-assets',
+    type: 'S3',
     provider: 'AWS',
+    providerId: 1, // E-Commerce Production AWS
     status: 'RUNNING',
     region: 'us-east-1',
     cost: 80,
@@ -164,11 +169,13 @@ export const mockResources: Resource[] = [
     createdAt: '2024-01-15T09:00:00Z',
     updatedAt: '2024-01-20T14:30:00Z',
   },
+  // 네트워크
   {
     id: 3,
-    name: 'ecommerce-web-db',
-    type: 'RDS',
+    name: 'ecommerce-production-vpc',
+    type: 'VPC',
     provider: 'AWS',
+    providerId: 1, // E-Commerce Production AWS
     status: 'RUNNING',
     region: 'us-east-1',
     cost: 320,
@@ -178,11 +185,13 @@ export const mockResources: Resource[] = [
   },
 
   // Backend API Services Resources (GCP)
+  // 서버
   {
     id: 4,
     name: 'ecommerce-api-server',
     type: 'Compute Engine',
     provider: 'GCP',
+    providerId: 2, // E-Commerce Development GCP
     status: 'RUNNING',
     region: 'asia-northeast-1',
     cost: 120,
@@ -190,11 +199,13 @@ export const mockResources: Resource[] = [
     createdAt: '2024-01-10T10:00:00Z',
     updatedAt: '2024-01-18T16:45:00Z',
   },
+  // 스토리지
   {
     id: 5,
-    name: 'ecommerce-api-db',
-    type: 'Cloud SQL',
+    name: 'ecommerce-api-backups',
+    type: 'Cloud Storage',
     provider: 'GCP',
+    providerId: 2, // E-Commerce Development GCP
     status: 'RUNNING',
     region: 'asia-northeast-1',
     cost: 280,
@@ -202,11 +213,13 @@ export const mockResources: Resource[] = [
     createdAt: '2024-01-10T10:00:00Z',
     updatedAt: '2024-01-18T16:45:00Z',
   },
+  // 네트워크
   {
     id: 6,
-    name: 'ecommerce-microservices',
-    type: 'Kubernetes Engine',
+    name: 'ecommerce-development-vpc',
+    type: 'VPC',
     provider: 'GCP',
+    providerId: 2, // E-Commerce Development GCP
     status: 'RUNNING',
     region: 'asia-northeast-1',
     cost: 450,
@@ -216,11 +229,13 @@ export const mockResources: Resource[] = [
   },
 
   // Staging Environment Resources (Azure)
+  // 서버
   {
     id: 7,
     name: 'ecommerce-staging-vm',
     type: 'Virtual Machine',
     provider: 'AZURE',
+    providerId: 3, // E-Commerce Staging Azure
     status: 'RUNNING',
     region: 'eastus',
     cost: 180,
@@ -228,11 +243,13 @@ export const mockResources: Resource[] = [
     createdAt: '2024-01-05T08:00:00Z',
     updatedAt: '2024-01-22T11:20:00Z',
   },
+  // 스토리지
   {
     id: 8,
-    name: 'ecommerce-staging-db',
-    type: 'Azure SQL Database',
+    name: 'ecommerce-staging-storage',
+    type: 'Storage Account',
     provider: 'AZURE',
+    providerId: 3, // E-Commerce Staging Azure
     status: 'RUNNING',
     region: 'eastus',
     cost: 250,
@@ -242,11 +259,13 @@ export const mockResources: Resource[] = [
   },
 
   // Analytics & Data Processing Resources (AWS)
+  // 서버
   {
-    id: 9,
-    name: 'ecommerce-analytics-cluster',
-    type: 'EMR',
+    id: 10,
+    name: 'ecommerce-analytics-server',
+    type: 'EC2',
     provider: 'AWS',
+    providerId: 4, // E-Commerce Analytics AWS
     status: 'RUNNING',
     region: 'us-west-2',
     cost: 580,
@@ -254,11 +273,13 @@ export const mockResources: Resource[] = [
     createdAt: '2024-01-01T12:00:00Z',
     updatedAt: '2024-01-15T09:30:00Z',
   },
+  // 스토리지
   {
-    id: 10,
+    id: 11,
     name: 'ecommerce-data-lake',
     type: 'S3',
     provider: 'AWS',
+    providerId: 4, // E-Commerce Analytics AWS
     status: 'RUNNING',
     region: 'us-west-2',
     cost: 120,
@@ -268,11 +289,13 @@ export const mockResources: Resource[] = [
   },
 
   // CDN & Content Delivery Resources (GCP)
+  // 스토리지
   {
-    id: 11,
-    name: 'ecommerce-cdn-global',
-    type: 'Cloud CDN',
+    id: 13,
+    name: 'ecommerce-static-assets',
+    type: 'Cloud Storage',
     provider: 'GCP',
+    providerId: 5, // E-Commerce CDN GCP
     status: 'RUNNING',
     region: 'global',
     cost: 350,
@@ -280,11 +303,13 @@ export const mockResources: Resource[] = [
     createdAt: '2024-01-08T14:00:00Z',
     updatedAt: '2024-01-25T10:15:00Z',
   },
+  // 네트워크
   {
-    id: 12,
-    name: 'ecommerce-static-assets',
-    type: 'Cloud Storage',
+    id: 14,
+    name: 'ecommerce-cdn-vpc',
+    type: 'VPC',
     provider: 'GCP',
+    providerId: 5, // E-Commerce CDN GCP
     status: 'RUNNING',
     region: 'global',
     cost: 90,
