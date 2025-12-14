@@ -1,266 +1,241 @@
-import React, { useState } from 'react';
+import { Layout, Menu } from 'antd';
+import {
+  DashboardOutlined,
+  CloudOutlined,
+  SecurityScanOutlined,
+  MonitorOutlined,
+  DollarOutlined,
+  DeploymentUnitOutlined,
+  CodeOutlined,
+  ApiOutlined,
+  BellOutlined,
+  SettingOutlined,
+  TeamOutlined,
+} from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
+import type { MenuProps } from 'antd';
 import { ROUTES } from '@/constants';
 import { useAuth } from '@/hooks/useAuth';
 import './Sidebar.scss';
+
+const { Sider } = Layout;
 
 interface SidebarProps {
   collapsed: boolean;
 }
 
-interface MenuItem {
-  key: string;
-  icon: string;
-  label: string;
-  children?: MenuItem[];
-  disabled?: boolean;
-}
-
-const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
+const Sidebar = ({ collapsed }: SidebarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { hasRole } = useAuth();
-  const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
-  const menuItems: MenuItem[] = [
+  const menuItems: MenuProps['items'] = [
     {
       key: ROUTES.DASHBOARD,
-      icon: '📊',
+      icon: <DashboardOutlined />,
       label: '대시보드',
+      onClick: () => navigate(ROUTES.DASHBOARD),
     },
     {
-      key: ROUTES.PROJECT,
-      icon: '📁',
-      label: '프로젝트 관리',
+      key: 'tenants',
+      icon: <TeamOutlined />,
+      label: '테넌트 관리',
+      onClick: () => navigate(ROUTES.TENANTS),
       disabled: !hasRole(['SUPER_ADMIN', 'TENANT_ADMIN']),
     },
     {
       key: 'cloud',
-      icon: '☁️',
+      icon: <CloudOutlined />,
       label: '클라우드 리소스',
       children: [
         {
+          key: ROUTES.PROVIDERS,
+          label: '프로바이더',
+          onClick: () => navigate(ROUTES.PROVIDERS),
+        },
+        {
           key: ROUTES.RESOURCES,
-          icon: '📦',
           label: '리소스',
+          onClick: () => navigate(ROUTES.RESOURCES),
         },
         {
           key: ROUTES.INVENTORY,
-          icon: '📋',
           label: '인벤토리',
+          onClick: () => navigate(ROUTES.INVENTORY),
         },
       ],
     },
     {
       key: 'orchestration',
-      icon: '🎯',
+      icon: <DeploymentUnitOutlined />,
       label: '오케스트레이션',
       children: [
         {
           key: ROUTES.DEPLOYMENTS,
-          icon: '🚀',
           label: '배포',
+          onClick: () => navigate(ROUTES.DEPLOYMENTS),
         },
         {
           key: ROUTES.SCALING,
-          icon: '📈',
           label: '스케일링',
+          onClick: () => navigate(ROUTES.SCALING),
         },
       ],
     },
     {
       key: 'monitoring',
-      icon: '📊',
+      icon: <MonitorOutlined />,
       label: '모니터링',
       children: [
         {
           key: ROUTES.METRICS,
-          icon: '📈',
           label: '메트릭',
+          onClick: () => navigate(ROUTES.METRICS),
         },
         {
           key: ROUTES.LOGS,
-          icon: '📝',
           label: '로그',
+          onClick: () => navigate(ROUTES.LOGS),
         },
         {
           key: ROUTES.ALERTS,
-          icon: '🚨',
           label: '알림',
+          onClick: () => navigate(ROUTES.ALERTS),
         },
       ],
     },
     {
       key: 'security',
-      icon: '🔒',
+      icon: <SecurityScanOutlined />,
       label: '보안 & 컴플라이언스',
       children: [
         {
           key: ROUTES.USERS,
-          icon: '👤',
           label: '사용자',
+          onClick: () => navigate(ROUTES.USERS),
         },
         {
           key: ROUTES.ROLES,
-          icon: '🎭',
           label: '역할',
+          onClick: () => navigate(ROUTES.ROLES),
         },
         {
           key: ROUTES.POLICIES,
-          icon: '📋',
           label: '정책',
+          onClick: () => navigate(ROUTES.POLICIES),
         },
       ],
       disabled: !hasRole(['SUPER_ADMIN', 'TENANT_ADMIN']),
     },
     {
       key: 'cost',
-      icon: '💰',
+      icon: <DollarOutlined />,
       label: '비용 관리',
       children: [
         {
           key: ROUTES.COST_TRACKING,
-          icon: '📊',
           label: '비용 추적',
+          onClick: () => navigate(ROUTES.COST_TRACKING),
         },
         {
           key: ROUTES.BUDGETS,
-          icon: '💳',
           label: '예산',
+          onClick: () => navigate(ROUTES.BUDGETS),
         },
         {
           key: ROUTES.OPTIMIZATION,
-          icon: '⚡',
           label: '최적화',
+          onClick: () => navigate(ROUTES.OPTIMIZATION),
         },
       ],
     },
     {
       key: 'iac',
-      icon: '🏗️',
+      icon: <CodeOutlined />,
       label: 'Infrastructure as Code',
       children: [
         {
           key: ROUTES.TEMPLATES,
-          icon: '📄',
           label: '템플릿',
+          onClick: () => navigate(ROUTES.TEMPLATES),
         },
         {
           key: ROUTES.PIPELINES,
-          icon: '🔄',
           label: '파이프라인',
+          onClick: () => navigate(ROUTES.PIPELINES),
         },
       ],
     },
     {
       key: 'integration',
-      icon: '🔗',
+      icon: <ApiOutlined />,
       label: '통합 & API',
       children: [
         {
           key: ROUTES.API_MANAGEMENT,
-          icon: '🔌',
           label: 'API 관리',
+          onClick: () => navigate(ROUTES.API_MANAGEMENT),
         },
         {
           key: ROUTES.WEBHOOKS,
-          icon: '🎣',
           label: '웹훅',
+          onClick: () => navigate(ROUTES.WEBHOOKS),
         },
       ],
     },
     {
       key: ROUTES.NOTIFICATIONS,
-      icon: '🔔',
+      icon: <BellOutlined />,
       label: '알림',
+      onClick: () => navigate(ROUTES.NOTIFICATIONS),
     },
     {
       key: ROUTES.SETTINGS,
-      icon: '⚙️',
+      icon: <SettingOutlined />,
       label: '설정',
+      onClick: () => navigate(ROUTES.SETTINGS),
     },
   ];
 
-  const isActive = (key: string) => {
-    return location.pathname.startsWith(key);
-  };
-
-  const isExpanded = (key: string) => {
-    return expandedItems.includes(key);
-  };
-
-  const toggleExpanded = (key: string) => {
-    setExpandedItems((prev) =>
-      prev.includes(key) ? prev.filter((item) => item !== key) : [...prev, key]
-    );
-  };
-
-  const handleItemClick = (item: MenuItem) => {
-    if (item.children) {
-      toggleExpanded(item.key);
-    } else {
-      navigate(item.key);
+  // Get current selected key from location
+  const getSelectedKey = () => {
+    const path = location.pathname;
+    for (const item of menuItems) {
+      if (item && 'key' in item && path.startsWith(item.key as string)) {
+        return [item.key as string];
+      }
+      if (item && 'children' in item) {
+        const child = item.children?.find(
+          (c) => c && 'key' in c && path.startsWith(c.key as string)
+        );
+        if (child && 'key' in child) {
+          return [child.key as string];
+        }
+      }
     }
-  };
-
-  const renderMenuItem = (item: MenuItem) => {
-    const hasChildren = item.children && item.children.length > 0;
-    const active = isActive(item.key);
-    const expanded = isExpanded(item.key);
-
-    return (
-      <div key={item.key} className="nav-item">
-        <div
-          className={`nav-link ${active ? 'active' : ''} ${item.disabled ? 'disabled' : ''}`}
-          onClick={() => !item.disabled && handleItemClick(item)}
-        >
-          <span className="nav-icon">{item.icon}</span>
-          {!collapsed && (
-            <>
-              <span className="nav-text">{item.label}</span>
-              {hasChildren && <span className={`nav-arrow ${expanded ? 'expanded' : ''}`}>▼</span>}
-            </>
-          )}
-        </div>
-
-        {hasChildren && !collapsed && expanded && (
-          <div className="nav-submenu">
-            {item.children!.map((child) => (
-              <div key={child.key} className="nav-subitem">
-                <div
-                  className={`nav-sublink ${isActive(child.key) ? 'active' : ''}`}
-                  onClick={() => navigate(child.key)}
-                >
-                  <span className="nav-subicon">{child.icon}</span>
-                  <span className="nav-subtext">{child.label}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    );
+    return [ROUTES.DASHBOARD];
   };
 
   return (
-    <aside className={`site-sider ${collapsed ? 'collapsed' : ''}`}>
+    <Sider
+      trigger={null}
+      collapsible
+      collapsed={collapsed}
+      className="site-sider"
+      width={250}
+    >
       <div className="logo">
         <h1>{collapsed ? 'AC' : 'AgenticCP'}</h1>
       </div>
-
-      <nav className="nav-menu">{menuItems.map(renderMenuItem)}</nav>
-
-      <div className="sidebar-footer">
-        <div className="footer-content">
-          <div className="footer-icon">ℹ️</div>
-          <div className="footer-text">
-            <div className="footer-title">AgenticCP</div>
-            <div className="footer-subtitle">Multi-Cloud Platform</div>
-          </div>
-        </div>
-      </div>
-    </aside>
+      <Menu
+        theme="dark"
+        mode="inline"
+        selectedKeys={getSelectedKey()}
+        items={menuItems}
+      />
+    </Sider>
   );
 };
 
 export default Sidebar;
+
