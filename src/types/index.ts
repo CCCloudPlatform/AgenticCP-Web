@@ -176,6 +176,7 @@ export interface Resource {
   providerId?: number; // 프로바이더 인스턴스 ID
   status: ResourceStatus;
   region: string;
+  cost?: number;
   tags: Record<string, string>;
   createdAt: string;
   updatedAt: string;

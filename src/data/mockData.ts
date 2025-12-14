@@ -150,7 +150,8 @@ export const mockResources: Resource[] = [
     providerId: 1, // E-Commerce Production AWS
     status: 'RUNNING',
     region: 'us-east-1',
-    tags: { Environment: 'Production', Project: 'Frontend Web App', Category: 'Server' },
+    cost: 150,
+    tags: { Environment: 'Production', Project: 'Frontend Web App' },
     createdAt: '2024-01-15T09:00:00Z',
     updatedAt: '2024-01-20T14:30:00Z',
   },
@@ -163,7 +164,8 @@ export const mockResources: Resource[] = [
     providerId: 1, // E-Commerce Production AWS
     status: 'RUNNING',
     region: 'us-east-1',
-    tags: { Environment: 'Production', Project: 'Frontend Web App', Category: 'Storage' },
+    cost: 80,
+    tags: { Environment: 'Production', Project: 'Frontend Web App' },
     createdAt: '2024-01-15T09:00:00Z',
     updatedAt: '2024-01-20T14:30:00Z',
   },
@@ -176,7 +178,8 @@ export const mockResources: Resource[] = [
     providerId: 1, // E-Commerce Production AWS
     status: 'RUNNING',
     region: 'us-east-1',
-    tags: { Environment: 'Production', Project: 'Frontend Web App', Category: 'Network' },
+    cost: 320,
+    tags: { Environment: 'Production', Project: 'Frontend Web App' },
     createdAt: '2024-01-15T09:00:00Z',
     updatedAt: '2024-01-20T14:30:00Z',
   },
@@ -191,7 +194,8 @@ export const mockResources: Resource[] = [
     providerId: 2, // E-Commerce Development GCP
     status: 'RUNNING',
     region: 'asia-northeast-1',
-    tags: { Environment: 'Development', Project: 'Backend API Services', Category: 'Server' },
+    cost: 120,
+    tags: { Environment: 'Development', Project: 'Backend API Services' },
     createdAt: '2024-01-10T10:00:00Z',
     updatedAt: '2024-01-18T16:45:00Z',
   },
@@ -204,7 +208,8 @@ export const mockResources: Resource[] = [
     providerId: 2, // E-Commerce Development GCP
     status: 'RUNNING',
     region: 'asia-northeast-1',
-    tags: { Environment: 'Development', Project: 'Backend API Services', Category: 'Storage' },
+    cost: 280,
+    tags: { Environment: 'Development', Project: 'Backend API Services' },
     createdAt: '2024-01-10T10:00:00Z',
     updatedAt: '2024-01-18T16:45:00Z',
   },
@@ -217,7 +222,8 @@ export const mockResources: Resource[] = [
     providerId: 2, // E-Commerce Development GCP
     status: 'RUNNING',
     region: 'asia-northeast-1',
-    tags: { Environment: 'Development', Project: 'Backend API Services', Category: 'Network' },
+    cost: 450,
+    tags: { Environment: 'Development', Project: 'Backend API Services' },
     createdAt: '2024-01-10T10:00:00Z',
     updatedAt: '2024-01-18T16:45:00Z',
   },
@@ -232,7 +238,8 @@ export const mockResources: Resource[] = [
     providerId: 3, // E-Commerce Staging Azure
     status: 'RUNNING',
     region: 'eastus',
-    tags: { Environment: 'Staging', Project: 'Staging Environment', Category: 'Server' },
+    cost: 180,
+    tags: { Environment: 'Staging', Project: 'Staging Environment' },
     createdAt: '2024-01-05T08:00:00Z',
     updatedAt: '2024-01-22T11:20:00Z',
   },
@@ -245,20 +252,8 @@ export const mockResources: Resource[] = [
     providerId: 3, // E-Commerce Staging Azure
     status: 'RUNNING',
     region: 'eastus',
-    tags: { Environment: 'Staging', Project: 'Staging Environment', Category: 'Storage' },
-    createdAt: '2024-01-05T08:00:00Z',
-    updatedAt: '2024-01-22T11:20:00Z',
-  },
-  // 네트워크
-  {
-    id: 9,
-    name: 'ecommerce-staging-vnet',
-    type: 'Virtual Network',
-    provider: 'AZURE',
-    providerId: 3, // E-Commerce Staging Azure
-    status: 'RUNNING',
-    region: 'eastus',
-    tags: { Environment: 'Staging', Project: 'Staging Environment', Category: 'Network' },
+    cost: 250,
+    tags: { Environment: 'Staging', Project: 'Staging Environment' },
     createdAt: '2024-01-05T08:00:00Z',
     updatedAt: '2024-01-22T11:20:00Z',
   },
@@ -273,7 +268,8 @@ export const mockResources: Resource[] = [
     providerId: 4, // E-Commerce Analytics AWS
     status: 'RUNNING',
     region: 'us-west-2',
-    tags: { Environment: 'Production', Project: 'Analytics & Data Processing', Category: 'Server' },
+    cost: 580,
+    tags: { Environment: 'Production', Project: 'Analytics & Data Processing' },
     createdAt: '2024-01-01T12:00:00Z',
     updatedAt: '2024-01-15T09:30:00Z',
   },
@@ -286,20 +282,8 @@ export const mockResources: Resource[] = [
     providerId: 4, // E-Commerce Analytics AWS
     status: 'RUNNING',
     region: 'us-west-2',
-    tags: { Environment: 'Production', Project: 'Analytics & Data Processing', Category: 'Storage' },
-    createdAt: '2024-01-01T12:00:00Z',
-    updatedAt: '2024-01-15T09:30:00Z',
-  },
-  // 네트워크
-  {
-    id: 12,
-    name: 'ecommerce-analytics-vpc',
-    type: 'VPC',
-    provider: 'AWS',
-    providerId: 4, // E-Commerce Analytics AWS
-    status: 'RUNNING',
-    region: 'us-west-2',
-    tags: { Environment: 'Production', Project: 'Analytics & Data Processing', Category: 'Network' },
+    cost: 120,
+    tags: { Environment: 'Production', Project: 'Analytics & Data Processing' },
     createdAt: '2024-01-01T12:00:00Z',
     updatedAt: '2024-01-15T09:30:00Z',
   },
@@ -314,7 +298,8 @@ export const mockResources: Resource[] = [
     providerId: 5, // E-Commerce CDN GCP
     status: 'RUNNING',
     region: 'global',
-    tags: { Environment: 'Production', Project: 'CDN & Content Delivery', Category: 'Storage' },
+    cost: 350,
+    tags: { Environment: 'Production', Project: 'CDN & Content Delivery' },
     createdAt: '2024-01-08T14:00:00Z',
     updatedAt: '2024-01-25T10:15:00Z',
   },
@@ -327,7 +312,8 @@ export const mockResources: Resource[] = [
     providerId: 5, // E-Commerce CDN GCP
     status: 'RUNNING',
     region: 'global',
-    tags: { Environment: 'Production', Project: 'CDN & Content Delivery', Category: 'Network' },
+    cost: 90,
+    tags: { Environment: 'Production', Project: 'CDN & Content Delivery' },
     createdAt: '2024-01-08T14:00:00Z',
     updatedAt: '2024-01-25T10:15:00Z',
   },
