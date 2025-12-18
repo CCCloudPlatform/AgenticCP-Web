@@ -1,4 +1,4 @@
-import { CloudProvider, Project, Resource, Organization } from '@/types';
+import { ApiResponse, CloudProvider, Organization, OrganizationTenant, Project, Resource } from '@/types';
 
 /**
  * E-Commerce Platform Organization Structure
@@ -49,6 +49,16 @@ export const mockOrganizations: Organization[] = [
     totalCost: 0,
     createdAt: '2023-12-01T00:00:00Z',
     updatedAt: '2024-01-10T13:45:00Z',
+  },
+  {
+    id: 5,
+    name: '개발팀',
+    description: '내부 개발팀 조직',
+    status: 'ACTIVE',
+    totalProjects: 1,
+    totalCost: 0,
+    createdAt: '2024-01-01T10:00:00Z',
+    updatedAt: '2024-01-15T14:30:00Z',
   },
 ];
 
@@ -483,6 +493,69 @@ export const mockApiResponses = {
     hasNext: false,
     hasPrevious: false,
   },
+};
+
+/**
+ * Mock Organization Tenant for "개발팀" (organizationId: 5)
+ */
+export const mockOrganizationTenantResponse: ApiResponse<OrganizationTenant> = {
+  success: true,
+  message: '조직 테넌트를 성공적으로 조회했습니다.',
+  data: {
+    // BaseEntity fields
+    id: 1,
+    createdAt: '2024-01-01T10:00:00',
+    updatedAt: '2024-01-15T14:30:00',
+    createdBy: 'admin',
+    updatedBy: 'admin',
+    isDeleted: false,
+
+    // Tenant basic info
+    tenantKey: 'org-dev-team-001',
+    tenantName: '개발팀 전용 테넌트',
+    description: '개발팀의 전용 클라우드 환경',
+
+    // Organization relation (1:1)
+    organization: {
+      id: 5,
+      name: '개발팀',
+      createdAt: '2024-01-01T10:00:00',
+      updatedAt: '2024-01-15T14:30:00',
+      createdBy: 'admin',
+      updatedBy: 'admin',
+      isDeleted: false,
+    },
+
+    // Status & type
+    status: 'ACTIVE',
+    tenantType: 'DEDICATED',
+
+    // Resource quotas
+    maxUsers: 100,
+    maxResources: 50,
+    storageQuotaGb: 1000,
+    bandwidthQuotaGb: 500,
+
+    // Contact info
+    contactEmail: 'dev-team@example.com',
+    contactPhone: '010-1234-5678',
+
+    // Billing info
+    billingAddress: '서울시 강남구 테헤란로 123, 10층',
+
+    // Settings (JSON string)
+    settings:
+      '{"theme":"dark","language":"ko","timezone":"Asia/Seoul","notifications":{"email":true,"sms":false}}',
+
+    // Subscription info
+    subscriptionStartDate: '2024-01-01T00:00:00',
+    subscriptionEndDate: '2024-12-31T23:59:59',
+
+    // Trial info
+    isTrial: false,
+    trialEndDate: null,
+  },
+  timestamp: new Date().toISOString(),
 };
 
 /**

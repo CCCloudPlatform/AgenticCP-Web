@@ -9,10 +9,7 @@ export const organizationService = {
    * Get all organizations
    */
   getOrganizations: async (_params?: PaginationParams): Promise<PagedResponse<Organization>> => {
-    // Mock API delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    // Return mock data
+    await new Promise((resolve) => setTimeout(resolve, 300));
     return Promise.resolve(mockApiResponses.getOrganizations);
   },
 
@@ -20,9 +17,7 @@ export const organizationService = {
    * Get organization by ID
    */
   getOrganizationById: async (id: number): Promise<Organization> => {
-    // Mock API delay
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
+    await new Promise((resolve) => setTimeout(resolve, 200));
     const organization = mockOrganizations.find((o) => o.id === id);
     if (!organization) {
       throw new Error('Organization not found');
@@ -34,8 +29,7 @@ export const organizationService = {
    * Create organization
    */
   createOrganization: async (data: Partial<Organization>): Promise<Organization> => {
-    // Mock API delay
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     const newOrganization: Organization = {
       id: mockOrganizations.length + 1,
@@ -49,6 +43,12 @@ export const organizationService = {
     };
 
     mockOrganizations.push(newOrganization);
+    mockApiResponses.getOrganizations = {
+      ...mockApiResponses.getOrganizations,
+      content: mockOrganizations,
+      totalElements: mockOrganizations.length,
+    };
+
     return Promise.resolve(newOrganization);
   },
 
@@ -56,44 +56,62 @@ export const organizationService = {
    * Update organization
    */
   updateOrganization: async (id: number, data: Partial<Organization>): Promise<Organization> => {
-    // Mock API delay
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
-    const organizationIndex = mockOrganizations.findIndex((o) => o.id === id);
-    if (organizationIndex === -1) {
+    const index = mockOrganizations.findIndex((o) => o.id === id);
+    if (index === -1) {
       throw new Error('Organization not found');
     }
 
-    const updatedOrganization = {
-      ...mockOrganizations[organizationIndex],
+    const updated: Organization = {
+      ...mockOrganizations[index],
       ...data,
       updatedAt: new Date().toISOString(),
     };
 
-    mockOrganizations[organizationIndex] = updatedOrganization;
-    return Promise.resolve(updatedOrganization);
+    mockOrganizations[index] = updated;
+    mockApiResponses.getOrganizations = {
+      ...mockApiResponses.getOrganizations,
+      content: mockOrganizations,
+      totalElements: mockOrganizations.length,
+    };
+
+    return Promise.resolve(updated);
   },
 
   /**
    * Delete organization
    */
   deleteOrganization: async (id: number): Promise<void> => {
-    // Mock API delay
-    await new Promise((resolve) => setTimeout(resolve, 400));
+    await new Promise((resolve) => setTimeout(resolve, 200));
 
-    const organizationIndex = mockOrganizations.findIndex((o) => o.id === id);
-    if (organizationIndex === -1) {
+    const index = mockOrganizations.findIndex((o) => o.id === id);
+    if (index === -1) {
       throw new Error('Organization not found');
     }
 
-    mockOrganizations.splice(organizationIndex, 1);
+    mockOrganizations.splice(index, 1);
+    mockApiResponses.getOrganizations = {
+      ...mockApiResponses.getOrganizations,
+      content: mockOrganizations,
+      totalElements: mockOrganizations.length,
+    };
+
     return Promise.resolve();
+  },
+
+  /**
+   * Get organization count
+   */
+  getOrganizationCount: async (): Promise<number> => {
+    await new Promise((resolve) => setTimeout(resolve, 150));
+    return Promise.resolve(mockOrganizations.length);
   },
 
   /**
    * Get organization statistics
    */
-  getOrganizationStats: async (
+  getOrganizationStats: (
     id: number
   ): Promise<{
     totalProjects: number;
@@ -101,15 +119,17 @@ export const organizationService = {
     activeProjects: number;
     totalResources: number;
   }> => {
-    // Mock API delay
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    // 간단한 목업 통계 (실제 로직은 백엔드에서 계산)
+    const organization = mockOrganizations.find((o) => o.id === id);
+    if (!organization) {
+      return Promise.reject(new Error('Organization not found'));
+    }
 
-    // Mock stats calculation
     return Promise.resolve({
-      totalProjects: 5,
-      totalCost: 5400,
-      activeProjects: 4,
-      totalResources: 12,
+      totalProjects: organization.totalProjects,
+      totalCost: organization.totalCost,
+      activeProjects: organization.totalProjects, // 단순 가정
+      totalResources: organization.totalProjects * 3,
     });
   },
 };

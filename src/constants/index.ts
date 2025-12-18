@@ -30,6 +30,9 @@ export const ROUTES = {
   REGISTER: '/register',
   DASHBOARD: '/dashboard',
 
+  // Organization Management
+  ORGANIZATIONS: '/organizations',
+
   // Platform Management
   PLATFORM: '/platform',
   PLATFORM_CONFIG: '/platform/config',

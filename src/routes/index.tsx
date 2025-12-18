@@ -9,6 +9,7 @@ const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
 const DashboardPage = lazy(() => import('@/pages/dashboard/DashboardPage'));
 const ProjectsPage = lazy(() => import('@/pages/projects/ProjectsPage'));
+const OrganizationsPage = lazy(() => import('@/pages/organizations/OrganizationsPage'));
 const ProjectSelectionPage = lazy(() => import('@/pages/cloud/ProjectSelectionPage'));
 const ProjectResourcesPage = lazy(() => import('@/pages/cloud/ProjectResourcesPage'));
 const ResourcesPage = lazy(() => import('@/pages/cloud/ResourcesPage'));
@@ -47,6 +48,9 @@ const AppRoutes = () => {
           <Route element={<MainLayout />}>
             <Route path={ROUTES.HOME} element={<Navigate to={ROUTES.DASHBOARD} replace />} />
             <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
+
+            {/* Organization Management Routes */}
+            <Route path={ROUTES.ORGANIZATIONS} element={<OrganizationsPage />} />
 
             {/* Project Management Routes */}
             <Route path={ROUTES.PROJECT} element={<ProjectsPage />} />

@@ -228,6 +228,66 @@ export interface Organization {
 
 export type OrganizationStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
 
+/**
+ * Organization Tenant Types
+ */
+export type TenantStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
+export type TenantType = 'DEDICATED' | 'SHARED';
+
+export interface OrganizationTenant {
+  // BaseEntity fields
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  updatedBy: string;
+  isDeleted: boolean;
+
+  // Tenant basic info
+  tenantKey: string;
+  tenantName: string;
+  description?: string;
+
+  // Organization relation (1:1)
+  organization: {
+    id: number;
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    createdBy: string;
+    updatedBy: string;
+    isDeleted: boolean;
+  };
+
+  // Status & type
+  status: TenantStatus;
+  tenantType: TenantType;
+
+  // Resource quotas
+  maxUsers: number;
+  maxResources: number;
+  storageQuotaGb: number;
+  bandwidthQuotaGb: number;
+
+  // Contact info
+  contactEmail: string;
+  contactPhone?: string;
+
+  // Billing info
+  billingAddress?: string;
+
+  // Settings (JSON string)
+  settings: string;
+
+  // Subscription info
+  subscriptionStartDate?: string;
+  subscriptionEndDate?: string | null;
+
+  // Trial info
+  isTrial: boolean;
+  trialEndDate?: string | null;
+}
+
 export interface Project {
   id: number;
   name: string;

@@ -1,0 +1,450 @@
+/* ===========================================
+   ORGANIZATIONS PAGE - NEXT-GEN DESIGN
+   =========================================== */
+
+.organizations-page {
+  padding: var(--space-6);
+  background: var(--bg-primary);
+  min-height: 100vh;
+
+  .page-header {
+    margin-bottom: var(--space-8);
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-6);
+
+      .header-text {
+        flex: 1;
+
+        .page-title {
+          font-size: var(--font-size-4xl);
+          font-weight: var(--font-weight-bold);
+          color: var(--text-primary);
+          margin: 0 0 var(--space-2) 0;
+          background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .page-description {
+          font-size: var(--font-size-lg);
+          color: var(--text-secondary);
+          margin: 0 0 var(--space-4) 0;
+        }
+      }
+
+      .header-actions {
+        .add-org-btn {
+          background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+          border: none;
+          border-radius: var(--radius-lg);
+          box-shadow: var(--shadow-md);
+          transition: all var(--transition-normal);
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+          }
+        }
+      }
+    }
+  }
+
+  .stats-section {
+    margin-bottom: var(--space-8);
+
+    .stat-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+      }
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--color-primary);
+      }
+
+      &.total-orgs::before {
+        background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+      }
+
+      &.active-orgs::before {
+        background: linear-gradient(90deg, var(--color-success), #34d399);
+      }
+
+      &.total-projects::before {
+        background: linear-gradient(90deg, var(--color-info), #60a5fa);
+      }
+
+      &.total-cost::before {
+        background: linear-gradient(90deg, var(--color-warning), #fbbf24);
+      }
+
+      .ant-statistic-title {
+        color: var(--text-secondary);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-medium);
+        margin-bottom: var(--space-2);
+      }
+
+      .ant-statistic-content-value {
+        font-size: var(--font-size-3xl);
+        font-weight: var(--font-weight-bold);
+      }
+    }
+  }
+
+  .content-section {
+    .organizations-card,
+    .tenant-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-normal);
+
+      &:hover {
+        box-shadow: var(--shadow-lg);
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: var(--space-6);
+        padding-bottom: var(--space-4);
+        border-bottom: 1px solid var(--border-light);
+
+        .card-title-text {
+          font-size: var(--font-size-2xl);
+          font-weight: var(--font-weight-semibold);
+          color: var(--text-primary);
+          margin: 0 0 var(--space-1) 0;
+        }
+
+        .card-description {
+          font-size: var(--font-size-base);
+          color: var(--text-secondary);
+          margin: 0;
+        }
+
+        .card-actions {
+          .refresh-btn {
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-fast);
+          }
+        }
+      }
+    }
+
+    .organizations-card {
+      .table-container {
+        .organizations-table {
+          .ant-table-thead > tr > th {
+            background: var(--bg-secondary);
+            border-bottom: 2px solid var(--border-light);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+            padding: var(--space-4);
+          }
+
+          .ant-table-tbody > tr {
+            transition: all var(--transition-fast);
+
+            &:hover {
+              background: var(--bg-secondary);
+              transform: scale(1.01);
+            }
+
+            > td {
+              padding: var(--space-4);
+              border-bottom: 1px solid var(--border-light);
+            }
+          }
+
+          .org-cell {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+
+            .org-icon-wrapper {
+              width: 40px;
+              height: 40px;
+              border-radius: var(--radius-lg);
+              background: linear-gradient(
+                135deg,
+                var(--color-primary),
+                var(--color-primary-light)
+              );
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              box-shadow: var(--shadow-sm);
+
+              .org-icon {
+                color: var(--color-white);
+                font-size: var(--font-size-lg);
+              }
+            }
+
+            .org-info {
+              .org-name {
+                font-weight: var(--font-weight-semibold);
+                color: var(--text-primary);
+                margin-bottom: var(--space-1);
+              }
+
+              .org-description {
+                font-size: var(--font-size-sm);
+                color: var(--text-secondary);
+              }
+            }
+          }
+
+          .status-tag {
+            border-radius: var(--radius-md);
+            font-weight: var(--font-weight-medium);
+            padding: var(--space-1) var(--space-3);
+
+            &.status-active {
+              background: rgba(16, 185, 129, 0.08);
+              border-color: transparent;
+              color: var(--color-success);
+            }
+
+            &.status-inactive {
+              background: rgba(148, 163, 184, 0.12);
+              border-color: transparent;
+              color: var(--color-gray-600);
+            }
+
+            &.status-suspended {
+              background: rgba(245, 158, 11, 0.08);
+              border-color: transparent;
+              color: var(--color-warning);
+            }
+          }
+
+          .date-cell {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+
+            .date-icon {
+              color: var(--text-tertiary);
+            }
+          }
+
+          .actions-cell {
+            .action-btn {
+              border-radius: var(--radius-md);
+              transition: all var(--transition-fast);
+
+              &:hover {
+                transform: scale(1.05);
+              }
+
+              &.edit-btn:hover {
+                color: var(--color-warning);
+                background: rgba(245, 158, 11, 0.08);
+              }
+
+              &.delete-btn:hover {
+                color: var(--color-error);
+                background: rgba(239, 68, 68, 0.08);
+              }
+            }
+          }
+
+          .table-pagination {
+            margin-top: var(--space-6);
+            text-align: center;
+          }
+        }
+      }
+    }
+
+    .tenant-card {
+      .tenant-empty,
+      .tenant-loading,
+      .tenant-error {
+        padding: var(--space-6);
+        text-align: center;
+      }
+
+      .tenant-content {
+        .tenant-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: var(--space-4);
+
+          .tenant-org-name {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+
+            .tenant-org-icon {
+              color: var(--color-primary);
+            }
+          }
+        }
+
+        .tenant-details {
+          display: flex;
+          flex-direction: column;
+          gap: var(--space-4);
+
+          .tenant-section {
+            .section-title {
+              font-size: var(--font-size-sm);
+              font-weight: var(--font-weight-medium);
+              color: var(--text-secondary);
+              margin-bottom: var(--space-2);
+            }
+
+            .section-row {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: var(--space-2) 0;
+              border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+
+              &:last-child {
+                border-bottom: none;
+              }
+
+              .label {
+                font-size: var(--font-size-sm);
+                color: var(--text-secondary);
+              }
+
+              .value {
+                font-size: var(--font-size-sm);
+                color: var(--text-primary);
+                max-width: 60%;
+                text-align: right;
+
+                &.code {
+                  font-family: var(--font-family-mono);
+                  background: var(--bg-tertiary);
+                  padding: 2px 6px;
+                  border-radius: var(--radius-sm);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .organization-modal {
+    .modal-title {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+
+      .modal-title-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-lg);
+        background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-white);
+        font-size: var(--font-size-lg);
+      }
+
+      .modal-title-text {
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary);
+      }
+    }
+
+    .organization-form {
+      .status-option {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+
+        .status-icon {
+          &.active {
+            color: var(--color-success);
+          }
+
+          &.inactive {
+            color: var(--color-gray-500);
+          }
+
+          &.suspended {
+            color: var(--color-warning);
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    padding: var(--space-4);
+
+    .page-header {
+      .header-content {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+
+    .content-section {
+      .organizations-card {
+        margin-bottom: var(--space-4);
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: var(--space-3);
+
+    .page-header {
+      margin-bottom: var(--space-6);
+
+      .header-content {
+        .header-text {
+          .page-title {
+            font-size: var(--font-size-3xl);
+          }
+
+          .page-description {
+            font-size: var(--font-size-base);
+          }
+        }
+      }
+    }
+  }
+}
+
+
