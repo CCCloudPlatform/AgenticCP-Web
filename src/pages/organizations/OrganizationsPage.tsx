@@ -34,7 +34,10 @@ import {
   CalendarOutlined,
   FolderOutlined,
   ReloadOutlined,
-  CloudOutlined,
+  MinusCircleOutlined,
+  UserOutlined,
+  MailOutlined,
+  CrownOutlined,
 } from '@ant-design/icons';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -42,6 +45,8 @@ import {
   OrganizationStatus,
   OrganizationCreateRequest,
   OrganizationUpdateRequest,
+  OrganizationMember,
+  OrganizationMemberRole,
 } from '@/types';
 import { organizationService } from '@/services/organizationService';
 import { formatDate, formatCurrency } from '@/utils/format';
@@ -238,6 +243,21 @@ const OrganizationsPage: React.FC = () => {
     }
   };
 
+  const getRoleConfig = (role: OrganizationMemberRole) => {
+    switch (role) {
+      case 'OWNER':
+        return { color: '#f59e0b', icon: <CrownOutlined />, text: '소유자' };
+      case 'ADMIN':
+        return { color: 'var(--color-primary)', icon: <TeamOutlined />, text: '관리자' };
+      case 'MEMBER':
+        return { color: 'var(--color-success)', icon: <UserOutlined />, text: '멤버' };
+      case 'VIEWER':
+        return { color: 'var(--text-tertiary)', icon: <EyeOutlined />, text: '뷰어' };
+      default:
+        return { color: 'var(--text-tertiary)', icon: <UserOutlined />, text: role };
+    }
+  };
+
   const columns = [
     {
       title: '조직',
@@ -276,6 +296,17 @@ const OrganizationsPage: React.FC = () => {
         <div className="projects-cell">
           <Badge count={totalProjects} showZero color="blue" />
           <span className="projects-label">개 프로젝트</span>
+        </div>
+      ),
+    },
+    {
+      title: '조직원',
+      dataIndex: 'members',
+      key: 'members',
+      render: (members: OrganizationMember[] | undefined) => (
+        <div className="members-cell">
+          <Badge count={members?.length || 0} showZero color="green" style={{ marginRight: 8 }} />
+          <span className="members-count">명</span>
         </div>
       ),
     },
@@ -473,16 +504,16 @@ const OrganizationsPage: React.FC = () => {
               {editingOrganization ? <EditOutlined /> : <PlusOutlined />}
             </div>
             <div className="modal-title-text">
-              {editingOrganization ? '조직 편집' : '조직 생성'}
+              {editingOrganization ? '조직 편집' : '새 조직 생성'}
             </div>
           </div>
         }
         open={modalVisible}
         onCancel={() => setModalVisible(false)}
         onOk={() => form.submit()}
-        width={600}
+        width={800}
         className="organization-modal"
-        okText="저장"
+        okText={editingOrganization ? '변경사항 저장' : '조직 생성'}
         cancelText="취소"
         confirmLoading={createMutation.isPending || updateMutation.isPending}
       >
@@ -492,48 +523,164 @@ const OrganizationsPage: React.FC = () => {
           onFinish={handleModalSubmit}
           className="organization-form"
         >
-          <Form.Item
-            name="name"
-            label="조직 이름"
-            rules={[{ required: true, message: '조직 이름을 입력해주세요.' }]}
-          >
-            <Input
-              placeholder="예: E-Commerce Platform Organization"
-              prefix={<TeamOutlined />}
-              size="large"
-            />
-          </Form.Item>
+          {/* 기본 정보 섹션 */}
+          <div className="form-section">
+            <div className="form-section-header">
+              <div className="form-section-icon"></div>
+              <div className="form-section-title">기본 정보</div>
+            </div>
 
-          <Form.Item name="description" label="조직 설명">
-            <Input.TextArea
-              placeholder="조직에 대한 간단한 설명을 입력해주세요."
-              rows={3}
-              size="large"
-            />
-          </Form.Item>
+            <Row gutter={16}>
+              <Col span={16}>
+                <Form.Item
+                  name="name"
+                  label="조직 이름"
+                  rules={[{ required: true, message: '조직 이름을 입력해주세요.' }]}
+                >
+                  <Input
+                    placeholder="예: E-Commerce Platform Organization"
+                    prefix={<TeamOutlined />}
+                    size="large"
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item name="status" label="상태" initialValue="ACTIVE">
+                  <Select size="large">
+                    <Option value="ACTIVE">
+                      <div className="status-option">
+                        <CheckCircleOutlined className="status-icon active" />
+                        <span>활성</span>
+                      </div>
+                    </Option>
+                    <Option value="INACTIVE">
+                      <div className="status-option">
+                        <StopOutlined className="status-icon inactive" />
+                        <span>비활성</span>
+                      </div>
+                    </Option>
+                    <Option value="SUSPENDED">
+                      <div className="status-option">
+                        <ExclamationCircleOutlined className="status-icon suspended" />
+                        <span>정지</span>
+                      </div>
+                    </Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
 
-          <Form.Item name="status" label="상태" initialValue="ACTIVE">
-            <Select size="large">
-              <Option value="ACTIVE">
-                <div className="status-option">
-                  <CheckCircleOutlined className="status-icon active" />
-                  <span>활성</span>
-                </div>
-              </Option>
-              <Option value="INACTIVE">
-                <div className="status-option">
-                  <StopOutlined className="status-icon inactive" />
-                  <span>비활성</span>
-                </div>
-              </Option>
-              <Option value="SUSPENDED">
-                <div className="status-option">
-                  <ExclamationCircleOutlined className="status-icon suspended" />
-                  <span>정지</span>
-                </div>
-              </Option>
-            </Select>
-          </Form.Item>
+            <Form.Item name="description" label="조직 설명">
+              <Input.TextArea
+                placeholder="조직에 대한 간단한 설명을 입력해주세요."
+                rows={3}
+                size="large"
+              />
+            </Form.Item>
+          </div>
+
+          {/* 조직원 추가 섹션 */}
+          <div className="members-section">
+            <div className="members-header">
+              <div className="members-title">
+                <span>조직원 추가</span>
+              </div>
+              <Text type="secondary" className="members-description">
+                조직에 소속될 멤버를 추가합니다.
+              </Text>
+            </div>
+
+            <Form.List name="members">
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(({ key, name, ...restField }) => (
+                    <div key={key} className="member-item">
+                      <Row gutter={12} align="middle">
+                        <Col span={7}>
+                          <Form.Item
+                            {...restField}
+                            name={[name, 'name']}
+                            rules={[{ required: true, message: '이름 입력' }]}
+                            className="member-form-item"
+                          >
+                            <Input prefix={<UserOutlined />} placeholder="이름" size="middle" />
+                          </Form.Item>
+                        </Col>
+                        <Col span={9}>
+                          <Form.Item
+                            {...restField}
+                            name={[name, 'email']}
+                            rules={[
+                              { required: true, message: '이메일 입력' },
+                              { type: 'email', message: '올바른 이메일 형식' },
+                            ]}
+                            className="member-form-item"
+                          >
+                            <Input prefix={<MailOutlined />} placeholder="이메일" size="middle" />
+                          </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                          <Form.Item
+                            {...restField}
+                            name={[name, 'role']}
+                            initialValue="MEMBER"
+                            className="member-form-item"
+                          >
+                            <Select size="middle" placeholder="역할">
+                              <Option value="OWNER">
+                                <div className="role-option">
+                                  <CrownOutlined className="role-icon owner" />
+                                  <span>소유자</span>
+                                </div>
+                              </Option>
+                              <Option value="ADMIN">
+                                <div className="role-option">
+                                  <TeamOutlined className="role-icon admin" />
+                                  <span>관리자</span>
+                                </div>
+                              </Option>
+                              <Option value="MEMBER">
+                                <div className="role-option">
+                                  <UserOutlined className="role-icon member" />
+                                  <span>멤버</span>
+                                </div>
+                              </Option>
+                              <Option value="VIEWER">
+                                <div className="role-option">
+                                  <EyeOutlined className="role-icon viewer" />
+                                  <span>뷰어</span>
+                                </div>
+                              </Option>
+                            </Select>
+                          </Form.Item>
+                        </Col>
+                        <Col span={2}>
+                          <Button
+                            type="text"
+                            danger
+                            icon={<MinusCircleOutlined />}
+                            onClick={() => remove(name)}
+                            className="remove-member-btn"
+                          />
+                        </Col>
+                      </Row>
+                    </div>
+                  ))}
+                  <Form.Item>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                      className="add-member-btn"
+                    >
+                      조직원 추가
+                    </Button>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
+          </div>
         </Form>
       </Modal>
 
@@ -726,9 +873,58 @@ const OrganizationsPage: React.FC = () => {
               ) : (
                 <div className="no-tenant">
                   <div className="no-tenant-icon">
-                    <CloudOutlined />
+                    <div>
+                      <br />
+                    </div>
                   </div>
                   <Text type="secondary">이 조직에 연결된 테넌트가 없습니다.</Text>
+                </div>
+              )}
+            </div>
+
+            <Divider />
+
+            {/* 조직원 정보 */}
+            <div className="detail-section members-detail-section">
+              <div className="section-header">
+                <div className="section-header-left">
+                  <div className="section-icon members"></div>
+                  <Title level={4} className="section-title">
+                    조직원 ({selectedOrganization.members?.length || 0}명)
+                  </Title>
+                </div>
+              </div>
+
+              {selectedOrganization.members && selectedOrganization.members.length > 0 ? (
+                <div className="members-grid">
+                  {selectedOrganization.members.map((member, index) => {
+                    const roleConfig = getRoleConfig(member.role);
+                    return (
+                      <div>
+                        <div key={member.id || index} className="member-card">
+                          <Tag
+                            className="member-card-role"
+                            style={{
+                              borderColor: roleConfig.color,
+                              color: roleConfig.color,
+                            }}
+                          >
+                            {roleConfig.icon}
+                            <span style={{ marginLeft: 4 }}>{roleConfig.text}</span>
+                          </Tag>
+                          <div className="member-card-info">
+                            <div className="member-card-email">{member.email}</div>
+                          </div>
+                        </div>
+                        <br />
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="no-members-detail">
+                  <UserOutlined className="no-members-icon" />
+                  <Text type="secondary">조직원이 없습니다.</Text>
                 </div>
               )}
             </div>

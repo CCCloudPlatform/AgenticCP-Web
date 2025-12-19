@@ -23,6 +23,7 @@ const AzureStorageCreatePage = lazy(() => import('@/pages/cloud/AzureStorageCrea
 const GCPVPCCreatePage = lazy(() => import('@/pages/cloud/GCPVPCCreatePage'));
 const AzureVNetCreatePage = lazy(() => import('@/pages/cloud/AzureVNetCreatePage'));
 const ResourceSettingsPage = lazy(() => import('@/pages/cloud/ResourceSettingsPage'));
+const InventoryPage = lazy(() => import('@/pages/resources/InventoryPage'));
 const NotFoundPage = lazy(() => import('@/pages/error/NotFoundPage'));
 
 // Layout
@@ -57,6 +58,7 @@ const AppRoutes = () => {
 
             {/* Cloud Resources Routes */}
             <Route path={ROUTES.RESOURCES} element={<ResourcesPage />} />
+            <Route path={ROUTES.INVENTORY} element={<InventoryPage />} />
             <Route path="/cloud/project-selection" element={<ProjectSelectionPage />} />
             <Route path="/cloud/project-resources" element={<ProjectResourcesPage />} />
             <Route path="/cloud/ec2/create" element={<EC2CreatePage />} />

@@ -222,6 +222,7 @@ export interface Organization {
   status: OrganizationStatus;
   totalProjects: number;
   totalCost: number;
+  members?: OrganizationMember[];
   createdAt: string;
   updatedAt: string;
 }
@@ -310,16 +311,30 @@ export type TenantStatusType = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED' | 'PENDING';
 export type TenantType = 'DEDICATED' | 'SHARED' | 'TRIAL';
 
 /**
+ * Organization Member Types
+ */
+export interface OrganizationMember {
+  id?: number;
+  name: string;
+  email: string;
+  role: OrganizationMemberRole;
+}
+
+export type OrganizationMemberRole = 'OWNER' | 'ADMIN' | 'MEMBER' | 'VIEWER';
+
+/**
  * Organization Create/Update Request
  */
 export interface OrganizationCreateRequest {
   name: string;
   description?: string;
   status?: OrganizationStatus;
+  members?: OrganizationMember[];
 }
 
 export interface OrganizationUpdateRequest {
   name?: string;
   description?: string;
   status?: OrganizationStatus;
+  members?: OrganizationMember[];
 }
