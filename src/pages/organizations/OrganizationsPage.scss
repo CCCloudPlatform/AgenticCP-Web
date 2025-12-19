@@ -1,8 +1,8 @@
 /* ===========================================
-   CLOUD PROVIDERS PAGE - MDC DESIGN SYSTEM
+   ORGANIZATIONS PAGE - MDC DESIGN SYSTEM
    =========================================== */
 
-.cloud-providers-page {
+.organizations-page {
   padding: var(--space-6);
   background: var(--bg-primary);
   min-height: 100vh;
@@ -35,12 +35,12 @@
         .page-description {
           font-size: var(--font-size-lg);
           color: var(--text-secondary);
-          margin: 0;
+          margin: 0 0 var(--space-4) 0;
         }
       }
 
       .header-actions {
-        .add-provider-btn {
+        .add-organization-btn {
           background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
           border: none;
           border-radius: var(--radius-lg);
@@ -85,15 +85,15 @@
         border-color: var(--color-primary);
       }
 
-      &.total-providers::before {
+      &.total-organizations::before {
         background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
       }
 
-      &.active-providers::before {
+      &.active-organizations::before {
         background: linear-gradient(90deg, var(--color-success), #34d399);
       }
 
-      &.total-resources::before {
+      &.total-projects::before {
         background: linear-gradient(90deg, var(--color-info), #60a5fa);
       }
 
@@ -124,8 +124,8 @@
     }
   }
 
-  // 프로바이더 카드
-  .providers-card {
+  // 조직 카드
+  .organizations-card {
     background: var(--bg-primary);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-xl);
@@ -166,16 +166,12 @@
         .refresh-btn {
           border-radius: var(--radius-lg);
           transition: all var(--transition-fast);
-
-          &:hover {
-            transform: rotate(180deg);
-          }
         }
       }
     }
 
     .table-container {
-      .providers-table {
+      .organizations-table {
         .ant-table {
           .ant-table-thead > tr > th {
             background: var(--bg-secondary);
@@ -200,13 +196,13 @@
           }
         }
 
-        // 프로바이더 셀
-        .provider-cell {
+        // 조직 셀
+        .organization-cell {
           display: flex;
           align-items: center;
           gap: var(--space-3);
 
-          .provider-icon-wrapper {
+          .organization-icon-wrapper {
             width: 48px;
             height: 48px;
             border-radius: var(--radius-lg);
@@ -216,32 +212,20 @@
             justify-content: center;
             box-shadow: var(--shadow-sm);
 
-            .provider-icon {
+            .organization-icon {
               font-size: var(--font-size-xl);
               color: white;
-
-              &.aws-icon {
-                color: #ff9900;
-              }
-
-              &.gcp-icon {
-                color: #4285f4;
-              }
-
-              &.azure-icon {
-                color: #0078d4;
-              }
             }
           }
 
-          .provider-info {
-            .provider-name {
+          .organization-info {
+            .organization-name {
               font-weight: var(--font-weight-semibold);
               color: var(--text-primary);
               margin-bottom: var(--space-1);
             }
 
-            .provider-type {
+            .organization-description {
               font-size: var(--font-size-sm);
               color: var(--text-secondary);
             }
@@ -253,6 +237,13 @@
           border-radius: var(--radius-md);
           font-weight: var(--font-weight-medium);
           padding: var(--space-1) var(--space-3);
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+
+          .anticon {
+            margin-right: 0;
+          }
 
           &.status-active {
             background: rgba(16, 185, 129, 0.1);
@@ -266,37 +257,28 @@
             color: var(--color-gray-600);
           }
 
-          &.status-error {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: var(--color-error);
-            color: var(--color-error);
-          }
-
-          &.status-connecting {
-            background: rgba(59, 130, 246, 0.1);
-            border-color: var(--color-info);
-            color: var(--color-info);
+          &.status-suspended {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--color-warning);
+            color: var(--color-warning);
           }
         }
 
-        // 리소스 셀
-        .resources-cell {
-          .resource-count {
+        // 프로젝트 셀
+        .projects-cell {
+          display: flex;
+          align-items: center;
+          gap: var(--space-2);
+
+          .ant-badge {
             display: flex;
             align-items: center;
-            gap: var(--space-2);
-            margin-bottom: var(--space-1);
-
-            .resource-label {
-              font-size: var(--font-size-sm);
-              color: var(--text-secondary);
-            }
           }
 
-          .resource-detail {
-            .running-count {
-              font-size: var(--font-size-xs);
-            }
+          .projects-label {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            white-space: nowrap;
           }
         }
 
@@ -337,11 +319,6 @@
               transform: scale(1.1);
             }
 
-            &.sync-btn:hover {
-              color: var(--color-info);
-              background: rgba(59, 130, 246, 0.1);
-            }
-
             &.view-btn:hover {
               color: var(--color-primary);
               background: rgba(99, 102, 241, 0.1);
@@ -350,11 +327,6 @@
             &.edit-btn:hover {
               color: var(--color-warning);
               background: rgba(245, 158, 11, 0.1);
-            }
-
-            &.settings-btn:hover {
-              color: var(--color-gray-600);
-              background: rgba(107, 114, 128, 0.1);
             }
 
             &.delete-btn:hover {
@@ -400,11 +372,11 @@
   }
 
   // 모달 스타일
-  .provider-modal {
+  .organization-modal {
     .modal-title {
       display: flex;
       align-items: center;
-      gap: var(--space-3);
+      gap: 12px;
 
       .modal-title-icon {
         width: 40px;
@@ -425,37 +397,333 @@
       }
     }
 
-    .provider-form {
-      .provider-option {
-        display: flex;
-        align-items: center;
-        gap: var(--space-2);
-
-        .aws-icon {
-          color: #ff9900;
-        }
-
-        .gcp-icon {
-          color: #4285f4;
-        }
-
-        .azure-icon {
-          color: #0078d4;
-        }
-      }
-
+    .organization-form {
       .status-option {
         display: flex;
         align-items: center;
-        gap: var(--space-4);
+        gap: 10px;
 
         .status-icon {
+          font-size: var(--font-size-base);
+
           &.active {
             color: var(--color-success);
           }
 
           &.inactive {
             color: var(--color-gray-500);
+          }
+
+          &.suspended {
+            color: var(--color-warning);
+          }
+        }
+      }
+    }
+  }
+
+  // 조직 상세 모달
+  .organization-detail-modal {
+    .ant-modal-content {
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+
+    .ant-modal-header {
+      padding: var(--space-5) var(--space-6);
+      border-bottom: 1px solid var(--border-light);
+      background: var(--bg-secondary);
+    }
+
+    .ant-modal-body {
+      padding: var(--space-6);
+    }
+
+    .ant-modal-footer {
+      padding: var(--space-4) var(--space-6);
+      border-top: 1px solid var(--border-light);
+      background: var(--bg-secondary);
+    }
+
+    .modal-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .modal-title-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: var(--radius-lg);
+        background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: var(--font-size-xl);
+        box-shadow: var(--shadow-sm);
+
+        &.detail {
+          background: linear-gradient(135deg, var(--color-info), #60a5fa);
+        }
+      }
+
+      .modal-title-text {
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-primary);
+      }
+    }
+
+    .detail-content {
+      .detail-section {
+        .section-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: var(--space-5);
+
+          .section-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: var(--font-size-base);
+
+            &.tenant {
+              background: linear-gradient(135deg, var(--color-secondary), #22d3ee);
+            }
+          }
+
+          .section-title {
+            margin: 0;
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+          }
+        }
+
+        .detail-descriptions {
+          border-radius: var(--radius-lg);
+          overflow: hidden;
+
+          .ant-descriptions-item-label {
+            background: var(--bg-secondary);
+            font-weight: var(--font-weight-medium);
+            color: var(--text-secondary);
+            padding: var(--space-3) var(--space-4);
+          }
+
+          .ant-descriptions-item-content {
+            background: var(--bg-primary);
+            padding: var(--space-3) var(--space-4);
+          }
+
+          // 상태 태그 간격
+          .ant-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+
+            .anticon {
+              margin-right: 0;
+            }
+          }
+        }
+      }
+
+      .ant-divider {
+        margin: var(--space-6) 0;
+        border-color: var(--border-light);
+      }
+
+      .tenant-section {
+        .section-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: var(--space-6);
+          padding-bottom: var(--space-4);
+          border-bottom: 1px solid var(--border-light);
+
+          .section-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            .section-icon {
+              width: 32px;
+              height: 32px;
+              border-radius: var(--radius-md);
+              background: linear-gradient(135deg, var(--color-secondary), #22d3ee);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: white;
+              font-size: var(--font-size-base);
+
+              &.tenant {
+                background: linear-gradient(135deg, var(--color-secondary), #22d3ee);
+              }
+            }
+
+            .section-title {
+              margin: 0;
+              font-size: var(--font-size-lg);
+              font-weight: var(--font-weight-semibold);
+              color: var(--text-primary);
+            }
+          }
+
+          .section-header-right {
+            .refresh-btn {
+              border-radius: var(--radius-md);
+              border: 1px solid var(--border-light);
+              background: var(--bg-primary);
+              transition: all var(--transition-fast);
+
+              &:hover {
+                border-color: var(--color-primary);
+                color: var(--color-primary);
+              }
+            }
+          }
+        }
+
+        .tenant-loading {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: var(--space-10);
+          background: var(--bg-secondary);
+          border-radius: var(--radius-lg);
+        }
+
+        .tenant-info {
+          .tenant-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-fast);
+            height: 100%;
+
+            .ant-card-body {
+              padding: var(--space-4);
+            }
+
+            &:hover {
+              border-color: var(--color-primary);
+              box-shadow: var(--shadow-md);
+              transform: translateY(-2px);
+            }
+
+            .tenant-card-header {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              margin-bottom: var(--space-4);
+              padding-bottom: var(--space-3);
+              border-bottom: 1px solid var(--border-light);
+
+              .anticon {
+                width: 28px;
+                height: 28px;
+                border-radius: var(--radius-sm);
+                background: linear-gradient(
+                  135deg,
+                  var(--color-primary),
+                  var(--color-primary-light)
+                );
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: var(--font-size-sm);
+              }
+
+              .ant-typography {
+                font-size: var(--font-size-base);
+                color: var(--text-primary);
+              }
+            }
+
+            .ant-descriptions {
+              .ant-descriptions-row {
+                border-bottom: none;
+              }
+
+              .ant-descriptions-item {
+                padding-bottom: var(--space-2);
+              }
+
+              .ant-descriptions-item-label {
+                color: var(--text-tertiary);
+                font-size: var(--font-size-sm);
+                font-weight: var(--font-weight-normal);
+                width: 90px;
+                padding: var(--space-1) 0;
+
+                &::after {
+                  content: none;
+                }
+              }
+
+              .ant-descriptions-item-content {
+                font-size: var(--font-size-sm);
+                font-weight: var(--font-weight-medium);
+                color: var(--text-primary);
+                padding: var(--space-1) 0;
+              }
+            }
+
+            // 태그 스타일
+            .ant-tag {
+              display: inline-flex;
+              align-items: center;
+              gap: 6px;
+              border-radius: var(--radius-sm);
+              font-size: var(--font-size-xs);
+              padding: 2px 8px;
+
+              .anticon {
+                margin-right: 0;
+              }
+            }
+
+            // 코드 스타일
+            .ant-typography code {
+              background: var(--bg-secondary);
+              border: 1px solid var(--border-light);
+              border-radius: var(--radius-sm);
+              padding: 2px 6px;
+              font-size: var(--font-size-xs);
+              color: var(--color-primary);
+            }
+          }
+        }
+
+        .no-tenant {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: var(--space-12);
+          background: var(--bg-secondary);
+          border-radius: var(--radius-lg);
+          border: 2px dashed var(--border-medium);
+
+          .no-tenant-icon {
+            font-size: 56px;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-4);
+            opacity: 0.5;
+          }
+
+          .ant-typography {
+            font-size: var(--font-size-base);
           }
         }
       }
@@ -504,7 +772,7 @@
       margin-bottom: var(--space-6);
     }
 
-    .providers-card {
+    .organizations-card {
       .card-header {
         flex-direction: column;
         gap: var(--space-4);
@@ -514,8 +782,21 @@
       .table-container {
         overflow-x: auto;
 
-        .providers-table {
+        .organizations-table {
           min-width: 800px;
+        }
+      }
+    }
+
+    .organization-detail-modal {
+      .detail-content {
+        .tenant-info {
+          .ant-col {
+            &.ant-col-12 {
+              flex: 0 0 100%;
+              max-width: 100%;
+            }
+          }
         }
       }
     }
