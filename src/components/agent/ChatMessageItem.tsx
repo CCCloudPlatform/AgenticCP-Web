@@ -204,7 +204,7 @@ const ChatMessageItem = ({ message }: ChatMessageItemProps) => {
   const showInteractiveResult = isAgent && (
     message.resultType ||
     message.metadata?.result ||
-    message.metadata?.interactive_actions?.length > 0
+    (message.metadata?.interactive_actions?.length ?? 0) > 0
   );
 
   const handleAction = (action: string, params?: Record<string, any>) => {

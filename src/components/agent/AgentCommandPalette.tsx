@@ -94,6 +94,7 @@ const AgentCommandPalette = ({ visible, onClose, onSelectCommand }: AgentCommand
       <Search
         placeholder="명령어를 검색하세요..."
         onChange={(e) => handleSearch(e.target.value)}
+        value={searchValue}
         style={{ marginBottom: 16 }}
         size="large"
       />

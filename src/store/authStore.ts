@@ -3,6 +3,7 @@ import { User, LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } 
 import { authService } from '@/services/authService';
 import { storage } from '@/utils/storage';
 import { STORAGE_KEYS } from '@/constants';
+import { DEV_CONFIG } from '@/config/dev';
 
 interface AuthState {
   user: User | null;
@@ -29,6 +30,10 @@ export const useAuthStore = create<AuthState>((set) => ({
   login: async (credentials: LoginRequest) => {
     set({ isLoading: true, error: null });
     try {
+      const isDevAccount =
+        credentials.username === DEV_CONFIG.HARDCODED_ACCOUNT.username &&
+        credentials.password === DEV_CONFIG.HARDCODED_ACCOUNT.password;
+
       const response = await authService.login(credentials);
       const { accessToken, refreshToken } = response;
 
@@ -37,7 +42,9 @@ export const useAuthStore = create<AuthState>((set) => ({
       storage.set(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
 
       // 사용자 정보 가져오기
-      const user = await authService.getCurrentUser();
+      const user = isDevAccount
+        ? DEV_CONFIG.HARDCODED_ACCOUNT.user
+        : await authService.getCurrentUser();
       storage.set(STORAGE_KEYS.USER_INFO, user);
 
       set({

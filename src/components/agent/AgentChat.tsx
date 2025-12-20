@@ -1,4 +1,4 @@
-import { Layout, Input, Button, Typography, Space, Empty, Spin, Dropdown } from 'antd';
+import { Layout, Input, Button, Typography, Space, Spin } from 'antd';
 import {
   SendOutlined,
   ClearOutlined,
@@ -16,7 +16,7 @@ import { useAgentChatStore } from '@/store/agentChatStore';
 import { agentService } from '@/services/agentService';
 import { API_BASE_URL } from '@/constants';
 import { message } from 'antd';
-import type { ChatMessage, ExecutionStep } from '@/store/agentChatStore';
+import type { ExecutionStep } from '@/store/agentChatStore';
 import ChatMessageItem from './ChatMessageItem';
 import './AgentChat.scss';
 
@@ -52,7 +52,6 @@ const AgentChat: React.FC<AgentChatProps> = ({ sidebarCollapsed = false }) => {
     return Math.min(maxWidth, Math.max(320, availableWidth));
   };
   
-  const maxChatWidth = getMaxChatWidth();
   // 초기 너비를 420px로 설정 (더 넓고 사용하기 편함)
   const [chatWidth, setChatWidth] = useState(() => {
     const calculatedMaxWidth = getMaxChatWidth();

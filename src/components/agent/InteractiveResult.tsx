@@ -1,15 +1,9 @@
-import { Card, Table, Tag, Space, Button, Typography, Empty, Spin } from 'antd';
-import { 
-  CheckCircleOutlined, 
-  ReloadOutlined, 
-  DownloadOutlined,
-  EyeOutlined,
-  PlayCircleOutlined 
-} from '@ant-design/icons';
+import { Card, Table, Tag, Space, Button, Typography } from 'antd';
+import { PlayCircleOutlined } from '@ant-design/icons';
 import type { ResultType, ChatMessage } from '@/store/agentChatStore';
 import './InteractiveResult.scss';
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 interface InteractiveResultProps {
   message: ChatMessage;

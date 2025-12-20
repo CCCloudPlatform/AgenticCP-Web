@@ -1,5 +1,5 @@
 import { apiRequest } from './api';
-import { LoginRequest, LoginResponse, LoginApiResponse, LoginErrorResponse, RegisterRequest, RegisterResponse, RegisterApiResponse, RegisterErrorResponse, User } from '@/types';
+import { LoginRequest, LoginResponse, LoginApiResponse, RegisterRequest, RegisterResponse, RegisterApiResponse, User } from '@/types';
 
 // 🔧 개발용 하드코딩 계정 (백엔드 연동 전까지 사용)
 const DEV_ACCOUNT = {

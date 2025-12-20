@@ -94,7 +94,7 @@ export const organizationService = {
    * Get organization statistics
    */
   getOrganizationStats: async (
-    id: number
+    _id: number
   ): Promise<{
     totalProjects: number;
     totalCost: number;

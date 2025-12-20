@@ -28,11 +28,13 @@ export const useAgentChat = () => {
       // Add agent response
       addMessage({
         role: 'agent',
-        content: response.message,
+        content: response.response,
         status: 'sent',
         metadata: {
-          action: response.action,
-          result: response.result,
+          agent_used: response.agent_used,
+          confidence: response.confidence,
+          processing_time: response.processing_time,
+          routing_info: response.routing_info,
         },
       });
 

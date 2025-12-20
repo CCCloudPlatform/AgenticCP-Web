@@ -1,4 +1,4 @@
-import { PageHeader as AntPageHeader } from '@ant-design/pro-components';
+import type { ReactNode } from 'react';
 import { Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -7,8 +7,8 @@ interface PageHeaderProps {
   title: string;
   subTitle?: string;
   showBack?: boolean;
-  extra?: React.ReactNode;
-  children?: React.ReactNode;
+  extra?: ReactNode;
+  children?: ReactNode;
 }
 
 const PageHeader = ({ title, subTitle, showBack, extra, children }: PageHeaderProps) => {

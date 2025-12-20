@@ -52,19 +52,6 @@ export interface ChatSession {
 // API 엔드포인트 설정
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
-// API 서버 상태 확인
-const checkAPIServerStatus = async (): Promise<boolean> => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/health`, {
-      method: 'GET',
-      signal: AbortSignal.timeout(3000) // 3초 타임아웃
-    });
-    return response.ok;
-  } catch {
-    return false;
-  }
-};
-
 // 실제 API 호출 함수
 export const callAgentAPI = async (userRequest: string): Promise<AgentResponse> => {
   try {
