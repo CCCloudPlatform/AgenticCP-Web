@@ -30,6 +30,12 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       label: '대시보드',
     },
     {
+      key: ROUTES.ORGANIZATIONS,
+      icon: '🏢',
+      label: '조직',
+      disabled: !hasRole(['SUPER_ADMIN', 'TENANT_ADMIN']),
+    },
+    {
       key: ROUTES.PROJECT,
       icon: '📁',
       label: '프로젝트 관리',

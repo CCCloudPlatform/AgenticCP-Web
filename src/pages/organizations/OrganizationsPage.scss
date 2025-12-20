@@ -1,0 +1,1252 @@
+/* ===========================================
+   ORGANIZATIONS PAGE - MDC DESIGN SYSTEM
+   =========================================== */
+
+.organizations-page {
+  padding: var(--space-6);
+  background: var(--bg-primary);
+  min-height: 100vh;
+  position: relative;
+
+  // 페이지 헤더
+  .page-header {
+    margin-bottom: var(--space-8);
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-6);
+
+      .header-text {
+        flex: 1;
+
+        .page-title {
+          font-size: var(--font-size-4xl);
+          font-weight: var(--font-weight-bold);
+          color: var(--text-primary);
+          margin: 0 0 var(--space-2) 0;
+          background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .page-description {
+          font-size: var(--font-size-lg);
+          color: var(--text-secondary);
+          margin: 0 0 var(--space-4) 0;
+        }
+      }
+
+      .header-actions {
+        .add-organization-btn {
+          background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+          border: none;
+          border-radius: var(--radius-lg);
+          box-shadow: var(--shadow-md);
+          transition: all var(--transition-normal);
+          cursor: pointer;
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+          }
+        }
+      }
+    }
+  }
+
+  // 통계 섹션
+  .stats-section {
+    margin-bottom: var(--space-8);
+
+    .stat-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-normal);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+      }
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--color-primary);
+      }
+
+      &.total-organizations::before {
+        background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+      }
+
+      &.active-organizations::before {
+        background: linear-gradient(90deg, var(--color-success), #34d399);
+      }
+
+      &.total-projects::before {
+        background: linear-gradient(90deg, var(--color-info), #60a5fa);
+      }
+
+      &.total-cost::before {
+        background: linear-gradient(90deg, var(--color-warning), #fbbf24);
+      }
+
+      .ant-statistic {
+        .ant-statistic-title {
+          color: var(--text-secondary);
+          font-size: var(--font-size-sm);
+          font-weight: var(--font-weight-medium);
+          margin-bottom: var(--space-2);
+        }
+
+        .ant-statistic-content {
+          .ant-statistic-content-value {
+            font-size: var(--font-size-3xl);
+            font-weight: var(--font-weight-bold);
+          }
+
+          .ant-statistic-content-prefix {
+            margin-right: var(--space-2);
+            font-size: var(--font-size-xl);
+          }
+        }
+      }
+    }
+  }
+
+  // 조직 카드
+  .organizations-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+
+    &.glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border-light);
+
+      .card-title {
+        .card-title-text {
+          font-size: var(--font-size-2xl);
+          font-weight: var(--font-weight-semibold);
+          color: var(--text-primary);
+          margin: 0 0 var(--space-1) 0;
+        }
+
+        .card-description {
+          font-size: var(--font-size-base);
+          color: var(--text-secondary);
+          margin: 0;
+        }
+      }
+
+      .card-actions {
+        .refresh-btn {
+          border-radius: var(--radius-lg);
+          transition: all var(--transition-fast);
+          cursor: pointer;
+        }
+      }
+    }
+
+    .table-container {
+      .organizations-table {
+        .ant-table {
+          .ant-table-thead > tr > th {
+            background: var(--bg-secondary);
+            border-bottom: 2px solid var(--border-light);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+            padding: var(--space-4);
+          }
+
+          .ant-table-tbody > tr {
+            transition: all var(--transition-fast);
+            cursor: pointer;
+
+            &:hover {
+              background: var(--bg-secondary);
+              transform: scale(1.01);
+            }
+
+            > td {
+              padding: var(--space-4);
+              border-bottom: 1px solid var(--border-light);
+            }
+          }
+        }
+
+        // 조직 셀
+        .organization-cell {
+          display: flex;
+          align-items: center;
+          gap: var(--space-3);
+
+          .organization-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+
+            .organization-icon {
+              font-size: var(--font-size-xl);
+              color: white;
+            }
+          }
+
+          .organization-info {
+            .organization-name {
+              font-weight: var(--font-weight-semibold);
+              color: var(--text-primary);
+              margin-bottom: var(--space-1);
+            }
+
+            .organization-description {
+              font-size: var(--font-size-sm);
+              color: var(--text-secondary);
+            }
+          }
+        }
+
+        // 상태 태그
+        .status-tag {
+          border-radius: var(--radius-md);
+          font-weight: var(--font-weight-medium);
+          padding: var(--space-1) var(--space-3);
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+
+          .anticon {
+            margin-right: 0;
+          }
+
+          &.status-active {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--color-success);
+            color: var(--color-success);
+          }
+
+          &.status-inactive {
+            background: rgba(107, 114, 128, 0.1);
+            border-color: var(--color-gray-400);
+            color: var(--color-gray-600);
+          }
+
+          &.status-suspended {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--color-warning);
+            color: var(--color-warning);
+          }
+        }
+
+        // 프로젝트 셀
+        .projects-cell {
+          display: flex;
+          align-items: center;
+          gap: var(--space-2);
+
+          .ant-badge {
+            display: flex;
+            align-items: center;
+          }
+
+          .projects-label {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            white-space: nowrap;
+          }
+        }
+
+        // 조직원 셀
+        .members-cell {
+          display: flex;
+          align-items: center;
+          gap: var(--space-3);
+
+          .members-avatars {
+            display: flex;
+            align-items: center;
+
+            .member-avatar {
+              width: 32px;
+              height: 32px;
+              border-radius: 50%;
+              background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+              color: white;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: var(--font-size-sm);
+              font-weight: var(--font-weight-semibold);
+              border: 2px solid var(--bg-primary);
+              margin-left: -8px;
+              cursor: pointer;
+              transition: all var(--transition-fast);
+
+              &:first-child {
+                margin-left: 0;
+              }
+
+              &:hover {
+                transform: scale(1.1);
+                z-index: 10 !important;
+              }
+
+              &.more {
+                background: var(--bg-tertiary);
+                color: var(--text-secondary);
+                font-size: var(--font-size-xs);
+              }
+            }
+          }
+
+          .members-count {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            white-space: nowrap;
+          }
+
+          .no-members {
+            font-size: var(--font-size-sm);
+          }
+        }
+
+        // 비용 셀
+        .cost-cell {
+          display: flex;
+          align-items: center;
+          gap: var(--space-2);
+
+          .cost-amount {
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+          }
+
+          .cost-icon {
+            color: var(--color-warning);
+          }
+        }
+
+        // 날짜 셀
+        .date-cell {
+          display: flex;
+          align-items: center;
+          gap: var(--space-2);
+
+          .date-icon {
+            color: var(--text-tertiary);
+          }
+        }
+
+        // 액션 셀
+        .actions-cell {
+          .action-btn {
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+            cursor: pointer;
+
+            &:hover {
+              transform: scale(1.1);
+            }
+
+            &.view-btn:hover {
+              color: var(--color-primary);
+              background: rgba(99, 102, 241, 0.1);
+            }
+
+            &.edit-btn:hover {
+              color: var(--color-warning);
+              background: rgba(245, 158, 11, 0.1);
+            }
+
+            &.delete-btn:hover {
+              color: var(--color-error);
+              background: rgba(239, 68, 68, 0.1);
+            }
+          }
+        }
+      }
+
+      .table-pagination {
+        margin-top: var(--space-6);
+        text-align: center;
+
+        .ant-pagination {
+          .ant-pagination-item {
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+
+            &:hover {
+              border-color: var(--color-primary);
+            }
+
+            &.ant-pagination-item-active {
+              background: var(--color-primary);
+              border-color: var(--color-primary);
+            }
+          }
+
+          .ant-pagination-prev,
+          .ant-pagination-next {
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+
+            &:hover {
+              border-color: var(--color-primary);
+              color: var(--color-primary);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 모달 스타일
+  .organization-modal {
+    .ant-modal-content {
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-xl);
+    }
+
+    .ant-modal-header {
+      padding: var(--space-5) var(--space-6);
+      border-bottom: 1px solid var(--border-light);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+    }
+
+    .ant-modal-body {
+      padding: var(--space-6);
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .ant-modal-footer {
+      padding: var(--space-4) var(--space-6);
+      border-top: 1px solid var(--border-light);
+      background: var(--bg-secondary);
+
+      .ant-btn-primary {
+        background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+        border: none;
+        box-shadow: var(--shadow-sm);
+
+        &:hover {
+          box-shadow: var(--shadow-md);
+          transform: translateY(-1px);
+        }
+      }
+    }
+
+    .modal-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+
+      .modal-title-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: var(--radius-lg);
+        background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: var(--font-size-xl);
+        box-shadow: var(--shadow-md);
+      }
+
+      .modal-title-text {
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-primary);
+      }
+    }
+
+    .organization-form {
+      .ant-form-item {
+        margin-bottom: var(--space-5);
+
+        .ant-form-item-label {
+          padding-bottom: var(--space-2);
+
+          label {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: var(--font-size-sm);
+          }
+        }
+
+        .ant-input,
+        .ant-input-affix-wrapper,
+        .ant-select-selector {
+          border-radius: var(--radius-lg);
+          border: 1px solid var(--border-light);
+          transition: all var(--transition-fast);
+
+          &:hover {
+            border-color: var(--color-primary);
+          }
+
+          &:focus,
+          &.ant-input-affix-wrapper-focused {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+          }
+        }
+
+        .ant-input-affix-wrapper {
+          .ant-input-prefix {
+            color: var(--text-tertiary);
+            margin-right: var(--space-2);
+          }
+        }
+
+        .ant-input-textarea {
+          textarea {
+            border-radius: var(--radius-lg);
+          }
+        }
+      }
+
+      // 기본 정보 섹션
+      .form-section {
+        background: var(--bg-secondary);
+        border-radius: var(--radius-xl);
+        padding: var(--space-5);
+        margin-bottom: var(--space-5);
+        border: 1px solid var(--border-light);
+
+        .form-section-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: var(--space-5);
+          padding-bottom: var(--space-4);
+          border-bottom: 1px solid var(--border-light);
+
+          .form-section-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: var(--font-size-lg);
+          }
+
+          .form-section-title {
+            font-size: var(--font-size-lg);
+            font-weight: 800;
+            color: var(--text-primary);
+          }
+        }
+
+        .ant-form-item {
+          margin-bottom: var(--space-4);
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+
+      .ant-divider {
+        margin: var(--space-6) 0;
+        border-color: var(--border-light);
+      }
+
+      .status-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .status-icon {
+          font-size: var(--font-size-base);
+
+          &.active {
+            color: var(--color-success);
+          }
+
+          &.inactive {
+            color: var(--color-gray-500);
+          }
+
+          &.suspended {
+            color: var(--color-warning);
+          }
+        }
+      }
+
+      // 조직원 추가 섹션
+      .members-section {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.02), rgba(139, 92, 246, 0.02));
+        border: 1px solid var(--border-light);
+        border-radius: var(--radius-xl);
+        padding: var(--space-5);
+        margin-top: var(--space-4);
+
+        .members-header {
+          margin-bottom: var(--space-5);
+          padding-bottom: var(--space-4);
+          border-bottom: 1px solid var(--border-light);
+
+          .members-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: var(--font-size-lg);
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: var(--space-2);
+
+            .anticon {
+              width: 32px;
+              height: 32px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+              border-radius: var(--radius-md);
+              color: white;
+              font-size: var(--font-size-base);
+            }
+          }
+
+          .members-description {
+            font-size: var(--font-size-sm);
+            color: var(--text-tertiary);
+            margin-left: 44px;
+          }
+        }
+
+        .member-list {
+          display: flex;
+          flex-direction: column;
+          gap: var(--space-3);
+        }
+
+        .member-item {
+          background: var(--bg-primary);
+          border-radius: var(--radius-lg);
+          padding: var(--space-4);
+          border: 1px solid var(--border-light);
+          transition: all var(--transition-fast);
+          box-shadow: var(--shadow-sm);
+
+          &:hover {
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+          }
+
+          .member-form-item {
+            margin-bottom: 0;
+          }
+
+          .remove-member-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+            background: var(--bg-secondary);
+            transition: all var(--transition-fast);
+
+            &:hover {
+              background: rgba(239, 68, 68, 0.1);
+              border-color: var(--color-error);
+              color: var(--color-error);
+            }
+          }
+
+          .ant-input-affix-wrapper {
+            background: var(--bg-secondary);
+          }
+        }
+
+        .add-member-btn {
+          height: 48px;
+          border-radius: var(--radius-lg);
+          border: 2px dashed var(--color-primary);
+          color: var(--color-primary);
+          font-weight: var(--font-weight-semibold);
+          cursor: pointer;
+          transition: all var(--transition-fast);
+          background: transparent;
+          margin-top: var(--space-2);
+
+          &:hover {
+            background: rgba(99, 102, 241, 0.08);
+            border-color: var(--color-primary-light);
+            box-shadow: var(--shadow-sm);
+          }
+
+          .anticon {
+            margin-right: var(--space-2);
+            font-size: var(--font-size-lg);
+          }
+        }
+
+        .role-option {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .role-icon {
+            font-size: var(--font-size-sm);
+
+            &.owner {
+              color: #f59e0b;
+            }
+
+            &.admin {
+              color: var(--color-primary);
+            }
+
+            &.member {
+              color: var(--color-success);
+            }
+
+            &.viewer {
+              color: var(--color-gray-500);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 조직 상세 모달
+  .organization-detail-modal {
+    .ant-modal-content {
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+
+    .ant-modal-header {
+      padding: var(--space-5) var(--space-6);
+      border-bottom: 1px solid var(--border-light);
+      background: var(--bg-secondary);
+    }
+
+    .ant-modal-body {
+      padding: var(--space-6);
+    }
+
+    .ant-modal-footer {
+      padding: var(--space-4) var(--space-6);
+      border-top: 1px solid var(--border-light);
+      background: var(--bg-secondary);
+    }
+
+    .modal-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .modal-title-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: var(--radius-lg);
+        background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: var(--font-size-xl);
+        box-shadow: var(--shadow-sm);
+
+        &.detail {
+          background: linear-gradient(135deg, var(--color-info), #60a5fa);
+        }
+      }
+
+      .modal-title-text {
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-primary);
+      }
+    }
+
+    .detail-content {
+      .detail-section {
+        .section-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: var(--space-5);
+
+          .section-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: var(--font-size-base);
+
+            &.tenant {
+              background: linear-gradient(135deg, var(--color-secondary), #22d3ee);
+            }
+          }
+
+          .section-title {
+            margin: 0;
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+          }
+        }
+
+        .detail-descriptions {
+          border-radius: var(--radius-lg);
+          overflow: hidden;
+
+          .ant-descriptions-item-label {
+            background: var(--bg-secondary);
+            font-weight: var(--font-weight-medium);
+            color: var(--text-secondary);
+            padding: var(--space-3) var(--space-4);
+          }
+
+          .ant-descriptions-item-content {
+            background: var(--bg-primary);
+            padding: var(--space-3) var(--space-4);
+          }
+
+          // 상태 태그 간격
+          .ant-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+
+            .anticon {
+              margin-right: 0;
+            }
+          }
+        }
+      }
+
+      .ant-divider {
+        margin: var(--space-6) 0;
+        border-color: var(--border-light);
+      }
+
+      .tenant-section {
+        .section-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: var(--space-6);
+          padding-bottom: var(--space-4);
+          border-bottom: 1px solid var(--border-light);
+
+          .section-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            .section-icon {
+              width: 32px;
+              height: 32px;
+              border-radius: var(--radius-md);
+              background: linear-gradient(135deg, var(--color-secondary), #22d3ee);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: white;
+              font-size: var(--font-size-base);
+
+              &.tenant {
+                background: linear-gradient(135deg, var(--color-secondary), #22d3ee);
+              }
+            }
+
+            .section-title {
+              margin: 0;
+              font-size: var(--font-size-lg);
+              font-weight: var(--font-weight-semibold);
+              color: var(--text-primary);
+            }
+          }
+
+          .section-header-right {
+            .refresh-btn {
+              border-radius: var(--radius-md);
+              border: 1px solid var(--border-light);
+              background: var(--bg-primary);
+              transition: all var(--transition-fast);
+              cursor: pointer;
+
+              &:hover {
+                border-color: var(--color-primary);
+                color: var(--color-primary);
+              }
+            }
+          }
+        }
+
+        .tenant-loading {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: var(--space-10);
+          background: var(--bg-secondary);
+          border-radius: var(--radius-lg);
+        }
+
+        .tenant-info {
+          .tenant-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-fast);
+            height: 100%;
+            cursor: pointer;
+
+            .ant-card-body {
+              padding: var(--space-4);
+            }
+
+            &:hover {
+              border-color: var(--color-primary);
+              box-shadow: var(--shadow-md);
+              transform: translateY(-2px);
+            }
+
+            .tenant-card-header {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              margin-bottom: var(--space-4);
+              padding-bottom: var(--space-3);
+              border-bottom: 1px solid var(--border-light);
+
+              .anticon {
+                width: 28px;
+                height: 28px;
+                border-radius: var(--radius-sm);
+                background: linear-gradient(
+                  135deg,
+                  var(--color-primary),
+                  var(--color-primary-light)
+                );
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: var(--font-size-sm);
+              }
+
+              .ant-typography {
+                font-size: var(--font-size-base);
+                color: var(--text-primary);
+              }
+            }
+
+            .ant-descriptions {
+              .ant-descriptions-row {
+                border-bottom: none;
+              }
+
+              .ant-descriptions-item {
+                padding-bottom: var(--space-2);
+              }
+
+              .ant-descriptions-item-label {
+                color: var(--text-tertiary);
+                font-size: var(--font-size-sm);
+                font-weight: var(--font-weight-normal);
+                width: 90px;
+                padding: var(--space-1) 0;
+
+                &::after {
+                  content: none;
+                }
+              }
+
+              .ant-descriptions-item-content {
+                font-size: var(--font-size-sm);
+                font-weight: var(--font-weight-medium);
+                color: var(--text-primary);
+                padding: var(--space-1) 0;
+              }
+            }
+
+            // 태그 스타일
+            .ant-tag {
+              display: inline-flex;
+              align-items: center;
+              gap: 6px;
+              border-radius: var(--radius-sm);
+              font-size: var(--font-size-xs);
+              padding: 2px 8px;
+
+              .anticon {
+                margin-right: 0;
+              }
+            }
+
+            // 코드 스타일
+            .ant-typography code {
+              background: var(--bg-secondary);
+              border: 1px solid var(--border-light);
+              border-radius: var(--radius-sm);
+              padding: 2px 6px;
+              font-size: var(--font-size-xs);
+              color: var(--color-primary);
+            }
+          }
+        }
+
+        .no-tenant {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: var(--space-12);
+          background: var(--bg-secondary);
+          border-radius: var(--radius-lg);
+          border: 2px dashed var(--border-medium);
+
+          .no-tenant-icon {
+            font-size: 56px;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-4);
+            opacity: 0.5;
+          }
+
+          .ant-typography {
+            font-size: var(--font-size-base);
+          }
+        }
+      }
+
+      // 조직원 상세 섹션
+      &.members-detail-section {
+        .section-icon.members {
+          background: linear-gradient(135deg, var(--color-success), #34d399);
+        }
+
+        .members-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          gap: var(--space-4);
+        }
+
+        .member-card {
+          display: flex;
+          align-items: center;
+          gap: var(--space-3);
+          padding: var(--space-4);
+          background: var(--bg-secondary);
+          cursor: pointer;
+          border-radius: var(--radius-lg);
+          border: 1px solid var(--border-light);
+          transition: all var(--transition-fast);
+
+          &:hover {
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+          }
+
+          .member-card-avatar {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-bold);
+          }
+
+          .member-card-info {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+
+            .member-card-email {
+              font-size: var(--font-size-sm);
+              font-weight: var(--font-weight-medium);
+              color: var(--text-primary);
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+          }
+
+          .member-card-role {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: var(--font-size-xs);
+            background: transparent;
+            border: 1px solid;
+            padding: 2px 8px;
+            border-radius: var(--radius-md);
+          }
+        }
+
+        .no-members-detail {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: var(--space-8);
+          background: var(--bg-secondary);
+          border-radius: var(--radius-lg);
+          border: 2px dashed var(--border-medium);
+
+          .no-members-icon {
+            font-size: 48px;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-3);
+            opacity: 0.5;
+          }
+        }
+      }
+    }
+  }
+
+  // 반응형 디자인
+  @media (max-width: 1024px) {
+    padding: var(--space-4);
+
+    .page-header {
+      .header-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-4);
+      }
+    }
+
+    .stats-section {
+      .stat-card {
+        margin-bottom: var(--space-4);
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: var(--space-3);
+
+    .page-header {
+      margin-bottom: var(--space-6);
+
+      .header-content {
+        .header-text {
+          .page-title {
+            font-size: var(--font-size-3xl);
+          }
+
+          .page-description {
+            font-size: var(--font-size-base);
+          }
+        }
+      }
+    }
+
+    .stats-section {
+      margin-bottom: var(--space-6);
+    }
+
+    .organizations-card {
+      .card-header {
+        flex-direction: column;
+        gap: var(--space-4);
+        align-items: stretch;
+      }
+
+      .table-container {
+        overflow-x: auto;
+
+        .organizations-table {
+          min-width: 800px;
+        }
+      }
+    }
+
+    .organization-detail-modal {
+      .detail-content {
+        .tenant-info {
+          .ant-col {
+            &.ant-col-12 {
+              flex: 0 0 100%;
+              max-width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: var(--space-2);
+
+    .page-header {
+      .header-content {
+        .header-text {
+          .page-title {
+            font-size: var(--font-size-2xl);
+          }
+        }
+      }
+    }
+
+    .stats-section {
+      .stat-card {
+        .ant-statistic {
+          .ant-statistic-content {
+            .ant-statistic-content-value {
+              font-size: var(--font-size-2xl);
+            }
+          }
+        }
+      }
+    }
+  }
+}

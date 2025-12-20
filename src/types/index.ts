@@ -176,6 +176,7 @@ export interface Resource {
   providerId?: number; // 프로바이더 인스턴스 ID
   status: ResourceStatus;
   region: string;
+  cost?: number;
   tags: Record<string, string>;
   createdAt: string;
   updatedAt: string;
@@ -221,6 +222,7 @@ export interface Organization {
   status: OrganizationStatus;
   totalProjects: number;
   totalCost: number;
+  members?: OrganizationMember[];
   createdAt: string;
   updatedAt: string;
 }
@@ -245,3 +247,94 @@ export interface Project {
 
 export type ProjectStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED' | 'ARCHIVED';
 export type ProjectEnvironment = 'DEVELOPMENT' | 'STAGING' | 'PRODUCTION' | 'TESTING';
+
+/**
+ * Organization Tenant Types
+ */
+export interface OrganizationTenant {
+  // BaseEntity 필드 (상속)
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  updatedBy: string;
+  isDeleted: boolean;
+
+  // Tenant 기본 정보
+  tenantKey: string;
+  tenantName: string;
+  description: string;
+
+  // 조직 관계 (1:1)
+  organization: OrganizationBasic;
+
+  // 테넌트 상태 및 타입
+  status: TenantStatusType;
+  tenantType: TenantType;
+
+  // 리소스 할당량
+  maxUsers: number;
+  maxResources: number;
+  storageQuotaGb: number;
+  bandwidthQuotaGb: number;
+
+  // 연락처 정보
+  contactEmail: string;
+  contactPhone: string;
+
+  // 과금 정보
+  billingAddress: string;
+
+  // 테넌트 설정 (JSON 문자열)
+  settings: string;
+
+  // 구독 정보
+  subscriptionStartDate: string;
+  subscriptionEndDate: string;
+
+  // 트라이얼 정보
+  isTrial: boolean;
+  trialEndDate: string | null;
+}
+
+export interface OrganizationBasic {
+  id: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  updatedBy: string;
+  isDeleted: boolean;
+}
+
+export type TenantStatusType = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED' | 'PENDING';
+export type TenantType = 'DEDICATED' | 'SHARED' | 'TRIAL';
+
+/**
+ * Organization Member Types
+ */
+export interface OrganizationMember {
+  id?: number;
+  name: string;
+  email: string;
+  role: OrganizationMemberRole;
+}
+
+export type OrganizationMemberRole = 'OWNER' | 'ADMIN' | 'MEMBER' | 'VIEWER';
+
+/**
+ * Organization Create/Update Request
+ */
+export interface OrganizationCreateRequest {
+  name: string;
+  description?: string;
+  status?: OrganizationStatus;
+  members?: OrganizationMember[];
+}
+
+export interface OrganizationUpdateRequest {
+  name?: string;
+  description?: string;
+  status?: OrganizationStatus;
+  members?: OrganizationMember[];
+}

@@ -35,6 +35,9 @@ export const ROUTES = {
   PLATFORM_CONFIG: '/platform/config',
   FEATURE_FLAGS: '/platform/features',
 
+  // Organization Management
+  ORGANIZATIONS: '/organizations',
+
   // Project Management
   PROJECT: '/projects',
   TENANT_DETAIL: '/tenants/:id',
